@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 import Header from '@/components/Header';
+import Providers from './providers';
 
 const pretendard = localFont({
   src: './fonts/PretendardVariable.woff2',
@@ -23,8 +24,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${pretendard.className}`}>
-        <Header />
-        <main className="max-w-[1200px] mx-auto">{children}</main>
+        <Providers>
+          <Header />
+          <main className="max-w-[1200px] mx-auto">{children}</main>
+        </Providers>
       </body>
     </html>
   );
