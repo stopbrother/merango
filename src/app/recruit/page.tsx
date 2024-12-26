@@ -1,4 +1,4 @@
-import { getRecruits } from '@/api/recruit-api';
+import { getRecruits } from '@/api/party-api';
 import RecruitList from '@/components/recruit/RecruitList';
 import { createClient } from '@/utils/supabase/server';
 import {
