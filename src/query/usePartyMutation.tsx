@@ -1,4 +1,4 @@
-import { addRecruit } from '@/api/recruit-api';
+import { addRecruit } from '@/api/party-api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useAddRecruitMutation = () => {
