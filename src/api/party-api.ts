@@ -32,6 +32,7 @@ export const getRecruits = async (client: SupabaseDataBase) => {
   const { data, error } = await client
     .from('party_recruit')
     .select(`*, created_by(*)`)
+    .order('created_date_time', { ascending: false })
     .returns<RecruitWithProfile[]>();
 
   if (error) throw new Error(error.message);
@@ -39,7 +40,18 @@ export const getRecruits = async (client: SupabaseDataBase) => {
   return data;
 };
 
-// 참가자 API
+// 참가 API
+
+export const addMember = async (partyId: string) => {
+  const client = createClient();
+
+  const { error } = await client
+    .from('party_member')
+    .insert({ party_id: partyId });
+
+  if (error) throw new Error(error.message);
+};
+
 export const getMembers = async (client: SupabaseDataBase, PartyId: string) => {
   const { data, error } = await client
     .from('party_member')
