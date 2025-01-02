@@ -1,8 +1,4 @@
-import {
-  PartyMemberWithProfile,
-  RecruitForm,
-  RecruitWithProfile,
-} from '@/types/parties.types';
+import { RecruitForm, RecruitWithProfile } from '@/types/parties.types';
 import { SupabaseDataBase } from '@/types/utils.types';
 import { createClient } from '@/utils/supabase/client';
 
@@ -34,30 +30,6 @@ export const getRecruits = async (client: SupabaseDataBase) => {
     .select(`*, created_by(*)`)
     .order('created_date_time', { ascending: false })
     .returns<RecruitWithProfile[]>();
-
-  if (error) throw new Error(error.message);
-
-  return data;
-};
-
-// 참가 API
-
-export const addMember = async (partyId: string) => {
-  const client = createClient();
-
-  const { error } = await client
-    .from('party_member')
-    .insert({ party_id: partyId });
-
-  if (error) throw new Error(error.message);
-};
-
-export const getMembers = async (client: SupabaseDataBase, PartyId: string) => {
-  const { data, error } = await client
-    .from('party_member')
-    .select('*, profile_id(*)')
-    .eq('party_id', PartyId)
-    .returns<PartyMemberWithProfile[]>();
 
   if (error) throw new Error(error.message);
 
