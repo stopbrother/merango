@@ -1,14 +1,11 @@
 import { createClient } from '@/utils/supabase/server';
 import LoginButton from './LoginButton';
 import UserDropdownButton from './UserDropdownButton';
-import { getUserProfile } from '@/api/profile-api';
+import { getCurrentUser, getUserProfile } from '@/api/profile-api';
 
 const AuthHeader = async () => {
   const client = createClient();
-
-  const {
-    data: { user },
-  } = await client.auth.getUser();
+  const user = await getCurrentUser(client);
 
   if (!user) return <LoginButton />;
 
