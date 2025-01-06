@@ -1,6 +1,6 @@
 'use client';
 
-import { useRecruitQuery } from '@/query/usePartyQuery';
+import { useRecruitQuery } from '@/query/party/usePartyQuery';
 import RecruitCard from './RecruitCard';
 import { useState } from 'react';
 import RecruitDetail from './RecruitDetail';

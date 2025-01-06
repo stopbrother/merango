@@ -17,7 +17,7 @@ import { Input } from './ui/input';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 import { Textarea } from './ui/textarea';
 import { useState } from 'react';
-import { useAddRecruitMutation } from '@/query/usePartyMutation';
+import { useAddRecruitMutation } from '@/query/party/usePartyMutation';
 
 const FormSchema = z.object({
   party_type: z.enum(['사냥', '퀘스트', '보스']),
