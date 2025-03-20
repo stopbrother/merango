@@ -20,7 +20,7 @@ export const useIsMemberQuery = (
 
   return useQuery({
     queryKey: ['member', partyId, profileId],
-    queryFn: () => isMember(browserClient, partyId, partyId),
+    queryFn: () => isMember(browserClient, partyId, profileId),
     enabled: !!partyId && !!profileId, // 두 값이 유효할때만 실행
   });
 };
