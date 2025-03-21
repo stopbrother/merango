@@ -1,9 +1,14 @@
-import { RecruitForm, RecruitWithProfile } from '@/types/parties.types';
+import {
+  Recruit,
+  RecruitForm,
+  RecruitWithProfile,
+} from '@/types/parties.types';
 import { SupabaseDataBase } from '@/types/utils.types';
 import { createClient } from '@/utils/supabase/client';
 
 // 구인 API
 
+// api - 구인글 등록
 export const addRecruit = async (formData: RecruitForm) => {
   const client = createClient();
 
@@ -14,6 +19,7 @@ export const addRecruit = async (formData: RecruitForm) => {
 
   if (error) throw new Error(error.message);
 
+  // 작성자 자동참가
   const { error: partyMemberError } = await client.from('party_member').insert({
     party_id: recruitData[0].id,
     profile_id: recruitData[0].created_by,
@@ -24,6 +30,7 @@ export const addRecruit = async (formData: RecruitForm) => {
   return recruitData;
 };
 
+// api - 구인글 리스트
 export const getRecruits = async (client: SupabaseDataBase) => {
   const { data, error } = await client
     .from('party_recruit')
@@ -34,4 +41,15 @@ export const getRecruits = async (client: SupabaseDataBase) => {
   if (error) throw new Error(error.message);
 
   return data;
+};
+
+// api - 구인글 업데이트
+
+// api - 구인글 삭제
+export const deleteRecruit = async (data: Recruit) => {
+  const client = createClient();
+
+  const { error } = await client.from('party_recruit').delete();
+
+  if (error) throw new Error(error.message);
 };
