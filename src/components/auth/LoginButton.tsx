@@ -1,7 +1,6 @@
 'use client';
 import { useSigninMutation } from '@/query/auth/useAuthMutation';
 import { Button } from '../ui/button';
-import { signInWithDiscord } from '@/api/auth-api';
 
 const LoginButton = () => {
   const { mutate: signIn } = useSigninMutation();

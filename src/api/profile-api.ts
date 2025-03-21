@@ -1,6 +1,6 @@
 import { SupabaseDataBase } from '@/types/utils.types';
 
-// 로그인 한 사용자
+// api - 로그인 한 사용자
 export const getCurrentUser = async (client: SupabaseDataBase) => {
   const { data, error } = await client.auth.getUser();
 
@@ -12,6 +12,7 @@ export const getCurrentUser = async (client: SupabaseDataBase) => {
   return data.user;
 };
 
+// api - 유저 정보
 export const getUserProfile = async (
   client: SupabaseDataBase,
   userId: string

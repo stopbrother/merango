@@ -7,6 +7,7 @@ export type RecruitForm = Pick<Recruit, 'party_type' | 'title' | 'description'>;
 
 export type PartyMember = Tables<'party_member'>;
 
+// created_by → profile 테이블로 교체 ?
 export interface RecruitWithProfile extends Omit<Recruit, 'created_by'> {
   created_by: Profile;
 }
