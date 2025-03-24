@@ -49,27 +49,27 @@ export type Database = {
         Row: {
           created_by: string
           created_date_time: string
-          description: string | null
+          description: string
           id: string
-          party_type: string
+          party_type: Database["public"]["Enums"]["party_type_enum"]
           title: string
           updated_date_time: string | null
         }
         Insert: {
           created_by?: string
           created_date_time?: string
-          description?: string | null
+          description?: string
           id?: string
-          party_type?: string
+          party_type?: Database["public"]["Enums"]["party_type_enum"]
           title?: string
           updated_date_time?: string | null
         }
         Update: {
           created_by?: string
           created_date_time?: string
-          description?: string | null
+          description?: string
           id?: string
-          party_type?: string
+          party_type?: Database["public"]["Enums"]["party_type_enum"]
           title?: string
           updated_date_time?: string | null
         }
@@ -118,7 +118,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      party_type_enum: "사냥" | "퀘스트" | "보스"
     }
     CompositeTypes: {
       [_ in never]: never
