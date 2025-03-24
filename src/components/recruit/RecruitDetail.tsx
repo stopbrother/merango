@@ -15,6 +15,7 @@ import {
 } from '../ui/dialog';
 import { useAuthQuery } from '@/query/auth/useAuthQuery';
 import { Pencil, Trash2 } from 'lucide-react';
+import { useDeleteRecruitMutation } from '@/query/party/usePartyMutation';
 
 interface RecruitDetailProps {
   recruit: RecruitWithProfile;
@@ -34,21 +35,38 @@ const RecruitDetail = ({ recruit }: RecruitDetailProps) => {
   // 참가 신청
   const { mutate: addMember } = useAddMemberMutation(recruit.id);
 
+  // 구인글 삭제
+  const { mutate: deleteRecruit } = useDeleteRecruitMutation();
+
+  // 로그인한 사용자가 작성자인지 확인
+  const isOwner = recruit.created_by.id === userId;
+
+  // 구인글 삭제 핸들러
+  const handleDeleteRecruit = () => {
+    if (!confirm('삭제하시겠습니까?')) return;
+    deleteRecruit(recruit.id);
+  };
+
   return (
     <DialogContent>
       {/* Tooltip 컴포넌트 사용시 별도의 컴포넌트로 추출 ex) icon을 children으로 */}
-      <button
-        className="absolute top-4 right-[4.5rem] opacity-70 hover:opacity-100"
-        title="수정"
-      >
-        <Pencil className="w-4 h-4" />
-      </button>
-      <button
-        className="absolute top-4 right-11 opacity-70 hover:opacity-100"
-        title="삭제"
-      >
-        <Trash2 className="w-4 h-4" />
-      </button>
+      {isOwner && (
+        <>
+          <button
+            className="absolute top-4 right-[4.5rem] opacity-70 hover:opacity-100"
+            title="수정"
+          >
+            <Pencil className="w-4 h-4" />
+          </button>
+          <button
+            onClick={handleDeleteRecruit}
+            className="absolute top-4 right-11 opacity-70 hover:opacity-100"
+            title="삭제"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </>
+      )}
       <DialogHeader>
         <DialogDescription>{recruit.party_type}</DialogDescription>
         <DialogTitle>{recruit.title}</DialogTitle>
@@ -56,7 +74,6 @@ const RecruitDetail = ({ recruit }: RecruitDetailProps) => {
       <div className="mt-4">
         <p className="text-gray-700">{recruit.description}</p>
       </div>
-
       <div className="mt-6">
         <h3 className="text-lg font-bold mb-4">참가자 목록</h3>
         <ul className="space-y-4">
@@ -69,7 +86,6 @@ const RecruitDetail = ({ recruit }: RecruitDetailProps) => {
           ))}
         </ul>
       </div>
-
       <DialogFooter>
         {isMember ? (
           <Button disabled>참가중</Button>

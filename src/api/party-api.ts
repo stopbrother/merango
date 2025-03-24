@@ -46,10 +46,13 @@ export const getRecruits = async (client: SupabaseDataBase) => {
 // api - 구인글 업데이트
 
 // api - 구인글 삭제
-export const deleteRecruit = async (data: Recruit) => {
+export const deleteRecruit = async (recruitId: Recruit['id']) => {
   const client = createClient();
 
-  const { error } = await client.from('party_recruit').delete();
+  const { error } = await client
+    .from('party_recruit')
+    .delete()
+    .eq('id', recruitId);
 
   if (error) throw new Error(error.message);
 };
