@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from '../ui/dialog';
 import { useAuthQuery } from '@/query/auth/useAuthQuery';
+import { Pencil, Trash2 } from 'lucide-react';
 
 interface RecruitDetailProps {
   recruit: RecruitWithProfile;
@@ -35,6 +36,19 @@ const RecruitDetail = ({ recruit }: RecruitDetailProps) => {
 
   return (
     <DialogContent>
+      {/* Tooltip 컴포넌트 사용시 별도의 컴포넌트로 추출 ex) icon을 children으로 */}
+      <button
+        className="absolute top-4 right-[4.5rem] opacity-70 hover:opacity-100"
+        title="수정"
+      >
+        <Pencil className="w-4 h-4" />
+      </button>
+      <button
+        className="absolute top-4 right-11 opacity-70 hover:opacity-100"
+        title="삭제"
+      >
+        <Trash2 className="w-4 h-4" />
+      </button>
       <DialogHeader>
         <DialogDescription>{recruit.party_type}</DialogDescription>
         <DialogTitle>{recruit.title}</DialogTitle>
