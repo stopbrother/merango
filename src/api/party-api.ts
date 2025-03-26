@@ -32,10 +32,11 @@ export const addRecruit = async (formData: RecruitForm) => {
 
 // api - 구인글 리스트
 export const getRecruits = async (client: SupabaseDataBase) => {
+  // 가상테이블 생성 => COALESCE(updated_date_time, created_date_time) AS sort_time
   const { data, error } = await client
-    .from('party_recruit')
+    .from('party_recruit_sort')
     .select(`*, created_by(*)`)
-    .order('created_date_time', { ascending: false })
+    .order('sort_time', { ascending: false })
     .returns<RecruitWithProfile[]>();
 
   if (error) throw new Error(error.message);
@@ -43,7 +44,21 @@ export const getRecruits = async (client: SupabaseDataBase) => {
   return data;
 };
 
-// api - 구인글 업데이트
+// api - 구인글 수정
+export const updateRecruit = async (
+  recruitId: Recruit['id'],
+  formData: RecruitForm
+) => {
+  const client = createClient();
+  console.log('update실행:', { recruitId, formData });
+
+  const { error } = await client
+    .from('party_recruit')
+    .update(formData)
+    .eq('id', recruitId);
+
+  if (error) throw new Error(error.message);
+};
 
 // api - 구인글 삭제
 export const deleteRecruit = async (recruitId: Recruit['id']) => {
