@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
+import Link from 'next/link';
 
 interface UserDropdownButtonProps {
   profile: Profile;
@@ -38,7 +39,9 @@ const UserDropdownButton = ({ profile }: UserDropdownButtonProps) => {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent>
-        <DropdownMenuItem>프로필</DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href={`/profile/${profile.full_name}`}>프로필</Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <Button onClick={handleLogOut}>로그아웃</Button>
