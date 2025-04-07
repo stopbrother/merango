@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '../utils/supabase/client';
 
+// 디스코드 소셜 로그인
 export async function signInWithDiscord() {
   const supabase = createClient();
 
@@ -18,6 +19,7 @@ export async function signInWithDiscord() {
   if (error) console.log('error', error);
 }
 
+// 로그아웃
 export async function signOut() {
   const supabase = createClient();
 
