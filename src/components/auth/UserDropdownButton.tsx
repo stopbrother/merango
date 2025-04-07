@@ -40,7 +40,7 @@ const UserDropdownButton = ({ profile }: UserDropdownButtonProps) => {
 
       <DropdownMenuContent>
         <DropdownMenuItem>
-          <Link href={`/profile/${profile.full_name}`}>프로필</Link>
+          <Link href={`/profile/${profile.id}`}>프로필</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
