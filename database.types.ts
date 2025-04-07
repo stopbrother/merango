@@ -92,7 +92,7 @@ export type Database = {
       }
       profiles: {
         Row: {
-          avatar_url: string | null
+          avatar_url: string
           full_name: string | null
           id: string
           updated_at: string | null
@@ -100,7 +100,7 @@ export type Database = {
           website: string | null
         }
         Insert: {
-          avatar_url?: string | null
+          avatar_url: string
           full_name?: string | null
           id: string
           updated_at?: string | null
@@ -108,7 +108,7 @@ export type Database = {
           website?: string | null
         }
         Update: {
-          avatar_url?: string | null
+          avatar_url?: string
           full_name?: string | null
           id?: string
           updated_at?: string | null
