@@ -3,10 +3,16 @@ import { TabsList, TabsTrigger } from '../ui/tabs';
 
 const ProfileTabsTrigger = () => {
   return (
-    <TabsList>
-      <TabsTrigger value="intro">소개</TabsTrigger>
-      <TabsTrigger value="joined">참가 중인 파티</TabsTrigger>
-      <TabsTrigger value="created">내가 만든 파티</TabsTrigger>
+    <TabsList className="border-b">
+      <TabsTrigger value="intro" variant="underline">
+        소개
+      </TabsTrigger>
+      <TabsTrigger value="joined" variant="underline">
+        참가 중인 파티
+      </TabsTrigger>
+      <TabsTrigger value="created" variant="underline">
+        내가 만든 파티
+      </TabsTrigger>
     </TabsList>
   );
 };
