@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className={`${pretendard.className}`}>
         <Providers>
           <Header />
-          <main className="max-w-[1200px] mx-auto">{children}</main>
+          <main className="max-w-[1200px] mx-auto w-full py-4">{children}</main>
         </Providers>
       </body>
     </html>
