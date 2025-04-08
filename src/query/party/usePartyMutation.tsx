@@ -18,7 +18,7 @@ export const useAddRecruitMutation = () => {
   });
 };
 
-interface UpdateRecruitMutationProps {
+interface UpdateRecruitMutationParams {
   recruitId: Recruit['id'];
   formData: RecruitForm;
 }
@@ -28,7 +28,7 @@ export const useUpdateRecruitMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ recruitId, formData }: UpdateRecruitMutationProps) =>
+    mutationFn: ({ recruitId, formData }: UpdateRecruitMutationParams) =>
       updateRecruit(recruitId, formData),
     onSuccess: () => {
       queryClient.invalidateQueries({
