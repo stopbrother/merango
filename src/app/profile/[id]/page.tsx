@@ -32,7 +32,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
       <ProfileInfo userId={userId} />
       <Tabs defaultValue="intro">
         <ProfileTabsTrigger />
-        <ProfileTabsContents />
+        <ProfileTabsContents userId={userId} />
       </Tabs>
     </HydrationBoundary>
   );
