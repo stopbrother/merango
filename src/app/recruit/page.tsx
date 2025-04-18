@@ -1,5 +1,5 @@
-import { getRecruits } from '@/api/party-api';
-import RecruitList from '@/components/recruit/RecruitList';
+import { getParties } from '@/api/party-api';
+import PartyRecruitList from '@/components/recruit/PartyRecruitList';
 import { createClient } from '@/utils/supabase/server';
 import {
   dehydrate,
@@ -13,12 +13,12 @@ const RecruitPage = async () => {
 
   await queryClient.prefetchQuery({
     queryKey: ['recruits'],
-    queryFn: () => getRecruits(serverClient),
+    queryFn: () => getParties(serverClient),
   });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <RecruitList />
+      <PartyRecruitList />
     </HydrationBoundary>
   );
 };
