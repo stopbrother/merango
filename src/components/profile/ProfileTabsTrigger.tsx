@@ -11,7 +11,7 @@ const ProfileTabsTrigger = () => {
         참가 중인 파티
       </TabsTrigger>
       <TabsTrigger value="created" variant="underline">
-        내가 만든 파티
+        생성한 파티
       </TabsTrigger>
     </TabsList>
   );

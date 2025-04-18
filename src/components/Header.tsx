@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import RecruitForm from './RecruitForm';
+import PartyRecruitForm from './PartyRecruitForm';
 
 import AuthHeader from './auth/AuthHeader';
 
@@ -20,7 +20,7 @@ const Header = () => {
           </Link>
         </nav>
         <div className="space-x-6">
-          <RecruitForm />
+          <PartyRecruitForm />
           <AuthHeader />
         </div>
       </div>

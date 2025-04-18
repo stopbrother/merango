@@ -23,7 +23,7 @@ import {
 } from '@/query/party/usePartyMutation';
 import { RecruitWithProfile } from '@/types/parties.types';
 
-interface RecruitFormProps {
+interface PartyRecruitFormProps {
   editData?: RecruitWithProfile;
   children?: React.ReactNode;
 }
@@ -36,7 +36,7 @@ const FormSchema = z.object({
   description: z.string(),
 });
 
-const RecruitForm = ({ editData, children }: RecruitFormProps) => {
+const PartyRecruitForm = ({ editData, children }: PartyRecruitFormProps) => {
   // 모달 상태
   const [open, setOpen] = useState(false);
   // 구인글 등록
@@ -156,4 +156,4 @@ const RecruitForm = ({ editData, children }: RecruitFormProps) => {
   );
 };
 
-export default RecruitForm;
+export default PartyRecruitForm;

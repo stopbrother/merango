@@ -1,4 +1,4 @@
-import { addRecruit, deleteRecruit, updateRecruit } from '@/api/party-api';
+import { addParties, deleteParty, updateParty } from '@/api/party-api';
 import { Recruit, RecruitForm } from '@/types/parties.types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -9,7 +9,7 @@ export const useAddRecruitMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: addRecruit,
+    mutationFn: addParties,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['recruits'],
@@ -29,7 +29,7 @@ export const useUpdateRecruitMutation = () => {
 
   return useMutation({
     mutationFn: ({ recruitId, formData }: UpdateRecruitMutationParams) =>
-      updateRecruit(recruitId, formData),
+      updateParty(recruitId, formData),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['recruits'],
@@ -47,7 +47,7 @@ export const useDeleteRecruitMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: deleteRecruit,
+    mutationFn: deleteParty,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['recruits'],

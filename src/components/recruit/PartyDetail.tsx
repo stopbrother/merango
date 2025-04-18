@@ -7,7 +7,7 @@ import {
 import { useDeleteRecruitMutation } from '@/query/party/usePartyMutation';
 import { RecruitWithProfile } from '@/types/parties.types';
 import { Pencil, Trash2 } from 'lucide-react';
-import RecruitForm from '../RecruitForm';
+import PartyRecruitForm from '../PartyRecruitForm';
 import { Button } from '../ui/button';
 import {
   DialogClose,
@@ -18,10 +18,10 @@ import {
   DialogTitle,
 } from '../ui/dialog';
 
-interface RecruitDetailProps {
+interface PartyDetailProps {
   recruit: RecruitWithProfile;
 }
-const RecruitDetail = ({ recruit }: RecruitDetailProps) => {
+const PartyDetail = ({ recruit }: PartyDetailProps) => {
   // 수정하기 모달 상태
   // const [isEditOpen, setIsEditOpen] = useState(false);
 
@@ -63,14 +63,14 @@ const RecruitDetail = ({ recruit }: RecruitDetailProps) => {
         {/* Tooltip 컴포넌트 사용시 별도의 컴포넌트로 추출 ex) icon을 children으로 */}
         {isOwner && (
           <>
-            <RecruitForm editData={recruit}>
+            <PartyRecruitForm editData={recruit}>
               <button
                 className="absolute top-4 right-[4.5rem] opacity-70 hover:opacity-100"
                 title="수정"
               >
                 <Pencil className="w-4 h-4" />
               </button>
-            </RecruitForm>
+            </PartyRecruitForm>
             <button
               onClick={handleDeleteRecruit}
               className="absolute top-4 right-11 opacity-70 hover:opacity-100"
@@ -127,4 +127,4 @@ const RecruitDetail = ({ recruit }: RecruitDetailProps) => {
   );
 };
 
-export default RecruitDetail;
+export default PartyDetail;
