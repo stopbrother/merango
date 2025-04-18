@@ -2,18 +2,6 @@ import { Profile } from '@/types/profiles.types';
 import { SupabaseDataBase } from '@/types/utils.types';
 import { createClient } from '@/utils/supabase/client';
 
-// api - 로그인 한 사용자
-export const getCurrentUser = async (client: SupabaseDataBase) => {
-  const { data, error } = await client.auth.getUser();
-
-  if (error) {
-    if (!data.user) return null;
-    throw new Error(error.message);
-  }
-
-  return data.user;
-};
-
 // api - 유저 정보
 export const getUserProfile = async (
   client: SupabaseDataBase,

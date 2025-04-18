@@ -1,7 +1,8 @@
+import { getUserProfile } from '@/api/profile-api';
 import { createClient } from '@/utils/supabase/server';
 import LoginButton from './LoginButton';
 import UserDropdownButton from './UserDropdownButton';
-import { getCurrentUser, getUserProfile } from '@/api/profile-api';
+import { getCurrentUser } from '@/api/auth-api';
 
 const AuthHeader = async () => {
   const client = createClient();

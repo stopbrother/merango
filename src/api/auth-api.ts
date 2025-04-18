@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '../utils/supabase/client';
+import { SupabaseDataBase } from '@/types/utils.types';
 
 // 디스코드 소셜 로그인
 export async function signInWithDiscord() {
@@ -30,3 +31,15 @@ export async function signOut() {
     console.log('error', error);
   }
 }
+
+// api - 로그인 한 사용자
+export const getCurrentUser = async (client: SupabaseDataBase) => {
+  const { data, error } = await client.auth.getUser();
+
+  if (error) {
+    if (!data.user) return null;
+    throw new Error(error.message);
+  }
+
+  return data.user;
+};
