@@ -1,3 +1,4 @@
+import { getCreatedParties } from '@/api/party-api';
 import { getUserProfile } from '@/api/profile-api';
 import ProfileInfo from '@/components/profile/ProfileInfo';
 import ProfileTabsContents from '@/components/profile/ProfileTabsContents';
@@ -25,6 +26,11 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
   await queryClient.prefetchQuery({
     queryKey: ['userProfile', userId],
     queryFn: () => getUserProfile(serverClient, userId),
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: ['createdParties', userId],
+    queryFn: () => getCreatedParties(serverClient, userId),
   });
 
   return (

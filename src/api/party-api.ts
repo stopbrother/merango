@@ -9,7 +9,7 @@ import { createClient } from '@/utils/supabase/client';
 // 구인 API
 
 // api - 구인글 등록
-export const addRecruit = async (formData: RecruitForm) => {
+export const addParties = async (formData: RecruitForm) => {
   const client = createClient();
 
   const { data: recruitData, error } = await client
@@ -31,7 +31,7 @@ export const addRecruit = async (formData: RecruitForm) => {
 };
 
 // api - 구인글 리스트
-export const getRecruits = async (client: SupabaseDataBase) => {
+export const getParties = async (client: SupabaseDataBase) => {
   // 가상테이블 생성 => COALESCE(updated_date_time, created_date_time) AS sort_time
   const { data, error } = await client
     .from('party_recruit_sort')
@@ -45,7 +45,7 @@ export const getRecruits = async (client: SupabaseDataBase) => {
 };
 
 // api - 구인글 수정
-export const updateRecruit = async (
+export const updateParty = async (
   recruitId: Recruit['id'],
   formData: RecruitForm
 ) => {
@@ -61,7 +61,7 @@ export const updateRecruit = async (
 };
 
 // api - 구인글 삭제
-export const deleteRecruit = async (recruitId: Recruit['id']) => {
+export const deleteParty = async (recruitId: Recruit['id']) => {
   const client = createClient();
 
   const { error } = await client
@@ -70,4 +70,21 @@ export const deleteRecruit = async (recruitId: Recruit['id']) => {
     .eq('id', recruitId);
 
   if (error) throw new Error(error.message);
+};
+
+// api - 생성한 파티 조회
+export const getCreatedParties = async (
+  client: SupabaseDataBase,
+  userId: Recruit['created_by']
+) => {
+  const { data, error } = await client
+    .from('party_recruit_sort')
+    .select(`*, created_by(*)`)
+    .eq('created_by', userId)
+    .order('sort_time', { ascending: false })
+    .returns<RecruitWithProfile[]>();
+
+  if (error) throw new Error(error.message);
+
+  return data;
 };
