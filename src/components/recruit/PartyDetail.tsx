@@ -37,7 +37,7 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
   const { data: isMember } = useIsMemberQuery(recruit.id, userId);
 
   // 참가 신청
-  const { mutate: addMember } = useAddMemberMutation(recruit.id);
+  const { mutate: addMember } = useAddMemberMutation(recruit.id, userId);
 
   // 구인글 삭제
   const { mutate: deleteRecruit } = useDeleteRecruitMutation();
