@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import RecruitForm from './RecruitForm';
+import PartyRecruitForm from './PartyRecruitForm';
 
 import AuthHeader from './auth/AuthHeader';
 
@@ -12,7 +12,7 @@ const Header = () => {
           <Link href={'/'} className="hover:text-[#E63946]">
             홈
           </Link>
-          <Link href={'/'} className="hover:text-[#E63946]">
+          <Link href={'/recruit'} className="hover:text-[#E63946]">
             파티찾기
           </Link>
           <Link href={'/'} className="hover:text-[#E63946]">
@@ -20,7 +20,7 @@ const Header = () => {
           </Link>
         </nav>
         <div className="space-x-6">
-          <RecruitForm />
+          <PartyRecruitForm />
           <AuthHeader />
         </div>
       </div>

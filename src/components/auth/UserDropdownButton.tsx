@@ -1,5 +1,7 @@
 'use client';
-import { signOut } from '@/app/auth/auth';
+import { useSignOutMutation } from '@/query/auth/useAuthMutation';
+import { Profile } from '@/types/profiles.types';
+import { useRouter } from 'next/navigation';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -8,13 +10,26 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import { Profile } from '@/types/profiles.types';
+import Link from 'next/link';
 
 interface UserDropdownButtonProps {
   profile: Profile;
 }
 
 const UserDropdownButton = ({ profile }: UserDropdownButtonProps) => {
+  const router = useRouter();
+
+  const { mutate: signOut } = useSignOutMutation();
+
+  // TODO 로그아웃 후 새로고침 x supabase 구조개선 참고
+  const handleLogOut = () => {
+    signOut(undefined, {
+      onSuccess: () => {
+        router.refresh();
+      },
+    });
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -24,10 +39,12 @@ const UserDropdownButton = ({ profile }: UserDropdownButtonProps) => {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent>
-        <DropdownMenuItem>프로필</DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href={`/profile/${profile.id}`}>프로필</Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <Button onClick={() => signOut()}>로그아웃</Button>
+          <Button onClick={handleLogOut}>로그아웃</Button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
