@@ -1,4 +1,7 @@
-import { PartyMemberWithProfile } from '@/types/parties.types';
+import {
+  PartyMemberWithProfile,
+  RecruitWithProfile,
+} from '@/types/parties.types';
 import { SupabaseDataBase } from '@/types/utils.types';
 import { createClient } from '@/utils/supabase/client';
 
@@ -44,4 +47,21 @@ export const isMember = async (
   if (error) throw new Error(error.message);
 
   return data.length > 0;
+};
+
+// api - 참가중인 파티 조회
+export const getJoinedParties = async (
+  client: SupabaseDataBase,
+  userId: string
+) => {
+  const { data, error } = await client
+    .from('party_member')
+    .select('party_id(*, created_by(*))')
+    .eq('profile_id', userId)
+    .order('joined_date_time', { ascending: false })
+    .returns<{ party_id: RecruitWithProfile }[]>();
+
+  if (error) throw new Error(error.message);
+
+  return data.map((item) => item.party_id);
 };
