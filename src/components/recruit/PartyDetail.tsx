@@ -1,9 +1,9 @@
 import { useAuthQuery } from '@/query/auth/useAuthQuery';
-import { useAddMemberMutation } from '@/query/member/useMembersMutation';
+import { useRequestJoinedPartyMutation } from '@/query/member/usePartyMemberMutation';
 import {
-  useIsMemberQuery,
-  useMembersQuery,
-} from '@/query/member/useMembersQuery';
+  useHasJoinedPartyQuery,
+  usePartyMembersQuery,
+} from '@/query/member/usePartyMemberQuery';
 import { useDeleteRecruitMutation } from '@/query/party/usePartyMutation';
 import { RecruitWithProfile } from '@/types/parties.types';
 import { Pencil, Trash2 } from 'lucide-react';
@@ -26,7 +26,7 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
   // const [isEditOpen, setIsEditOpen] = useState(false);
 
   // 참가 중인 멤버
-  const { data: members, error } = useMembersQuery(recruit.id);
+  const { data: members, error } = usePartyMembersQuery(recruit.id);
   if (error) console.log('error', error);
 
   // 로그인 사용자
@@ -34,10 +34,13 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
   const userId = currentUser?.id || '';
 
   // 참가 신청한 파티인지 확인
-  const { data: isMember } = useIsMemberQuery(recruit.id, userId);
+  const { data: isMember } = useHasJoinedPartyQuery(recruit.id, userId);
 
   // 참가 신청
-  const { mutate: addMember } = useAddMemberMutation(recruit.id, userId);
+  const { mutate: addMember } = useRequestJoinedPartyMutation(
+    recruit.id,
+    userId
+  );
 
   // 구인글 삭제
   const { mutate: deleteRecruit } = useDeleteRecruitMutation();

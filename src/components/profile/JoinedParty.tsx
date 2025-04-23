@@ -1,5 +1,5 @@
 'use client';
-import { useJoinedPartiesQuery } from '@/query/member/useMembersQuery';
+import { useJoinedPartiesQuery } from '@/query/member/usePartyMemberQuery';
 import QueryStateWrapper from '../QueryStateWrapper';
 import PartyList from '../recruit/PartyList';
 

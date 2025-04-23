@@ -1,18 +1,18 @@
-import { addMember } from '@/api/member-api';
+import { requestJoinParty } from '@/api/member-api';
 import { PartyMember } from '@/types/parties.types';
 import { Profile } from '@/types/profiles.types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-// 파티멤버
+// 파티참가
 // 참가신청
-export const useAddMemberMutation = (
+export const useRequestJoinedPartyMutation = (
   partyId: PartyMember['party_id'],
   userId: Profile['id']
 ) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: addMember,
+    mutationFn: requestJoinParty,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['members', partyId],
