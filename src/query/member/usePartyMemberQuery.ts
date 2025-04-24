@@ -9,26 +9,26 @@ import { createClient } from '@/utils/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 
 // 파티 멤버 목록  TODO: id -> party_id
-export const usePartyMembersQuery = (id: PartyMember['party_id']) => {
+export const usePartyMembersQuery = (partyId: PartyMember['party_id']) => {
   const browserClient = createClient();
 
   return useQuery({
-    queryKey: ['members', id],
-    queryFn: () => getPartyMembers(browserClient, id),
+    queryKey: ['members', partyId],
+    queryFn: () => getPartyMembers(browserClient, partyId),
   });
 };
 
 // 파티의 참가 상태
 export const useHasJoinedPartyQuery = (
   partyId: PartyMember['party_id'],
-  profileId: PartyMember['profile_id']
+  userId: PartyMember['profile_id']
 ) => {
   const browserClient = createClient();
 
   return useQuery({
-    queryKey: ['member', partyId, profileId],
-    queryFn: () => hasJoinedParty(browserClient, partyId, profileId),
-    enabled: !!partyId && !!profileId, // 두 값이 유효할때만 실행
+    queryKey: ['isJoined', partyId, userId],
+    queryFn: () => hasJoinedParty(browserClient, partyId, userId),
+    enabled: !!partyId && !!userId, // 두 값이 유효할때만 실행
   });
 };
 
