@@ -12,6 +12,7 @@ export const useRequestJoinPartyMutation = (
   const queryClient = useQueryClient();
 
   return useMutation({
+    // NOTE: requestJoinParty는 mutate(partyId) 호출 시 partyId를 인자로 받음
     mutationFn: requestJoinParty,
     onSuccess: () => {
       queryClient.invalidateQueries({
