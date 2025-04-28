@@ -1,9 +1,12 @@
 import { useAuthQuery } from '@/query/auth/useAuthQuery';
-import { useAddMemberMutation } from '@/query/member/useMembersMutation';
 import {
-  useIsMemberQuery,
-  useMembersQuery,
-} from '@/query/member/useMembersQuery';
+  useCancelJoinRequestMutation,
+  useRequestJoinPartyMutation,
+} from '@/query/member/usePartyMemberMutation';
+import {
+  useHasJoinedPartyQuery,
+  usePartyMembersQuery,
+} from '@/query/member/usePartyMemberQuery';
 import { useDeleteRecruitMutation } from '@/query/party/usePartyMutation';
 import { RecruitWithProfile } from '@/types/parties.types';
 import { Pencil, Trash2 } from 'lucide-react';
@@ -26,7 +29,7 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
   // const [isEditOpen, setIsEditOpen] = useState(false);
 
   // 참가 중인 멤버
-  const { data: members, error } = useMembersQuery(recruit.id);
+  const { data: partyMembers, error } = usePartyMembersQuery(recruit.id);
   if (error) console.log('error', error);
 
   // 로그인 사용자
@@ -34,10 +37,16 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
   const userId = currentUser?.id || '';
 
   // 참가 신청한 파티인지 확인
-  const { data: isMember } = useIsMemberQuery(recruit.id, userId);
+  const { data: isJoined } = useHasJoinedPartyQuery(recruit.id, userId);
 
   // 참가 신청
-  const { mutate: addMember } = useAddMemberMutation(recruit.id, userId);
+  const { mutate: requestJoin } = useRequestJoinPartyMutation(
+    recruit.id,
+    userId
+  );
+
+  // 참가 취소
+  const { mutate: cancelJoin } = useCancelJoinRequestMutation();
 
   // 구인글 삭제
   const { mutate: deleteRecruit } = useDeleteRecruitMutation();
@@ -90,7 +99,7 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
         <div className="mt-6">
           <h3 className="text-lg font-bold mb-4">참가자 목록</h3>
           <ul className="space-y-4">
-            {members?.map((member) => (
+            {partyMembers?.map((member) => (
               <li key={member.id} className="flex items-center gap-4">
                 <p className="text-gray-800 font-semibold">
                   {member.profile_id.username}
@@ -100,19 +109,25 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
           </ul>
         </div>
         <DialogFooter>
-          {isMember ? (
-            <Button disabled>참가중</Button>
+          {isJoined ? (
+            <Button
+              onClick={() => cancelJoin({ partyId: recruit.id, userId })}
+              variant="outline"
+              className="px-4 py-2 border border-gray-400 text-gray-700 hover:bg-gray-100"
+            >
+              참가 취소
+            </Button>
           ) : (
             <Button
-              onClick={() => addMember(recruit.id)}
-              className="px-4 py-2 bg-green-600"
+              onClick={() => requestJoin(recruit.id)}
+              className="px-4 py-2 bg-green-600 hover:bg-green-700"
             >
               참가 신청
             </Button>
           )}
 
           <DialogClose asChild>
-            <Button className="px-4 py-2 bg-gray-300 text-gray-800">
+            <Button className="px-4 py-2 bg-gray-300 text-gray-800 hover:bg-gray-400">
               닫기
             </Button>
           </DialogClose>

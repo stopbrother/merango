@@ -5,10 +5,10 @@ import {
 import { SupabaseDataBase } from '@/types/utils.types';
 import { createClient } from '@/utils/supabase/client';
 
-// 파티 멤버
+// 파티 참가
 
 // api - 참가 신청
-export const addMember = async (partyId: string) => {
+export const requestJoinParty = async (partyId: string) => {
   const client = createClient();
 
   const { error } = await client
@@ -18,8 +18,24 @@ export const addMember = async (partyId: string) => {
   if (error) throw new Error(error.message);
 };
 
-// api - 참가중인 멤버
-export const getMembers = async (client: SupabaseDataBase, PartyId: string) => {
+// api - 참가신청 취소
+export const cancelJoinRequest = async (partyId: string, userId: string) => {
+  const client = createClient();
+
+  const { error } = await client
+    .from('party_member')
+    .delete()
+    .eq('party_id', partyId)
+    .eq('profile_id', userId);
+
+  if (error) throw new Error(error.message);
+};
+
+// api - 참가자 조회
+export const getPartyMembers = async (
+  client: SupabaseDataBase,
+  PartyId: string
+) => {
   const { data, error } = await client
     .from('party_member')
     .select('*, profile_id(*)')
@@ -32,7 +48,7 @@ export const getMembers = async (client: SupabaseDataBase, PartyId: string) => {
 };
 
 // api - 참가 신청한 파티인지 확인
-export const isMember = async (
+export const hasJoinedParty = async (
   client: SupabaseDataBase,
   partyId: string,
   profileId: string
@@ -40,7 +56,7 @@ export const isMember = async (
   // console.log('실행됨', { partyId, profileId });
   const { data, error } = await client
     .from('party_member')
-    .select()
+    .select('id')
     .eq('party_id', partyId)
     .eq('profile_id', profileId);
 
@@ -49,7 +65,7 @@ export const isMember = async (
   return data.length > 0;
 };
 
-// api - 참가중인 파티 조회
+// api - 참가중인 파티 목록 조회
 export const getJoinedParties = async (
   client: SupabaseDataBase,
   userId: string
