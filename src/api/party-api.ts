@@ -30,7 +30,7 @@ export const addParties = async (formData: RecruitForm) => {
   return recruitData;
 };
 
-// api - 구인글 리스트
+// api - 구인글 리스트 조회
 export const getParties = async (client: SupabaseDataBase) => {
   // 가상테이블 생성 => COALESCE(updated_date_time, created_date_time) AS sort_time
   const { data, error } = await client
