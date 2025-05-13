@@ -22,6 +22,7 @@ import {
   useUpdateRecruitMutation,
 } from '@/query/party/usePartyMutation';
 import { RecruitWithProfile } from '@/types/parties.types';
+import { PARTY_TYPE_OPTIONS } from '@/constants/partyType';
 
 interface PartyRecruitFormProps {
   editData?: RecruitWithProfile;
@@ -29,7 +30,7 @@ interface PartyRecruitFormProps {
 }
 
 const FormSchema = z.object({
-  party_type: z.enum(['사냥', '퀘스트', '보스']),
+  party_type: z.enum(['hunt', 'quest', 'boss']),
   title: z.string().min(2, {
     message: '2글자 이상 입력해주세요.',
   }),
@@ -47,7 +48,7 @@ const PartyRecruitForm = ({ editData, children }: PartyRecruitFormProps) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: editData ?? {
-      party_type: '사냥',
+      party_type: 'hunt',
       title: '',
       description: '',
     },
@@ -109,10 +110,10 @@ const PartyRecruitForm = ({ editData, children }: PartyRecruitFormProps) => {
                       value={field.value}
                       onValueChange={field.onChange}
                     >
-                      {['사냥', '퀘스트', '보스'].map((type) => (
-                        <div key={type} className="flex items-center gap-1">
-                          <RadioGroupItem value={type} />
-                          <FormLabel>{type}</FormLabel>
+                      {PARTY_TYPE_OPTIONS.map(({ value, label }) => (
+                        <div key={value} className="flex items-center gap-1">
+                          <RadioGroupItem value={value} />
+                          <FormLabel>{label}</FormLabel>
                         </div>
                       ))}
                     </RadioGroup>
