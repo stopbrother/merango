@@ -88,3 +88,26 @@ export const getCreatedParties = async (
 
   return data;
 };
+
+// api - 파티 검색
+export const searchParties = async (
+  client: SupabaseDataBase,
+  keyword: string,
+  partyType: string
+) => {
+  let query = client
+    .from('party_recruit_sort')
+    .select(`*, created_by(*)`)
+    .order('sort_time', { ascending: false });
+
+  // 키워드가 있을 경우, title 컬럼에서 대소문자 무시 부분 일치 검색
+  if (keyword) query = query.ilike('title', `%${keyword}%`);
+
+  if (partyType !== 'all') query = query.eq('party_type', partyType);
+
+  const { data, error } = await query;
+
+  if (error) throw new Error(error.message);
+
+  return data;
+};
