@@ -1,6 +1,12 @@
 'use client';
 import { PARTY_TYPE_OPTIONS } from '@/constants/partyType';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 import { Button } from './ui/button';
+import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form';
 import { Input } from './ui/input';
 import {
   Select,
@@ -9,20 +15,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
-import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'sonner';
-import { useSearchPartiesQuery } from '@/query/party/usePartyQuery';
 
 const formSchema = z.object({
   keyword: z.string(),
   party_type: z.enum(['all', 'hunt', 'quest', 'boss']),
 });
 
-const SearchParty = () => {
-  const {};
+const SearchPartyForm = () => {
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -33,11 +33,13 @@ const SearchParty = () => {
   });
 
   const onSubmit = (formData: z.infer<typeof formSchema>) => {
-    console.log('formData', formData);
+    const { keyword, party_type } = formData;
+
     if (!formData.keyword.trim()) return toast.error('검색어를 입력해주세요.');
 
-    useSearchPartiesQuery(keyword, partyType);
+    router.push(`/search/${keyword}/${party_type}`);
   };
+
   return (
     <Form {...form}>
       <form
@@ -97,4 +99,4 @@ const SearchParty = () => {
   );
 };
 
-export default SearchParty;
+export default SearchPartyForm;

@@ -1,4 +1,4 @@
-import SearchParty from '@/components/SearchParty';
+import SearchPartyForm from '@/components/SearchPartyForm';
 import { Button } from '@/components/ui/button';
 
 export default function Home() {
@@ -15,7 +15,7 @@ export default function Home() {
       </div>
 
       {/* 검색 영역 */}
-      <SearchParty />
+      <SearchPartyForm />
     </div>
   );
 }
