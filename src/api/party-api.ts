@@ -105,7 +105,7 @@ export const searchParties = async (
 
   if (partyType !== 'all') query = query.eq('party_type', partyType);
 
-  const { data, error } = await query;
+  const { data, error } = await query.returns<RecruitWithProfile[]>();
 
   if (error) throw new Error(error.message);
 

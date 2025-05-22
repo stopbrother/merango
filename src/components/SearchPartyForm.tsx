@@ -18,7 +18,7 @@ import {
 
 const formSchema = z.object({
   keyword: z.string(),
-  party_type: z.enum(['all', 'hunt', 'quest', 'boss']),
+  partyType: z.enum(['all', 'hunt', 'quest', 'boss']),
 });
 
 const SearchPartyForm = () => {
@@ -28,12 +28,13 @@ const SearchPartyForm = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       keyword: '',
-      party_type: 'all',
+      partyType: 'all',
     },
   });
 
   const onSubmit = (formData: z.infer<typeof formSchema>) => {
-    const { keyword, party_type } = formData;
+    console.log('formData', formData);
+    const { keyword, partyType: party_type } = formData;
 
     if (!formData.keyword.trim()) return toast.error('검색어를 입력해주세요.');
 
@@ -66,7 +67,7 @@ const SearchPartyForm = () => {
         {/* select */}
         <FormField
           control={form.control}
-          name="party_type"
+          name="partyType"
           render={({ field }) => (
             <FormItem>
               <FormControl>
