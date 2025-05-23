@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { Button } from './ui/button';
-import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form';
+import { Form, FormControl, FormField, FormItem } from './ui/form';
 import { Input } from './ui/input';
 import {
   Select,
@@ -60,7 +60,6 @@ const SearchPartyForm = () => {
                   className="px-4 py-2 border border-gray-300 rounded-md w-full sm:w-64"
                 />
               </FormControl>
-              <FormMessage />
             </FormItem>
           )}
         />
@@ -88,7 +87,6 @@ const SearchPartyForm = () => {
                   </SelectContent>
                 </Select>
               </FormControl>
-              <FormMessage />
             </FormItem>
           )}
         />
