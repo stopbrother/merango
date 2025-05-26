@@ -9,7 +9,7 @@ interface PartyCardProps {
 }
 const PartyCard = ({ recruit }: PartyCardProps) => {
   // 시간을 2분전, 1개월 전 같은 텍스트로 변환
-  const dateTime = recruit.updated_date_time ?? recruit.created_date_time;
+  const dateTime = recruit.raised_date_time ?? recruit.created_date_time;
   const formattedTime = formatDistanceToNow(new Date(dateTime), {
     addSuffix: true,
     locale: ko,

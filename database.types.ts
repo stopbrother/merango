@@ -59,6 +59,7 @@ export type Database = {
           description: string
           id: string
           party_type: Database["public"]["Enums"]["party_type_enum"]
+          raised_date_time: string | null
           title: string
           updated_date_time: string | null
         }
@@ -68,6 +69,7 @@ export type Database = {
           description?: string
           id?: string
           party_type?: Database["public"]["Enums"]["party_type_enum"]
+          raised_date_time?: string | null
           title?: string
           updated_date_time?: string | null
         }
@@ -77,6 +79,7 @@ export type Database = {
           description?: string
           id?: string
           party_type?: Database["public"]["Enums"]["party_type_enum"]
+          raised_date_time?: string | null
           title?: string
           updated_date_time?: string | null
         }
@@ -129,6 +132,7 @@ export type Database = {
           description: string | null
           id: string | null
           party_type: Database["public"]["Enums"]["party_type_enum"] | null
+          raised_date_time: string | null
           sort_time: string | null
           title: string | null
           updated_date_time: string | null
@@ -139,6 +143,7 @@ export type Database = {
           description?: string | null
           id?: string | null
           party_type?: Database["public"]["Enums"]["party_type_enum"] | null
+          raised_date_time?: string | null
           sort_time?: never
           title?: string | null
           updated_date_time?: string | null
@@ -149,6 +154,7 @@ export type Database = {
           description?: string | null
           id?: string | null
           party_type?: Database["public"]["Enums"]["party_type_enum"] | null
+          raised_date_time?: string | null
           sort_time?: never
           title?: string | null
           updated_date_time?: string | null

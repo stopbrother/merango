@@ -1,3 +1,4 @@
+'use client';
 import { useAuthQuery } from '@/query/auth/useAuthQuery';
 import {
   useCancelJoinRequestMutation,
@@ -21,13 +22,14 @@ import {
   DialogTitle,
 } from '../ui/dialog';
 import TooltipWrapper from '../TooltipWrapper';
+import { useState } from 'react';
 
 interface PartyDetailProps {
   recruit: RecruitWithProfile;
 }
 const PartyDetail = ({ recruit }: PartyDetailProps) => {
-  // 수정하기 모달 상태
-  // const [isEditOpen, setIsEditOpen] = useState(false);
+  // 수정하기폼 모달 상태
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   // 참가 중인 멤버
   const { data: partyMembers, error } = usePartyMembersQuery(recruit.id);
@@ -73,13 +75,15 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
       <DialogContent>
         {isOwner && (
           <>
-            <PartyRecruitForm editData={recruit}>
-              <TooltipWrapper message="수정">
-                <button className="absolute top-4 right-[4.5rem] opacity-70 hover:opacity-100">
-                  <Pencil className="w-4 h-4" />
-                </button>
-              </TooltipWrapper>
-            </PartyRecruitForm>
+            <TooltipWrapper message="수정">
+              <button
+                onClick={() => setIsEditOpen(true)}
+                className="absolute top-4 right-[4.5rem] opacity-70 hover:opacity-100"
+              >
+                <Pencil className="w-4 h-4" />
+              </button>
+            </TooltipWrapper>
+
             <TooltipWrapper message="삭제">
               <button
                 onClick={handleDeleteRecruit}
@@ -152,7 +156,13 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
       </DialogContent>
 
       {/* 수정하기 모달 */}
-      {/* <RecruitForm open={isEditOpen} editData={recruit} /> */}
+      {isEditOpen && (
+        <PartyRecruitForm
+          open={isEditOpen}
+          editData={recruit}
+          onClose={() => setIsEditOpen(false)}
+        />
+      )}
     </>
   );
 };
