@@ -1,10 +1,20 @@
 import Link from 'next/link';
 
-import PartyRecruitForm from './PartyRecruitForm';
+import { getCurrentUser } from '@/api/auth-api';
+import { getUserProfile } from '@/api/profile-api';
+import { createClient } from '@/utils/supabase/server';
+import LoginButton from './auth/LoginButton';
+import UserDropdownButton from './auth/UserDropdownButton';
+import RecruitButton from './RecruitButton';
 
-import AuthHeader from './auth/AuthHeader';
+const Header = async () => {
+  const client = createClient();
+  const user = await getCurrentUser(client); // 로그인 정보
 
-const Header = () => {
+  if (!user) return <LoginButton />;
+
+  const profile = await getUserProfile(client, user?.id); // 사용자 정보
+
   return (
     <header className="w-full sticky top-0 bg-[#588157]">
       <div className="max-w-[1200px] h-[60px] flex justify-between items-center mx-auto px-4">
@@ -20,8 +30,9 @@ const Header = () => {
           </Link>
         </nav>
         <div className="space-x-6">
-          <PartyRecruitForm />
-          <AuthHeader />
+          <RecruitButton />
+          <UserDropdownButton profile={profile} />
+          {/* <AuthHeader /> */}
         </div>
       </div>
     </header>
