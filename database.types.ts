@@ -168,7 +168,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      party_type_enum: "사냥" | "퀘스트" | "보스"
+      party_type_enum: "hunt" | "quest" | "boss"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -284,7 +284,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      party_type_enum: ["사냥", "퀘스트", "보스"],
+      party_type_enum: ["hunt", "quest", "boss"],
     },
   },
 } as const

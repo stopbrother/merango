@@ -20,6 +20,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '../ui/dialog';
+import TooltipWrapper from '../TooltipWrapper';
 
 interface PartyDetailProps {
   recruit: RecruitWithProfile;
@@ -67,26 +68,26 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
   //   };
 
   return (
+    // TODO: action 버튼들 분리
     <>
       <DialogContent>
-        {/* Tooltip 컴포넌트 사용시 별도의 컴포넌트로 추출 ex) icon을 children으로 */}
         {isOwner && (
           <>
             <PartyRecruitForm editData={recruit}>
-              <button
-                className="absolute top-4 right-[4.5rem] opacity-70 hover:opacity-100"
-                title="수정"
-              >
-                <Pencil className="w-4 h-4" />
-              </button>
+              <TooltipWrapper message="수정">
+                <button className="absolute top-4 right-[4.5rem] opacity-70 hover:opacity-100">
+                  <Pencil className="w-4 h-4" />
+                </button>
+              </TooltipWrapper>
             </PartyRecruitForm>
-            <button
-              onClick={handleDeleteRecruit}
-              className="absolute top-4 right-11 opacity-70 hover:opacity-100"
-              title="삭제"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
+            <TooltipWrapper message="삭제">
+              <button
+                onClick={handleDeleteRecruit}
+                className="absolute top-4 right-11 opacity-70 hover:opacity-100"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </TooltipWrapper>
           </>
         )}
         <DialogHeader>
@@ -96,6 +97,8 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
         <div className="mt-4">
           <p className="text-gray-700">{recruit.description}</p>
         </div>
+
+        {/* TODO: 참가자 목록 컴포넌트 분리  */}
         <div className="mt-6">
           <h3 className="text-lg font-bold mb-4">참가자 목록</h3>
           <ul className="space-y-4">
@@ -109,7 +112,19 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
           </ul>
         </div>
         <DialogFooter>
-          {isJoined ? (
+          {isOwner ? (
+            <TooltipWrapper message="파티장은 취소할 수 없습니다.">
+              <div>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="px-4 py-2 border border-gray-400 text-gray-700 hover:bg-gray-100"
+                >
+                  참가 취소
+                </Button>
+              </div>
+            </TooltipWrapper>
+          ) : isJoined ? (
             <Button
               onClick={() => cancelJoin({ partyId: recruit.id, userId })}
               variant="outline"

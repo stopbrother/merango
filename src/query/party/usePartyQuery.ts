@@ -1,4 +1,4 @@
-import { getCreatedParties, getParties } from '@/api/party-api';
+import { getCreatedParties, getParties, searchParties } from '@/api/party-api';
 import { createClient } from '@/utils/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 
@@ -19,5 +19,15 @@ export const useCreatedPartiesQuery = (userId: string) => {
   return useQuery({
     queryKey: ['createdParties', userId],
     queryFn: () => getCreatedParties(browserClient, userId),
+  });
+};
+
+// 구인글(파티) 검색
+export const useSearchPartiesQuery = (keyword: string, partyType: string) => {
+  const browserClient = createClient();
+
+  return useQuery({
+    queryKey: ['searchParties', keyword, partyType],
+    queryFn: () => searchParties(browserClient, keyword, partyType),
   });
 };
