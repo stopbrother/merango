@@ -37,6 +37,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "party_member_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "party_recruit_sort"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "party_member_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
@@ -48,27 +55,33 @@ export type Database = {
       party_recruit: {
         Row: {
           created_by: string
+          created_date_time: string
           description: string
           id: string
-          last_active_time: string
           party_type: Database["public"]["Enums"]["party_type_enum"]
+          raised_date_time: string | null
           title: string
+          updated_date_time: string | null
         }
         Insert: {
           created_by?: string
+          created_date_time?: string
           description?: string
           id?: string
-          last_active_time?: string
           party_type?: Database["public"]["Enums"]["party_type_enum"]
+          raised_date_time?: string | null
           title?: string
+          updated_date_time?: string | null
         }
         Update: {
           created_by?: string
+          created_date_time?: string
           description?: string
           id?: string
-          last_active_time?: string
           party_type?: Database["public"]["Enums"]["party_type_enum"]
+          raised_date_time?: string | null
           title?: string
+          updated_date_time?: string | null
         }
         Relationships: [
           {
@@ -112,7 +125,50 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      party_recruit_sort: {
+        Row: {
+          created_by: string | null
+          created_date_time: string | null
+          description: string | null
+          id: string | null
+          party_type: Database["public"]["Enums"]["party_type_enum"] | null
+          raised_date_time: string | null
+          sort_time: string | null
+          title: string | null
+          updated_date_time: string | null
+        }
+        Insert: {
+          created_by?: string | null
+          created_date_time?: string | null
+          description?: string | null
+          id?: string | null
+          party_type?: Database["public"]["Enums"]["party_type_enum"] | null
+          raised_date_time?: string | null
+          sort_time?: never
+          title?: string | null
+          updated_date_time?: string | null
+        }
+        Update: {
+          created_by?: string | null
+          created_date_time?: string | null
+          description?: string | null
+          id?: string | null
+          party_type?: Database["public"]["Enums"]["party_type_enum"] | null
+          raised_date_time?: string | null
+          sort_time?: never
+          title?: string | null
+          updated_date_time?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "party_recruit_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       [_ in never]: never

@@ -34,9 +34,9 @@ export const addParties = async (formData: RecruitForm) => {
 export const getParties = async (client: SupabaseDataBase) => {
   // 가상테이블 생성 => COALESCE(updated_date_time, created_date_time) AS sort_time
   const { data, error } = await client
-    .from('party_recruit')
+    .from('party_recruit_sort')
     .select(`*, created_by(*)`)
-    .order('last_active_time', { ascending: false })
+    .order('sort_time', { ascending: false })
     .returns<RecruitWithProfile[]>();
 
   if (error) throw new Error(error.message);
@@ -78,10 +78,10 @@ export const getCreatedParties = async (
   userId: Recruit['created_by']
 ) => {
   const { data, error } = await client
-    .from('party_recruit')
+    .from('party_recruit_sort')
     .select(`*, created_by(*)`)
     .eq('created_by', userId)
-    .order('last_active_time', { ascending: false })
+    .order('sort_time', { ascending: false })
     .returns<RecruitWithProfile[]>();
 
   if (error) throw new Error(error.message);
@@ -96,9 +96,9 @@ export const searchParties = async (
   partyType: string
 ) => {
   let query = client
-    .from('party_recruit')
+    .from('party_recruit_sort')
     .select(`*, created_by(*)`)
-    .order('last_active_time', { ascending: false });
+    .order('sort_time', { ascending: false });
 
   // 키워드가 있을 경우, title 컬럼에서 대소문자 무시 부분 일치 검색
   if (keyword) query = query.ilike('title', `%${keyword}%`);
