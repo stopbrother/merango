@@ -1,4 +1,9 @@
-import { addParties, deleteParty, updateParty } from '@/api/party-api';
+import {
+  addParties,
+  deleteParty,
+  raiseParty,
+  updateParty,
+} from '@/api/party-api';
 import { Recruit, RecruitForm } from '@/types/parties.types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -48,6 +53,20 @@ export const useDeleteRecruitMutation = () => {
 
   return useMutation({
     mutationFn: deleteParty,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['recruits'],
+      });
+    },
+  });
+};
+
+// 구인글 끌어올리기
+export const useRaisePartyMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: raiseParty,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['recruits'],
