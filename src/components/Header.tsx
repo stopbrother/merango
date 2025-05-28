@@ -29,7 +29,7 @@ const Header = async () => {
             내 모집글
           </Link>
         </nav>
-        <div className="space-x-6">
+        <div className="flex items-center gap-6">
           <RecruitButton />
           <UserDropdownButton profile={profile} />
           {/* <AuthHeader /> */}
