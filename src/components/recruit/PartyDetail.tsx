@@ -8,21 +8,25 @@ import {
   useHasJoinedPartyQuery,
   usePartyMembersQuery,
 } from '@/query/member/usePartyMemberQuery';
-import { useDeleteRecruitMutation } from '@/query/party/usePartyMutation';
+import {
+  useDeleteRecruitMutation,
+  useRaisePartyMutation,
+} from '@/query/party/usePartyMutation';
 import { RecruitWithProfile } from '@/types/parties.types';
-import { Pencil, Trash2 } from 'lucide-react';
+import { MoveUp, Pencil, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 import PartyRecruitForm from '../PartyRecruitForm';
+import TooltipWrapper from '../TooltipWrapper';
 import { Button } from '../ui/button';
 import {
   DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '../ui/dialog';
-import TooltipWrapper from '../TooltipWrapper';
-import { useState } from 'react';
+import { canRaiseParty } from '@/utils/time';
+import { toast } from 'sonner';
 
 interface PartyDetailProps {
   recruit: RecruitWithProfile;
@@ -54,6 +58,9 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
   // 구인글 삭제
   const { mutate: deleteRecruit } = useDeleteRecruitMutation();
 
+  // 구인글 끌어올리기
+  const { mutate: raiseParty } = useRaisePartyMutation();
+
   // 로그인한 사용자가 작성자인지 확인
   const isOwner = recruit.created_by.id === userId;
 
@@ -68,6 +75,18 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
   //     if (!confirm('수정하시겠습니까?')) return;
   // ;
   //   };
+
+  // 구인글 끌어올리기 핸들러
+  const handleRaiseParty = () => {
+    // 끌어올리기 가능 여부 판단하는 유틸함수
+    const { ok, wait } = canRaiseParty(recruit.raised_date_time);
+
+    if (!confirm('해당 글을 끌어올리시겠습니까? (쿨타임: 30분)')) return;
+
+    if (!ok) return toast.warning(`${wait}분 후에 끌어올릴 수 있습니다.`);
+
+    raiseParty(recruit.id);
+  };
 
   return (
     // TODO: action 버튼들 분리
@@ -115,42 +134,64 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
             ))}
           </ul>
         </div>
-        <DialogFooter>
-          {isOwner ? (
-            <TooltipWrapper message="파티장은 취소할 수 없습니다.">
-              <div>
-                <Button
-                  disabled
-                  variant="outline"
-                  className="px-4 py-2 border border-gray-400 text-gray-700 hover:bg-gray-100"
-                >
-                  참가 취소
-                </Button>
-              </div>
-            </TooltipWrapper>
-          ) : isJoined ? (
+        {/* Dialog footer 영역 */}
+        <div className="mt-6 flex justify-end">
+          {/* 좌측하단 : 끌어올리기 버튼 */}
+          {isOwner && (
             <Button
-              onClick={() => cancelJoin({ partyId: recruit.id, userId })}
+              onClick={handleRaiseParty}
               variant="outline"
-              className="px-4 py-2 border border-gray-400 text-gray-700 hover:bg-gray-100"
+              className="text-blue-600 border-blue-500 hover:bg-blue-50 mr-auto"
             >
-              참가 취소
-            </Button>
-          ) : (
-            <Button
-              onClick={() => requestJoin(recruit.id)}
-              className="px-4 py-2 bg-green-600 hover:bg-green-700"
-            >
-              참가 신청
+              <MoveUp className="w-4 h-4" />
+              끌어올리기
             </Button>
           )}
+          {/* 우측하단: 참가/취소 + 닫기 버튼 */}
+          <div className="flex gap-2">
+            {/* disabled버튼(작성자) */}
+            {isOwner && (
+              <TooltipWrapper message="파티장은 취소할 수 없습니다.">
+                <div>
+                  <Button
+                    disabled
+                    variant="outline"
+                    className="px-4 py-2 border border-gray-400 text-gray-700 hover:bg-gray-100"
+                  >
+                    참가 취소
+                  </Button>
+                </div>
+              </TooltipWrapper>
+            )}
 
-          <DialogClose asChild>
-            <Button className="px-4 py-2 bg-gray-300 text-gray-800 hover:bg-gray-400">
-              닫기
-            </Button>
-          </DialogClose>
-        </DialogFooter>
+            {/* 참가 취소 버튼 */}
+            {!isOwner && isJoined && (
+              <Button
+                onClick={() => cancelJoin({ partyId: recruit.id, userId })}
+                variant="outline"
+                className="px-4 py-2 border border-gray-400 text-gray-700 hover:bg-gray-100"
+              >
+                참가 취소
+              </Button>
+            )}
+
+            {/* 참가 신청 버튼 */}
+            {!isOwner && !isJoined && (
+              <Button
+                onClick={() => requestJoin(recruit.id)}
+                className="px-4 py-2 bg-green-600 hover:bg-green-700"
+              >
+                참가 신청
+              </Button>
+            )}
+
+            <DialogClose asChild>
+              <Button className="px-4 py-2 bg-gray-300 text-gray-800 hover:bg-gray-400">
+                닫기
+              </Button>
+            </DialogClose>
+          </div>
+        </div>
         {/* <div className="mt-6 flex justify-center gap-4">
           </div> */}
       </DialogContent>

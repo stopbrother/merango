@@ -1,6 +1,12 @@
-import { addParties, deleteParty, updateParty } from '@/api/party-api';
+import {
+  addParties,
+  deleteParty,
+  raiseParty,
+  updateParty,
+} from '@/api/party-api';
 import { Recruit, RecruitForm } from '@/types/parties.types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 // 구인글
 
@@ -36,7 +42,7 @@ export const useUpdateRecruitMutation = () => {
       });
     },
     onError: (error) => {
-      alert('업데이트 실패');
+      toast.error('업데이트 실패');
       console.error(error.message);
     },
   });
@@ -49,6 +55,22 @@ export const useDeleteRecruitMutation = () => {
   return useMutation({
     mutationFn: deleteParty,
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['recruits'],
+      });
+    },
+  });
+};
+
+// 구인글 끌어올리기
+export const useRaisePartyMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: raiseParty,
+    onSuccess: () => {
+      toast.success('해당 글이 끌어올려졌습니다.');
+
       queryClient.invalidateQueries({
         queryKey: ['recruits'],
       });

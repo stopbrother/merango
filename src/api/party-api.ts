@@ -72,7 +72,7 @@ export const deleteParty = async (recruitId: Recruit['id']) => {
   if (error) throw new Error(error.message);
 };
 
-// api - 생성한 파티 조회
+// api - 생성한 파티(구인글) 조회
 export const getCreatedParties = async (
   client: SupabaseDataBase,
   userId: Recruit['created_by']
@@ -89,7 +89,7 @@ export const getCreatedParties = async (
   return data;
 };
 
-// api - 파티 검색
+// api - 파티(구인글) 검색
 export const searchParties = async (
   client: SupabaseDataBase,
   keyword: string,
@@ -110,4 +110,18 @@ export const searchParties = async (
   if (error) throw new Error(error.message);
 
   return data;
+};
+
+// api - 구인글 끌어올리기
+export const raiseParty = async (recruitId: Recruit['id']) => {
+  const client = createClient();
+
+  const now = new Date().toISOString(); // UTC(세계 표준시)로 변환
+
+  const { error } = await client
+    .from('party_recruit')
+    .update({ raised_date_time: now })
+    .eq('id', recruitId);
+
+  if (error) throw new Error(error.message);
 };
