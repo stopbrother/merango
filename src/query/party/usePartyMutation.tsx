@@ -6,6 +6,7 @@ import {
 } from '@/api/party-api';
 import { Recruit, RecruitForm } from '@/types/parties.types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 // 구인글
 
@@ -41,7 +42,7 @@ export const useUpdateRecruitMutation = () => {
       });
     },
     onError: (error) => {
-      alert('업데이트 실패');
+      toast.error('업데이트 실패');
       console.error(error.message);
     },
   });
@@ -68,6 +69,8 @@ export const useRaisePartyMutation = () => {
   return useMutation({
     mutationFn: raiseParty,
     onSuccess: () => {
+      toast.success('해당 글이 끌어올려졌습니다.');
+
       queryClient.invalidateQueries({
         queryKey: ['recruits'],
       });

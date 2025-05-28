@@ -25,6 +25,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '../ui/dialog';
+import { canRaiseParty } from '@/utils/time';
+import { toast } from 'sonner';
 
 interface PartyDetailProps {
   recruit: RecruitWithProfile;
@@ -73,6 +75,18 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
   //     if (!confirm('수정하시겠습니까?')) return;
   // ;
   //   };
+
+  // 구인글 끌어올리기 핸들러
+  const handleRaiseParty = () => {
+    // 끌어올리기 가능 여부 판단하는 유틸함수
+    const { ok, wait } = canRaiseParty(recruit.raised_date_time);
+
+    if (!confirm('해당 글을 끌어올리시겠습니까? (쿨타임: 30분)')) return;
+
+    if (!ok) return toast.warning(`${wait}분 후에 끌어올릴 수 있습니다.`);
+
+    raiseParty(recruit.id);
+  };
 
   return (
     // TODO: action 버튼들 분리
@@ -125,7 +139,7 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
           {/* 좌측하단 : 끌어올리기 버튼 */}
           {isOwner && (
             <Button
-              onClick={() => raiseParty(recruit.id)}
+              onClick={handleRaiseParty}
               variant="outline"
               className="text-blue-600 border-blue-500 hover:bg-blue-50 mr-auto"
             >
