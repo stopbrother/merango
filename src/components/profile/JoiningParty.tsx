@@ -3,11 +3,11 @@ import { useJoinedPartiesQuery } from '@/query/member/usePartyMemberQuery';
 import QueryStateWrapper from '../QueryStateWrapper';
 import PartyList from '../recruit/PartyList';
 
-interface JoinedPartyProps {
+interface JoiningPartyProps {
   userId: string;
 }
 
-const JoinedParty = ({ userId }: JoinedPartyProps) => {
+const JoiningParty = ({ userId }: JoiningPartyProps) => {
   const { data, isLoading, error } = useJoinedPartiesQuery(userId);
 
   return (
@@ -17,4 +17,4 @@ const JoinedParty = ({ userId }: JoinedPartyProps) => {
   );
 };
 
-export default JoinedParty;
+export default JoiningParty;
