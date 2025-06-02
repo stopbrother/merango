@@ -18,8 +18,8 @@ export const requestJoinParty = async (partyId: string) => {
   if (error) throw new Error(error.message);
 };
 
-// api - 참가신청 취소
-export const cancelJoinRequest = async (partyId: string, userId: string) => {
+// api - 참가자 본인: 참가신청 취소, 파티장: 추방
+export const removePartyMember = async (partyId: string, userId: string) => {
   const client = createClient();
 
   const { error } = await client

@@ -1,7 +1,7 @@
 'use client';
 import { useAuthQuery } from '@/query/auth/useAuthQuery';
 import {
-  useCancelJoinRequestMutation,
+  useRemovePartyMemberMutation,
   useRequestJoinPartyMutation,
 } from '@/query/member/usePartyMemberMutation';
 import {
@@ -13,7 +13,7 @@ import {
   useRaisePartyMutation,
 } from '@/query/party/usePartyMutation';
 import { RecruitWithProfile } from '@/types/parties.types';
-import { MoveUp, Pencil, Trash2 } from 'lucide-react';
+import { Loader2Icon, MoveUp, Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import PartyRecruitForm from '../PartyRecruitForm';
 import TooltipWrapper from '../TooltipWrapper';
@@ -43,19 +43,17 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
 
   // 로그인 사용자
   const { data: currentUser } = useAuthQuery();
-  const userId = currentUser?.id || '';
+  const currentUserId = currentUser?.id || '';
 
   // 참가 신청한 파티인지 확인
-  const { data: isJoined } = useHasJoinedPartyQuery(recruit.id, userId);
+  const { data: isJoined } = useHasJoinedPartyQuery(recruit.id, currentUserId);
 
   // 참가 신청
-  const { mutate: requestJoin } = useRequestJoinPartyMutation(
-    recruit.id,
-    userId
-  );
+  const { mutate: requestJoin, isPending: isJoining } =
+    useRequestJoinPartyMutation(recruit.id, currentUserId);
 
-  // 참가 취소
-  const { mutate: cancelJoin } = useCancelJoinRequestMutation();
+  // 참가 취소 & 추방
+  const { mutate: removeMember, isPending } = useRemovePartyMemberMutation();
 
   // 구인글 삭제
   const { mutate: deleteRecruit } = useDeleteRecruitMutation();
@@ -64,7 +62,7 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
   const { mutate: raiseParty } = useRaisePartyMutation();
 
   // 로그인한 사용자가 작성자인지 확인
-  const isOwner = recruit.created_by.id === userId;
+  const isOwner = recruit.created_by.id === currentUserId;
 
   // 구인글 삭제 핸들러
   const handleDeleteRecruit = () => {
@@ -88,6 +86,17 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
     if (!ok) return toast.warning(`${wait}분 후에 끌어올릴 수 있습니다.`);
 
     raiseParty(recruit.id);
+  };
+
+  // 참가취소 & 추방하기 핸들러
+  const handleRemoveMember = (userId: string, isSelf: boolean) => {
+    const confirmMessage = isSelf
+      ? '참가를 취소하시겠습니까?'
+      : '추방하시겠습니까?';
+
+    if (!confirm(confirmMessage)) return;
+
+    removeMember({ partyId: recruit.id, userId });
   };
 
   return (
@@ -128,7 +137,7 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
           <h3 className="text-lg font-bold mb-4">참가자 목록</h3>
           <ul className="space-y-4">
             {partyMembers?.map((member) => (
-              <li key={member.id}>
+              <li key={member.id} className="flex items-center justify-between">
                 <Link
                   href={`/profile/${member.profile_id.id}`}
                   className="flex flex-row gap-2 items-center text-gray-800 font-semibold hover:bg-gray-200"
@@ -136,6 +145,20 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
                   <ProfileAvatar profileImg={member.profile_id.avatar_url} />
                   {member.profile_id.username}
                 </Link>
+                {/* 추방하기 버튼(작성자만 보이고 작성자 본인은 추방x) */}
+                {isOwner && currentUserId !== member.profile_id.id && (
+                  <Button
+                    onClick={() =>
+                      handleRemoveMember(member.profile_id.id, false)
+                    }
+                    disabled={isPending}
+                    variant="link"
+                    className="text-sm text-red-500"
+                  >
+                    {isPending && <Loader2Icon className="animate-spin" />}
+                    추방
+                  </Button>
+                )}
               </li>
             ))}
           </ul>
@@ -173,10 +196,12 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
             {/* 참가 취소 버튼 */}
             {!isOwner && isJoined && (
               <Button
-                onClick={() => cancelJoin({ partyId: recruit.id, userId })}
+                onClick={() => handleRemoveMember(currentUserId, true)}
+                disabled={isPending}
                 variant="outline"
                 className="px-4 py-2 border border-gray-400 text-gray-700 hover:bg-gray-100"
               >
+                {isPending && <Loader2Icon className="animate-spin" />}
                 참가 취소
               </Button>
             )}
@@ -185,8 +210,10 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
             {!isOwner && !isJoined && (
               <Button
                 onClick={() => requestJoin(recruit.id)}
+                disabled={isJoining}
                 className="px-4 py-2 bg-green-600 hover:bg-green-700"
               >
+                {isJoining && <Loader2Icon className="animate-spin" />}
                 참가 신청
               </Button>
             )}
