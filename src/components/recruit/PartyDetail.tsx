@@ -27,6 +27,8 @@ import {
 } from '../ui/dialog';
 import { canRaiseParty } from '@/utils/time';
 import { toast } from 'sonner';
+import Link from 'next/link';
+import ProfileAvatar from '../ProfileAvatar';
 
 interface PartyDetailProps {
   recruit: RecruitWithProfile;
@@ -126,10 +128,14 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
           <h3 className="text-lg font-bold mb-4">참가자 목록</h3>
           <ul className="space-y-4">
             {partyMembers?.map((member) => (
-              <li key={member.id} className="flex items-center gap-4">
-                <p className="text-gray-800 font-semibold">
+              <li key={member.id}>
+                <Link
+                  href={`/profile/${member.profile_id.id}`}
+                  className="flex flex-row gap-2 items-center text-gray-800 font-semibold hover:bg-gray-200"
+                >
+                  <ProfileAvatar profileImg={member.profile_id.avatar_url} />
                   {member.profile_id.username}
-                </p>
+                </Link>
               </li>
             ))}
           </ul>

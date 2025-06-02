@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import Link from 'next/link';
+import ProfileAvatar from '../ProfileAvatar';
 
 interface UserDropdownButtonProps {
   profile: Profile;
@@ -34,6 +35,7 @@ const UserDropdownButton = ({ profile }: UserDropdownButtonProps) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className="bg-[#588157] hover:bg-[#476947]">
+          <ProfileAvatar profileImg={profile.avatar_url} />
           {profile.username}
         </Button>
       </DropdownMenuTrigger>
