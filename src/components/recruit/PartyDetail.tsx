@@ -89,7 +89,7 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
 
   // 참가하기 핸들러
   const handleRequestJoin = () => {
-    if (partyMembers?.length ?? 0 >= 6)
+    if ((partyMembers?.length ?? 0) >= 6)
       return toast.error('최대 인원(6명)이 찼습니다.');
 
     requestJoin(recruit.id);
