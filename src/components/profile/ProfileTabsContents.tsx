@@ -1,7 +1,7 @@
 import React from 'react';
 import { TabsContent } from '../ui/tabs';
 import ProfileIntro from './ProfileIntro';
-import JoinedParty from './JoinedParty';
+import JoiningParty from './JoiningParty';
 import CreatedParties from './CreatedParties';
 
 interface ProfileTabsContentsProps {
@@ -15,7 +15,7 @@ const ProfileTabsContents = ({ userId }: ProfileTabsContentsProps) => {
         <ProfileIntro userId={userId} />
       </TabsContent>
       <TabsContent value="joined">
-        <JoinedParty userId={userId} />
+        <JoiningParty userId={userId} />
       </TabsContent>
       <TabsContent value="created">
         <CreatedParties userId={userId} />

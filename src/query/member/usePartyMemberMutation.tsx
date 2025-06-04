@@ -1,4 +1,4 @@
-import { cancelJoinRequest, requestJoinParty } from '@/api/member-api';
+import { removePartyMember, requestJoinParty } from '@/api/member-api';
 import { PartyMember } from '@/types/parties.types';
 import { Profile } from '@/types/profiles.types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -42,13 +42,13 @@ interface PartyMemberMutationParams {
   userId: PartyMember['profile_id'];
 }
 
-// 참가신청 취소
-export const useCancelJoinRequestMutation = () => {
+// 참가신청 취소 or 참가자 추방
+export const useRemovePartyMemberMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ partyId, userId }: PartyMemberMutationParams) =>
-      cancelJoinRequest(partyId, userId),
+      removePartyMember(partyId, userId),
     onSuccess: (_, variables) => {
       const { partyId, userId } = variables; // mutate 인자
 
@@ -61,7 +61,7 @@ export const useCancelJoinRequestMutation = () => {
       });
 
       queryClient.invalidateQueries({
-        queryKey: ['isJoined', partyId, userId], // 참가 여부
+        queryKey: ['isJoined', partyId, userId], // 해당 파티 참가 여부
       });
     },
   });
