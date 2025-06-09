@@ -11,6 +11,15 @@ import { createClient } from '@/utils/supabase/client';
 export const requestJoinParty = async (partyId: string) => {
   const client = createClient();
 
+  // 현재 참가자 수 조회(6명 제한)
+  const { count, error: countError } = await client
+    .from('party_member')
+    .select('*', { count: 'exact', head: true })
+    .eq('party_id', partyId);
+
+  if ((count ?? 0) >= 6) throw new Error(countError?.message);
+
+  // 참가자 테이블에 데이터 삽입
   const { error } = await client
     .from('party_member')
     .insert({ party_id: partyId });

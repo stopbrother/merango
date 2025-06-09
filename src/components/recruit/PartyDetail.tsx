@@ -38,8 +38,7 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
 
   // 참가 중인 멤버
-  const { data: partyMembers, error } = usePartyMembersQuery(recruit.id);
-  if (error) console.log('error', error);
+  const { data: partyMembers } = usePartyMembersQuery(recruit.id);
 
   // 로그인 사용자
   const { data: currentUser } = useAuthQuery();
@@ -86,6 +85,14 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
     if (!ok) return toast.warning(`${wait}분 후에 끌어올릴 수 있습니다.`);
 
     raiseParty(recruit.id);
+  };
+
+  // 참가하기 핸들러
+  const handleRequestJoin = () => {
+    if ((partyMembers?.length ?? 0) >= 6)
+      return toast.error('최대 인원(6명)이 찼습니다.');
+
+    requestJoin(recruit.id);
   };
 
   // 참가취소 & 추방하기 핸들러
@@ -209,7 +216,7 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
             {/* 참가 신청 버튼 */}
             {!isOwner && !isJoined && (
               <Button
-                onClick={() => requestJoin(recruit.id)}
+                onClick={handleRequestJoin}
                 disabled={isJoining}
                 className="px-4 py-2 bg-green-600 hover:bg-green-700"
               >
