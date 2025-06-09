@@ -2,9 +2,7 @@ import { getJoinedParties } from '@/api/member-api';
 import { getCreatedParties } from '@/api/party-api';
 import { getUserProfile } from '@/api/profile-api';
 import ProfileInfo from '@/components/profile/ProfileInfo';
-import ProfileTabsContents from '@/components/profile/ProfileTabsContents';
-import ProfileTabsTrigger from '@/components/profile/ProfileTabsTrigger';
-import { Tabs } from '@/components/ui/tabs';
+import ProfileTabs from '@/components/profile/ProfileTabs';
 import { createClient } from '@/utils/supabase/server';
 import {
   dehydrate,
@@ -42,10 +40,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <ProfileInfo userId={userId} />
-      <Tabs defaultValue="intro">
-        <ProfileTabsTrigger />
-        <ProfileTabsContents userId={userId} />
-      </Tabs>
+      <ProfileTabs userId={userId} />
     </HydrationBoundary>
   );
 };
