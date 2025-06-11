@@ -100,7 +100,7 @@ export type Database = {
           id: string
           intro: string | null
           job: string | null
-          level: string | null
+          level: number | null
           social_name: string | null
           updated_at: string | null
           username: string | null
@@ -112,7 +112,7 @@ export type Database = {
           id: string
           intro?: string | null
           job?: string | null
-          level?: string | null
+          level?: number | null
           social_name?: string | null
           updated_at?: string | null
           username?: string | null
@@ -124,7 +124,7 @@ export type Database = {
           id?: string
           intro?: string | null
           job?: string | null
-          level?: string | null
+          level?: number | null
           social_name?: string | null
           updated_at?: string | null
           username?: string | null
