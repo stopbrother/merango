@@ -99,6 +99,9 @@ export type Database = {
           full_name: string | null
           id: string
           intro: string | null
+          job: string | null
+          level: string | null
+          social_name: string | null
           updated_at: string | null
           username: string | null
           website: string | null
@@ -108,6 +111,9 @@ export type Database = {
           full_name?: string | null
           id: string
           intro?: string | null
+          job?: string | null
+          level?: string | null
+          social_name?: string | null
           updated_at?: string | null
           username?: string | null
           website?: string | null
@@ -117,6 +123,9 @@ export type Database = {
           full_name?: string | null
           id?: string
           intro?: string | null
+          job?: string | null
+          level?: string | null
+          social_name?: string | null
           updated_at?: string | null
           username?: string | null
           website?: string | null
