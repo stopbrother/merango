@@ -1,4 +1,4 @@
-import { Profile } from '@/types/profiles.types';
+import { Profile, ProfileForm } from '@/types/profiles.types';
 import { SupabaseDataBase } from '@/types/utils.types';
 import { createClient } from '@/utils/supabase/client';
 
@@ -27,6 +27,21 @@ export const updateUserIntro = async (
   const { error } = await client
     .from('profiles')
     .update({ intro: data })
+    .eq('id', userId);
+
+  if (error) throw new Error(error.message);
+};
+
+// api - 프로필 수정
+export const updateProfile = async (
+  userId: Profile['id'],
+  formData: ProfileForm
+) => {
+  const client = createClient();
+
+  const { error } = await client
+    .from('profiles')
+    .update(formData)
     .eq('id', userId);
 
   if (error) throw new Error(error.message);
