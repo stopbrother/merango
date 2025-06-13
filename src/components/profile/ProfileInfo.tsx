@@ -5,13 +5,21 @@ import { Copy } from 'lucide-react';
 import Image from 'next/image';
 import { toast } from 'sonner';
 import QueryStateWrapper from '../QueryStateWrapper';
+import { useAuthQuery } from '@/query/auth/useAuthQuery';
+import { Button } from '../ui/button';
+import Link from 'next/link';
 
 interface ProfileInfoProps {
   userId: string;
 }
 
 const ProfileInfo = ({ userId }: ProfileInfoProps) => {
+  // 유저정보
   const { data: user, isLoading, error } = useProfileQuery(userId);
+
+  // 본인 프로필 페이지 구분
+  const { data: currentUser } = useAuthQuery();
+  const isOwner = userId === currentUser?.id;
   if (!user) return null;
 
   // 복사 핸들러
@@ -36,8 +44,17 @@ const ProfileInfo = ({ userId }: ProfileInfoProps) => {
 
         {/* 프로필 정보 영역 */}
         <div className="flex flex-col justify-center gap-2">
-          {/* 닉네임 */}
-          <p className="text-xl font-bold text-gray-900">{user.username}</p>
+          {/* 닉네임/레벨/직업 + 수정 버튼 */}
+          <div className="flex items-center gap-2">
+            <p className="text-xl font-bold text-gray-900">
+              {user.username}/{user.level ?? '레벨'}/{user.job ?? '직업'}
+            </p>
+            {isOwner && (
+              <Button size="sm" variant="outline" asChild>
+                <Link href={'/settings'}>프로필 편집</Link>
+              </Button>
+            )}
+          </div>
 
           {/* TODO: 사용자명 & 소셜 닉네임 공통 컴포넌트화 */}
           {/* 디스코드 사용자명 */}
