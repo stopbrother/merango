@@ -6,7 +6,7 @@ import { Edit } from 'lucide-react';
 import { useAuthQuery } from '@/query/auth/useAuthQuery';
 import { Textarea } from '../ui/textarea';
 import { useProfileQuery } from '@/query/profile/useProfileQuery';
-import { useProfileMutation } from '@/query/profile/useProfileMutation';
+import { useProfileIntroMutation } from '@/query/profile/useProfileMutation';
 import { Profile } from '@/types/profiles.types';
 import QueryStateWrapper from '../QueryStateWrapper';
 
@@ -30,7 +30,7 @@ const ProfileIntro = ({ userId }: ProfileIntroProps) => {
   const isOwner = userId === currentUser?.id;
 
   // 소개글 업데이트
-  const { mutate: updateIntro } = useProfileMutation(userId);
+  const { mutate: updateIntro } = useProfileIntroMutation(userId);
 
   const [isEdit, setIsEdit] = useState(false);
   const [intro, setIntro] = useState(user?.intro ?? ''); // 소개글 textarea 상태
