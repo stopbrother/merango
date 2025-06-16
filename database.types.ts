@@ -96,38 +96,38 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string
-          full_name: string | null
+          full_name: string
           id: string
           intro: string | null
           job: string | null
           level: number | null
           social_name: string | null
           updated_at: string | null
-          username: string | null
+          username: string
           website: string | null
         }
         Insert: {
           avatar_url: string
-          full_name?: string | null
+          full_name: string
           id: string
           intro?: string | null
           job?: string | null
           level?: number | null
           social_name?: string | null
           updated_at?: string | null
-          username?: string | null
+          username: string
           website?: string | null
         }
         Update: {
           avatar_url?: string
-          full_name?: string | null
+          full_name?: string
           id?: string
           intro?: string | null
           job?: string | null
           level?: number | null
           social_name?: string | null
           updated_at?: string | null
-          username?: string | null
+          username?: string
           website?: string | null
         }
         Relationships: []
