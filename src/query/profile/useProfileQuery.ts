@@ -9,6 +9,6 @@ export const useProfileQuery = (userId: Profile['id']) => {
   return useQuery({
     queryKey: ['userProfile', userId],
     queryFn: () => getUserProfile(browserClient, userId),
-    enabled: !!userId,
+    enabled: !!userId, // userId가 있을 경우에만 실행
   });
 };
