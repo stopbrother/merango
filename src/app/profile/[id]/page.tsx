@@ -1,3 +1,4 @@
+import { getCurrentUser } from '@/api/auth-api';
 import { getJoinedParties } from '@/api/member-api';
 import { getCreatedParties } from '@/api/party-api';
 import { getUserProfile } from '@/api/profile-api';
@@ -21,6 +22,11 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
 
   const serverClient = createClient();
   const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['currentUser'],
+    queryFn: () => getCurrentUser(serverClient),
+  });
 
   await queryClient.prefetchQuery({
     queryKey: ['userProfile', userId],

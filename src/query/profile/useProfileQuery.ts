@@ -9,5 +9,6 @@ export const useProfileQuery = (userId: Profile['id']) => {
   return useQuery({
     queryKey: ['userProfile', userId],
     queryFn: () => getUserProfile(browserClient, userId),
+    enabled: !!userId,
   });
 };
