@@ -17,33 +17,39 @@ import { useProfileUpdateMutation } from '@/query/profile/useProfileMutation';
 import { useAuthQuery } from '@/query/auth/useAuthQuery';
 import { useProfileQuery } from '@/query/profile/useProfileQuery';
 import QueryStateWrapper from '../QueryStateWrapper';
+import { MSG } from '@/constants/messages';
+import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
+// TODO: /schemas/... 경로로 분리
 const formSchema = z.object({
   username: z.string().min(2, {
-    message: '닉네임은 최소 2자 이상이어야 합니다.',
+    message: MSG.USERNAME.MIN, // zod4부터 message → error
   }),
   social_name: z.string(),
-  level: z.number().min(1).max(200),
+  level: z.coerce
+    .number({
+      message: MSG.LEVEL.TYPE,
+    })
+    .min(1, { message: MSG.LEVEL.MIN })
+    .max(200, { message: MSG.LEVEL.MAX }),
   job: z.string(),
 });
 
 const ProfileEditForm = () => {
+  const router = useRouter();
+
   const { data: user } = useAuthQuery();
   const { data: profile, isLoading, error } = useProfileQuery(user?.id ?? '');
   const { mutate: updateProfile } = useProfileUpdateMutation();
 
-  if (!profile) return <div>정보없음</div>;
-
-  const { username, social_name, level, job } = profile;
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: username,
-      social_name: social_name ?? '',
-      level: level ?? undefined,
-      job: job ?? '',
+      username: profile?.username,
+      social_name: profile?.social_name ?? '',
+      level: profile?.level ?? undefined,
+      job: profile?.job ?? '',
     },
   });
 
@@ -51,7 +57,15 @@ const ProfileEditForm = () => {
     console.log('formData', formData);
     if (!profile) return;
 
-    updateProfile({ userId: profile.id, formData });
+    updateProfile(
+      { userId: profile.id, formData },
+      {
+        onSuccess: () => {
+          toast.success('프로필 정보가 수정 되었습니다.');
+          router.back();
+        },
+      }
+    );
   };
 
   return (

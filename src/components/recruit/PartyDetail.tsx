@@ -150,7 +150,8 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
                   className="flex flex-row gap-2 items-center text-gray-800 font-semibold hover:bg-gray-200"
                 >
                   <ProfileAvatar profileImg={member.profile_id.avatar_url} />
-                  {member.profile_id.username}
+                  {member.profile_id.username}/{member.profile_id.level}/
+                  {member.profile_id.job}
                 </Link>
                 {/* 추방하기 버튼(작성자만 보이고 작성자 본인은 추방x) */}
                 {isOwner && currentUserId !== member.profile_id.id && (
