@@ -40,8 +40,6 @@ export const useProfileUpdateMutation = () => {
     onSuccess: (_, variables) => {
       const { userId } = variables;
 
-      toast.success('프로필 정보가 수정 되었습니다.');
-
       queryClient.invalidateQueries({
         queryKey: ['userProfile', userId],
       });
