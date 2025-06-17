@@ -1,19 +1,21 @@
+'use client';
 import Link from 'next/link';
 
-import { getCurrentUser } from '@/api/auth-api';
-import { getUserProfile } from '@/api/profile-api';
-import { createClient } from '@/utils/supabase/server';
+import { useAuthQuery } from '@/query/auth/useAuthQuery';
+import { useProfileQuery } from '@/query/profile/useProfileQuery';
 import LoginButton from './auth/LoginButton';
 import UserDropdownButton from './auth/UserDropdownButton';
 import RecruitButton from './RecruitButton';
 
-const Header = async () => {
-  const client = createClient();
-  const user = await getCurrentUser(client); // 로그인 정보
+const Header = () => {
+  // auth 테이블 조회
+  const { data: user } = useAuthQuery();
 
-  if (!user) return <LoginButton />;
+  // 타입 에러 방지 (enabled로 실행 제어됨)
+  const userId = user?.id ?? '';
 
-  const profile = await getUserProfile(client, user?.id); // 사용자 정보
+  // profiles 테이블 조회
+  const { data: profile } = useProfileQuery(userId);
 
   return (
     <header className="w-full sticky top-0 bg-[#588157]">
@@ -26,7 +28,7 @@ const Header = async () => {
             파티찾기
           </Link>
           <Link
-            href={`/profile/${profile.id}?tab=created`}
+            href={`/profile/${profile?.id}?tab=created`}
             className="hover:text-[#E63946]"
           >
             내 모집글
@@ -34,7 +36,7 @@ const Header = async () => {
         </nav>
         <div className="flex items-center gap-6">
           <RecruitButton />
-          <UserDropdownButton profile={profile} />
+          {profile ? <UserDropdownButton profile={profile} /> : <LoginButton />}
           {/* <AuthHeader /> */}
         </div>
       </div>
