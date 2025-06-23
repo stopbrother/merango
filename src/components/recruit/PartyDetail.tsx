@@ -29,11 +29,14 @@ import { canRaiseParty } from '@/utils/time';
 import { toast } from 'sonner';
 import Link from 'next/link';
 import ProfileAvatar from '../ProfileAvatar';
+import { requireLogin } from '@/utils/auth';
+import { useRouter } from 'next/navigation';
 
 interface PartyDetailProps {
   recruit: RecruitWithProfile;
 }
 const PartyDetail = ({ recruit }: PartyDetailProps) => {
+  const router = useRouter();
   // 수정하기폼 모달 상태
   const [isEditOpen, setIsEditOpen] = useState(false);
 
@@ -89,6 +92,8 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
 
   // 참가하기 핸들러
   const handleRequestJoin = () => {
+    if (!requireLogin({ user: currentUser, router })) return;
+
     if ((partyMembers?.length ?? 0) >= 6)
       return toast.error('최대 인원(6명)이 찼습니다.');
 
