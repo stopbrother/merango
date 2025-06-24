@@ -2,6 +2,7 @@
 import { useSignOutMutation } from '@/query/auth/useAuthMutation';
 import { Profile } from '@/types/profiles.types';
 import { useRouter } from 'next/navigation';
+import ProfileAvatar from '../ProfileAvatar';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -10,8 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import Link from 'next/link';
-import ProfileAvatar from '../ProfileAvatar';
+import DropdownLinkItem from './DropdownLinkItem';
 
 interface UserDropdownButtonProps {
   profile: Profile;
@@ -41,30 +41,18 @@ const UserDropdownButton = ({ profile }: UserDropdownButtonProps) => {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent>
-        <DropdownMenuItem className="hover:text-[#206030]" asChild>
-          <Link
-            href={`/profile/${profile.id}`}
-            className="cursor-pointer hover:text-[#206030]"
-          >
-            프로필
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link
-            href={`/profile/${profile?.id}?tab=created`}
-            className="dropdown-item"
-          >
-            생성한 파티
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link
-            href={`/profile/${profile?.id}?tab=joined`}
-            className="dropdown-item"
-          >
-            참가중인 파티
-          </Link>
-        </DropdownMenuItem>
+        <DropdownLinkItem href={`/profile/${profile.id}`}>
+          프로필
+        </DropdownLinkItem>
+
+        <DropdownLinkItem href={`/profile/${profile?.id}?tab=created`}>
+          생성한 파티
+        </DropdownLinkItem>
+
+        <DropdownLinkItem href={`/profile/${profile?.id}?tab=joined`}>
+          참가중인 파티
+        </DropdownLinkItem>
+
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <Button onClick={handleLogOut}>로그아웃</Button>
