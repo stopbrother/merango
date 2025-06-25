@@ -16,7 +16,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from './ui/dialog';
 import { Form, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 import { Input } from './ui/input';
@@ -80,12 +79,6 @@ const PartyRecruitForm = ({
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogTrigger asChild>
-        <Button className="bg-[#FFD700] text-[#333333] font-bold w-[120px] h-[40px]">
-          구인 하기
-        </Button>
-      </DialogTrigger>
-
       <DialogContent>
         <DialogHeader>
           <DialogTitle>구인</DialogTitle>
