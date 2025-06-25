@@ -27,13 +27,8 @@ const Header = () => {
           <Link href={'/recruit'} className="hover:text-[#E63946]">
             파티찾기
           </Link>
-          <Link
-            href={`/profile/${profile?.id}?tab=created`}
-            className="hover:text-[#E63946]"
-          >
-            내 모집글
-          </Link>
         </nav>
+
         <div className="flex items-center gap-6">
           <RecruitButton />
           {profile ? <UserDropdownButton profile={profile} /> : <LoginButton />}

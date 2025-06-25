@@ -76,3 +76,9 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .dropdown-item {
+    @apply flex w-full items-center px-2 py-1.5 text-sm cursor-pointer hover:bg-[#eaf5ea] hover:text-[#206030];
+  }
+}

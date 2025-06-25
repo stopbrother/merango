@@ -1,19 +1,22 @@
 'use client';
 
-import { useState } from 'react';
-import { Button } from './ui/button';
-import PartyRecruitForm from './PartyRecruitForm';
 import { useAuthQuery } from '@/query/auth/useAuthQuery';
-import { toast } from 'sonner';
+import { requireLogin } from '@/utils/auth';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import PartyRecruitForm from './PartyRecruitForm';
+import { Button } from './ui/button';
 
 const RecruitButton = () => {
+  const router = useRouter();
   // 구인하기 폼 모달 상태
   const [isRecruitFormOpen, setIsRecruitFormOpen] = useState(false);
 
   const { data: user } = useAuthQuery();
 
+  // 로그인 유무 검증 핸들러
   const handleOpenRecruitForm = () => {
-    if (!user) return toast.error('로그인이 필요합니다.');
+    if (!requireLogin({ user, router })) return;
 
     setIsRecruitFormOpen(true);
   };

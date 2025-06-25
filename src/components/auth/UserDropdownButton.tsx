@@ -41,8 +41,29 @@ const UserDropdownButton = ({ profile }: UserDropdownButtonProps) => {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent>
-        <DropdownMenuItem>
-          <Link href={`/profile/${profile.id}`}>프로필</Link>
+        <DropdownMenuItem className="hover:text-[#206030]" asChild>
+          <Link
+            href={`/profile/${profile.id}`}
+            className="cursor-pointer hover:text-[#206030]"
+          >
+            프로필
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link
+            href={`/profile/${profile?.id}?tab=created`}
+            className="dropdown-item"
+          >
+            생성한 파티
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link
+            href={`/profile/${profile?.id}?tab=joined`}
+            className="dropdown-item"
+          >
+            참가중인 파티
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
