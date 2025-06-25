@@ -54,8 +54,14 @@ const UserDropdownButton = ({ profile }: UserDropdownButtonProps) => {
         </DropdownLinkItem>
 
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <Button onClick={handleLogOut}>로그아웃</Button>
+        <DropdownMenuItem asChild>
+          <Button
+            variant="ghost"
+            className="w-full justify-start px-2 cursor-pointer focus:text-[#206030]"
+            onClick={handleLogOut}
+          >
+            로그아웃
+          </Button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
