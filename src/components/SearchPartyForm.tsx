@@ -45,7 +45,7 @@ const SearchPartyForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col items-center gap-3 bg-gray-100 p-4 border border-gray-300 rounded-lg shadow-md max-w-lg w-full sm:flex-row"
+        className="flex flex-col items-center justify-center gap-3 mx-auto bg-gray-100 p-3 border border-gray-300 rounded-lg shadow-md max-w-lg w-full sm:flex-row"
       >
         {/* input */}
         <FormField

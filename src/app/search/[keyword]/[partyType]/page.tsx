@@ -1,4 +1,5 @@
 import { searchParties } from '@/api/party-api';
+import SearchPartyForm from '@/components/SearchPartyForm';
 import SearchResult from '@/components/SearchResult';
 import { createClient } from '@/utils/supabase/server';
 import {
@@ -28,6 +29,7 @@ const SearchPage = async ({ params }: SearchPageProps) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
+      <SearchPartyForm />
       <SearchResult keyword={keyword} partyType={partyType} />
     </HydrationBoundary>
   );

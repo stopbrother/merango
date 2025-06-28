@@ -4,12 +4,14 @@ import QueryStateWrapper from '../QueryStateWrapper';
 import PartyList from './PartyList';
 import EmptyState from '../EmptyState';
 import { PartyPopper } from 'lucide-react';
+import SearchPartyForm from '../SearchPartyForm';
 
 const PartyRecruitList = () => {
   const { data, isLoading, error } = usePartiesQuery();
 
   return (
     <QueryStateWrapper isLoading={isLoading} error={error}>
+      <SearchPartyForm />
       {data?.length === 0 ? (
         <EmptyState icon={PartyPopper} message="등록된 파티가 없습니다." />
       ) : (
