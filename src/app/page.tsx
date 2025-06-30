@@ -1,5 +1,6 @@
 import SearchPartyForm from '@/components/SearchPartyForm';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -9,8 +10,11 @@ export default function Home() {
         <h1 className="text-4xl font-bold text-gray-800">
           MapleLand 파티 매칭
         </h1>
-        <Button className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-md">
-          파티 찾기
+        <Button
+          asChild
+          className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-md"
+        >
+          <Link href="/recruit">파티 찾기</Link>
         </Button>
       </div>
 
