@@ -141,7 +141,9 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
           <DialogTitle>{recruit.title}</DialogTitle>
         </DialogHeader>
         <div className="mt-4">
-          <p className="text-gray-700">{recruit.description}</p>
+          <p className="text-gray-700 whitespace-pre-line">
+            {recruit.description}
+          </p>
         </div>
 
         {/* TODO: 참가자 목록 컴포넌트 분리  */}
