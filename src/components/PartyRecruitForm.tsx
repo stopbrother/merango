@@ -130,7 +130,10 @@ const PartyRecruitForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>파티 설명</FormLabel>
-                  <Textarea {...field} />
+                  <Textarea
+                    placeholder="내용을 입력하세요 (기본 이모지만 사용 가능)"
+                    {...field}
+                  />
                 </FormItem>
               )}
             />
