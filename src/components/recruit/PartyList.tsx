@@ -1,7 +1,12 @@
 'use client';
 
 import { RecruitWithProfile } from '@/types/parties.types';
-import { Dialog, DialogTrigger } from '../ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog';
 import PartyCard from './PartyCard';
 import PartyDetail from './PartyDetail';
 
@@ -17,7 +22,11 @@ const PartyList = ({ parties }: PartyListProps) => {
           <DialogTrigger>
             <PartyCard recruit={party} />
           </DialogTrigger>
-          <PartyDetail recruit={party} />
+
+          <DialogContent>
+            <DialogTitle />
+            <PartyDetail recruit={party} />
+          </DialogContent>
         </Dialog>
       ))}
     </ul>
