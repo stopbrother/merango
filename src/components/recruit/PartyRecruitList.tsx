@@ -9,14 +9,14 @@ import SearchPartyForm from '../SearchPartyForm';
 const PartyRecruitList = () => {
   const { data, isLoading, error } = usePartiesQuery();
 
+  if (data?.length === 0)
+    return <EmptyState icon={PartyPopper} message="등록된 파티가 없습니다." />;
+
   return (
     <QueryStateWrapper isLoading={isLoading} error={error}>
       <SearchPartyForm />
-      {data?.length === 0 ? (
-        <EmptyState icon={PartyPopper} message="등록된 파티가 없습니다." />
-      ) : (
-        <PartyList parties={data ?? []} />
-      )}
+
+      <PartyList parties={data ?? []} />
     </QueryStateWrapper>
   );
 };
