@@ -187,8 +187,7 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
               variant="outline"
               className="text-blue-600 border-blue-500 hover:bg-blue-50 mr-auto"
             >
-              <MoveUp className="w-4 h-4" />
-              끌어올리기
+              <MoveUp className="w-4 h-4" />글 끌어올리기
             </Button>
           )}
           {/* 우측하단: 참가/취소 + 닫기 버튼 */}
