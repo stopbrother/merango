@@ -3,12 +3,12 @@ import { createClient } from '@/utils/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 
 // 구인글(파티) 리스트 조회
-export const usePartiesQuery = () => {
+export const usePartiesQuery = (partyType: string) => {
   const browserClient = createClient();
 
   return useQuery({
-    queryKey: ['recruits'],
-    queryFn: () => getParties(browserClient),
+    queryKey: ['recruits', partyType],
+    queryFn: () => getParties(browserClient, partyType),
   });
 };
 
