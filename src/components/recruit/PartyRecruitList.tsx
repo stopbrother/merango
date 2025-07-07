@@ -17,8 +17,10 @@ const PartyRecruitList = ({ type }: PartyRecruitListProps) => {
   const router = useRouter();
   const partyType = type ?? 'all';
 
+  // 목록조회
   const { data, isLoading, error } = usePartiesQuery(partyType);
 
+  // 탭 변경 핸들러
   const handleFilter = (value: string) => {
     if (partyType !== value)
       router.replace(`/recruit${value === 'all' ? '' : `?partyType=${value}`}`);
