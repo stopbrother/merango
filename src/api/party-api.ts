@@ -51,6 +51,23 @@ export const getParties = async (
   return data;
 };
 
+// api - 구인글 상세조회
+export const getPartyDetail = async (
+  client: SupabaseDataBase,
+  id: Recruit['id']
+) => {
+  const { data, error } = await client
+    .from('party_recruit')
+    .select(`*, created_by(*)`)
+    .eq('id', id)
+    .returns<RecruitWithProfile>()
+    .single();
+
+  if (error) throw new Error(error.message);
+
+  return data;
+};
+
 // api - 구인글 수정
 export const updateParty = async (
   recruitId: Recruit['id'],
