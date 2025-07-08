@@ -60,8 +60,8 @@ export const getPartyDetail = async (
     .from('party_recruit')
     .select(`*, created_by(*)`)
     .eq('id', id)
-    .returns<RecruitWithProfile>()
-    .single();
+    .single<RecruitWithProfile>();
+  // single은 결과없으면 에러, .maybeSingle은 결과가 없으면 data === null
 
   if (error) throw new Error(error.message);
 
