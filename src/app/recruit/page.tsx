@@ -9,12 +9,12 @@ import {
 
 interface RecruitPageProps {
   searchParams: {
-    partyType: string;
+    partyType?: string;
   };
 }
 
 const RecruitPage = async ({ searchParams }: RecruitPageProps) => {
-  const { partyType } = searchParams;
+  const partyType = searchParams.partyType ?? 'all';
 
   const serverClient = createClient();
   const queryClient = new QueryClient();
@@ -26,7 +26,7 @@ const RecruitPage = async ({ searchParams }: RecruitPageProps) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <PartyRecruitList type={partyType} />
+      <PartyRecruitList partyType={partyType} />
     </HydrationBoundary>
   );
 };
