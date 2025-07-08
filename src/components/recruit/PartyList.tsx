@@ -1,27 +1,28 @@
 'use client';
 
 import { RecruitWithProfile } from '@/types/parties.types';
-import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
-import PartyCard from './PartyCard';
-import PartyDetail from './PartyDetail';
+import PartyDialog from './PartyDialog';
+import { useSearchParams } from 'next/navigation';
 
 interface PartyListProps {
   parties: RecruitWithProfile[];
+  partyType: string;
 }
 
-const PartyList = ({ parties }: PartyListProps) => {
+const PartyList = ({ parties, partyType }: PartyListProps) => {
+  // 여기서 한번만 실행하고 props로 전달
+  const searchParams = useSearchParams();
+  const partyIdParam = searchParams.get('id');
+
   return (
     <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-3">
       {parties?.map((party) => (
-        <Dialog key={party.id}>
-          <DialogTrigger>
-            <PartyCard recruit={party} />
-          </DialogTrigger>
-
-          <DialogContent>
-            <PartyDetail recruit={party} />
-          </DialogContent>
-        </Dialog>
+        <PartyDialog
+          key={party.id}
+          party={party}
+          partyType={partyType}
+          partyIdParam={partyIdParam}
+        />
       ))}
     </ul>
   );
