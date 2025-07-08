@@ -10,12 +10,11 @@ import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import PartyList from './PartyList';
 
 interface PartyRecruitListProps {
-  type: string;
+  partyType: string;
 }
 
-const PartyRecruitList = ({ type }: PartyRecruitListProps) => {
+const PartyRecruitList = ({ partyType }: PartyRecruitListProps) => {
   const router = useRouter();
-  const partyType = type ?? 'all';
 
   // 목록조회
   const { data, isLoading, error } = usePartiesQuery(partyType);
@@ -42,7 +41,7 @@ const PartyRecruitList = ({ type }: PartyRecruitListProps) => {
 
       <QueryStateWrapper isLoading={isLoading} error={error}>
         {data?.length ? (
-          <PartyList parties={data ?? []} />
+          <PartyList parties={data ?? []} partyType={partyType} />
         ) : (
           <EmptyState icon={PartyPopper} message="등록된 파티가 없습니다." />
         )}
