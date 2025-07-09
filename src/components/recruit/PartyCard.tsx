@@ -25,7 +25,7 @@ const PartyCard = ({ recruit }: PartyCardProps) => {
     <Card key={recruit.id} className="hover:shadow-lg cursor-pointer">
       <CardHeader className="w-full flex flex-row justify-between items-center">
         <Badge>{typeLabel}</Badge>
-        <span className="text-sm text-gray-500 !mt-0">{formattedTime}</span>
+        <span className="text-sm text-gray-500 mt-0!">{formattedTime}</span>
       </CardHeader>
       <CardTitle className="text-center">{recruit.title}</CardTitle>
       <CardFooter className="justify-center">

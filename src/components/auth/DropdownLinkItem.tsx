@@ -10,7 +10,7 @@ interface DropdownLinkItemProps {
 const DropdownLinkItem = ({ href, children }: DropdownLinkItemProps) => {
   return (
     <DropdownMenuItem asChild>
-      <Link href={href} className="cursor-pointer focus:!text-[#206030]">
+      <Link href={href} className="cursor-pointer focus:text-[#206030]!">
         {children}
       </Link>
     </DropdownMenuItem>
