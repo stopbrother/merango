@@ -10,11 +10,15 @@ interface RecruitDetailPageProps {
 
 const RecruitDetailPage = async ({ params }: RecruitDetailPageProps) => {
   const serverClient = createClient();
-  const { data, error } = await getPartyDetail(serverClient, params.id);
+  const data = await getPartyDetail(serverClient, params.id);
 
-  if (error) return <div>데이터를 불러올 수 없습니다.</div>;
-
-  return <PartyDetail recruit={data} />;
+  return (
+    <div className="relative max-w-3xl mx-auto px-4 py-10">
+      <p className="text-sm text-muted-foreground mb-1">{data.party_type}</p>
+      <h1 className="text-2xl font-bold mb-6">{data.title}</h1>
+      <PartyDetail recruit={data} isModal={false} />
+    </div>
+  );
 };
 
 export default RecruitDetailPage;
