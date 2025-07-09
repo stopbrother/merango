@@ -23,6 +23,7 @@ const PartyDialog = ({ party, partyType, partyIdParam }: PartyDialogProps) => {
   const router = useRouter();
   const isOpen = party.id === partyIdParam; // open상태 결정
 
+  // 모달 라우팅 핸들러
   const handleOpenChange = (open: boolean) => {
     // 쿼리스트링 추가/제거 로직(열릴때 id추가, 닫힐때 id제거)
 

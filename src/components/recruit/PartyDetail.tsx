@@ -15,7 +15,7 @@ import {
 import { RecruitWithProfile } from '@/types/parties.types';
 import { requireLogin } from '@/utils/auth';
 import { canRaiseParty } from '@/utils/time';
-import { Loader2Icon, MoveUp, Pencil, Trash2 } from 'lucide-react';
+import { Loader2Icon, MoveUp } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -24,17 +24,14 @@ import PartyRecruitForm from '../PartyRecruitForm';
 import ProfileAvatar from '../ProfileAvatar';
 import TooltipWrapper from '../TooltipWrapper';
 import { Button } from '../ui/button';
-import {
-  DialogClose,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '../ui/dialog';
+import { DialogClose } from '../ui/dialog';
+import OwnerActionButtons from './OwnerActionButtons';
 
 interface PartyDetailProps {
   recruit: RecruitWithProfile;
+  isModal: boolean;
 }
-const PartyDetail = ({ recruit }: PartyDetailProps) => {
+const PartyDetail = ({ recruit, isModal }: PartyDetailProps) => {
   const router = useRouter();
   // 수정하기폼 모달 상태
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -111,33 +108,15 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
   };
 
   return (
-    // TODO: action 버튼들 분리
     <>
-      {isOwner && (
-        <>
-          <TooltipWrapper message="수정">
-            <button
-              onClick={() => setIsEditOpen(true)}
-              className="absolute top-4 right-[4.5rem] opacity-70 hover:opacity-100"
-            >
-              <Pencil className="w-4 h-4" />
-            </button>
-          </TooltipWrapper>
-
-          <TooltipWrapper message="삭제">
-            <button
-              onClick={handleDeleteRecruit}
-              className="absolute top-4 right-11 opacity-70 hover:opacity-100"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
-          </TooltipWrapper>
-        </>
+      {/* 수정/삭제 버튼 */}
+      {isOwner && isModal && (
+        <OwnerActionButtons
+          onEdit={() => setIsEditOpen(true)}
+          onDelete={handleDeleteRecruit}
+        />
       )}
-      <DialogHeader>
-        <DialogDescription>{recruit.party_type}</DialogDescription>
-        <DialogTitle>{recruit.title}</DialogTitle>
-      </DialogHeader>
+
       <div className="mt-4">
         <p className="text-gray-700 whitespace-pre-line">
           {recruit.description}
@@ -230,11 +209,21 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
             </Button>
           )}
 
-          <DialogClose asChild>
-            <Button className="px-4 py-2 bg-gray-300 text-gray-800 hover:bg-gray-400">
-              닫기
+          {/* 닫기 or 목록 버튼 조건부 */}
+          {isModal ? (
+            <DialogClose asChild>
+              <Button className="px-4 py-2 bg-gray-300 text-gray-800 hover:bg-gray-400">
+                닫기
+              </Button>
+            </DialogClose>
+          ) : (
+            <Button
+              asChild
+              className="px-4 py-2 bg-gray-300 text-gray-800 hover:bg-gray-400"
+            >
+              <Link href="/recruit">목록으로</Link>
             </Button>
-          </DialogClose>
+          )}
         </div>
       </div>
       {/* <div className="mt-6 flex justify-center gap-4">
