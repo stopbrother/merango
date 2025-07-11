@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 
 interface PartyListProps {
   parties: RecruitWithProfile[];
-  partyType: string;
+  partyType?: string;
 }
 
 const PartyList = ({ parties, partyType }: PartyListProps) => {
