@@ -10,13 +10,19 @@ const OwnerActionButtons = ({ onEdit, onDelete }: OwnerActionButtonsProps) => {
   return (
     <div className="absolute top-4 right-10 flex gap-2">
       <TooltipWrapper message="수정">
-        <button onClick={onEdit} className="opacity-70 hover:opacity-100">
+        <button
+          onClick={onEdit}
+          className="cursor-pointer opacity-70 hover:opacity-100"
+        >
           <Pencil className="w-4 h-4" />
         </button>
       </TooltipWrapper>
 
       <TooltipWrapper message="삭제">
-        <button onClick={onDelete} className="opacity-70 hover:opacity-100">
+        <button
+          onClick={onDelete}
+          className="cursor-pointer opacity-70 hover:opacity-100"
+        >
           <Trash2 className="w-4 h-4" />
         </button>
       </TooltipWrapper>
