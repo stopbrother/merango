@@ -11,13 +11,14 @@ import PartyList from './PartyList';
 
 interface PartyRecruitListProps {
   partyType: string;
+  keyword?: string;
 }
 
-const PartyRecruitList = ({ partyType }: PartyRecruitListProps) => {
+const PartyRecruitList = ({ partyType, keyword }: PartyRecruitListProps) => {
   const router = useRouter();
 
   // 목록조회
-  const { data, isLoading, error } = usePartiesQuery(partyType);
+  const { data, isLoading, error } = usePartiesQuery(partyType, keyword);
 
   // 탭 변경 핸들러
   const handleFilter = (value: string) => {
