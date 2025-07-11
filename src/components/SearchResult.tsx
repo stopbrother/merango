@@ -15,7 +15,7 @@ const SearchResult = ({ keyword, partyType }: SearchResultProps) => {
 
   return (
     <QueryStateWrapper isLoading={isLoading} error={error}>
-      <PartyList parties={data ?? []} />
+      <PartyList parties={data ?? []} partyType={partyType} />
     </QueryStateWrapper>
   );
 };

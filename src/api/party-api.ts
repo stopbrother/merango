@@ -31,13 +31,37 @@ export const addParties = async (formData: RecruitForm) => {
 };
 
 // api - 구인글 리스트 조회
-export const getParties = async (client: SupabaseDataBase) => {
-  // 가상테이블 생성 => COALESCE(updated_date_time, created_date_time) AS sort_time
-  const { data, error } = await client
+// 가상테이블 생성 => COALESCE(updated_date_time, created_date_time) AS sort_time
+export const getParties = async (
+  client: SupabaseDataBase,
+  partyType: string
+) => {
+  let query = client
     .from('party_recruit_sort')
     .select(`*, created_by(*)`)
-    .order('sort_time', { ascending: false })
-    .returns<RecruitWithProfile[]>();
+    .order('sort_time', { ascending: false });
+
+  if (partyType && partyType !== 'all')
+    query = query.eq('party_type', partyType);
+
+  const { data, error } = await query.returns<RecruitWithProfile[]>();
+
+  if (error) throw new Error(error.message);
+
+  return data;
+};
+
+// api - 구인글 상세조회
+export const getPartyDetail = async (
+  client: SupabaseDataBase,
+  id: Recruit['id']
+) => {
+  const { data, error } = await client
+    .from('party_recruit')
+    .select(`*, created_by(*)`)
+    .eq('id', id)
+    .single<RecruitWithProfile>();
+  // single은 결과없으면 에러, .maybeSingle은 결과가 없으면 data === null
 
   if (error) throw new Error(error.message);
 

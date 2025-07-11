@@ -13,29 +13,25 @@ import {
   useRaisePartyMutation,
 } from '@/query/party/usePartyMutation';
 import { RecruitWithProfile } from '@/types/parties.types';
-import { Loader2Icon, MoveUp, Pencil, Trash2 } from 'lucide-react';
+import { requireLogin } from '@/utils/auth';
+import { canRaiseParty } from '@/utils/time';
+import { Loader2Icon, MoveUp } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import PartyRecruitForm from '../PartyRecruitForm';
+import ProfileAvatar from '../ProfileAvatar';
 import TooltipWrapper from '../TooltipWrapper';
 import { Button } from '../ui/button';
-import {
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '../ui/dialog';
-import { canRaiseParty } from '@/utils/time';
-import { toast } from 'sonner';
-import Link from 'next/link';
-import ProfileAvatar from '../ProfileAvatar';
-import { requireLogin } from '@/utils/auth';
-import { useRouter } from 'next/navigation';
+import { DialogClose } from '../ui/dialog';
+import OwnerActionButtons from './OwnerActionButtons';
 
 interface PartyDetailProps {
   recruit: RecruitWithProfile;
+  isModal: boolean;
 }
-const PartyDetail = ({ recruit }: PartyDetailProps) => {
+const PartyDetail = ({ recruit, isModal }: PartyDetailProps) => {
   const router = useRouter();
   // 수정하기폼 모달 상태
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -112,135 +108,126 @@ const PartyDetail = ({ recruit }: PartyDetailProps) => {
   };
 
   return (
-    // TODO: action 버튼들 분리
     <>
-      <DialogContent>
-        {isOwner && (
-          <>
-            <TooltipWrapper message="수정">
-              <button
-                onClick={() => setIsEditOpen(true)}
-                className="absolute top-4 right-[4.5rem] opacity-70 hover:opacity-100"
-              >
-                <Pencil className="w-4 h-4" />
-              </button>
-            </TooltipWrapper>
+      {/* 수정/삭제 버튼 */}
+      {isOwner && isModal && (
+        <OwnerActionButtons
+          onEdit={() => setIsEditOpen(true)}
+          onDelete={handleDeleteRecruit}
+        />
+      )}
 
-            <TooltipWrapper message="삭제">
-              <button
-                onClick={handleDeleteRecruit}
-                className="absolute top-4 right-11 opacity-70 hover:opacity-100"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </TooltipWrapper>
-          </>
-        )}
-        <DialogHeader>
-          <DialogDescription>{recruit.party_type}</DialogDescription>
-          <DialogTitle>{recruit.title}</DialogTitle>
-        </DialogHeader>
-        <div className="mt-4">
-          <p className="text-gray-700">{recruit.description}</p>
-        </div>
+      <div className="mt-4">
+        <p className="text-gray-700 whitespace-pre-line">
+          {recruit.description}
+        </p>
+      </div>
 
-        {/* TODO: 참가자 목록 컴포넌트 분리  */}
-        <div className="mt-6">
-          <h3 className="text-lg font-bold mb-4">참가자 목록</h3>
-          <ul className="space-y-4">
-            {partyMembers?.map((member) => (
-              <li key={member.id} className="flex items-center justify-between">
-                <Link
-                  href={`/profile/${member.profile_id.id}`}
-                  className="flex flex-row gap-2 items-center text-gray-800 font-semibold hover:bg-gray-200"
+      {/* TODO: 참가자 목록 컴포넌트 분리  */}
+      <div className="mt-6">
+        <h3 className="text-lg font-bold mb-4">참가자 목록</h3>
+        <ul className="space-y-4">
+          {partyMembers?.map((member) => (
+            <li key={member.id} className="flex items-center justify-between">
+              <Link
+                href={`/profile/${member.profile_id.id}`}
+                className="flex flex-row gap-2 items-center text-gray-800 font-semibold hover:bg-gray-200"
+              >
+                <ProfileAvatar profileImg={member.profile_id.avatar_url} />
+                {member.profile_id.username}/{member.profile_id.level}/
+                {member.profile_id.job}
+              </Link>
+              {/* 추방하기 버튼(작성자만 보이고 작성자 본인은 추방x) */}
+              {isOwner && currentUserId !== member.profile_id.id && (
+                <Button
+                  onClick={() =>
+                    handleRemoveMember(member.profile_id.id, false)
+                  }
+                  disabled={isPending}
+                  variant="link"
+                  className="text-sm text-red-500"
                 >
-                  <ProfileAvatar profileImg={member.profile_id.avatar_url} />
-                  {member.profile_id.username}/{member.profile_id.level}/
-                  {member.profile_id.job}
-                </Link>
-                {/* 추방하기 버튼(작성자만 보이고 작성자 본인은 추방x) */}
-                {isOwner && currentUserId !== member.profile_id.id && (
-                  <Button
-                    onClick={() =>
-                      handleRemoveMember(member.profile_id.id, false)
-                    }
-                    disabled={isPending}
-                    variant="link"
-                    className="text-sm text-red-500"
-                  >
-                    {isPending && <Loader2Icon className="animate-spin" />}
-                    추방
-                  </Button>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-        {/* Dialog footer 영역 */}
-        <div className="mt-6 flex justify-end">
-          {/* 좌측하단 : 끌어올리기 버튼 */}
+                  {isPending && <Loader2Icon className="animate-spin" />}
+                  추방
+                </Button>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+      {/* Dialog footer 영역 */}
+      <div className="mt-6 flex justify-end">
+        {/* 좌측하단 : 끌어올리기 버튼 */}
+        {isOwner && (
+          <Button
+            onClick={handleRaiseParty}
+            variant="outline"
+            className="text-blue-600 border-blue-500 hover:bg-blue-50 mr-auto"
+          >
+            <MoveUp className="w-4 h-4" />글 끌어올리기
+          </Button>
+        )}
+        {/* 우측하단: 참가/취소 + 닫기 버튼 */}
+        <div className="flex gap-2">
+          {/* disabled버튼(작성자) */}
           {isOwner && (
+            <TooltipWrapper message="파티장은 취소할 수 없습니다.">
+              <div>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="px-4 py-2 border border-gray-400 text-gray-700 hover:bg-gray-100"
+                >
+                  참가 취소
+                </Button>
+              </div>
+            </TooltipWrapper>
+          )}
+
+          {/* 참가 취소 버튼 */}
+          {!isOwner && isJoined && (
             <Button
-              onClick={handleRaiseParty}
+              onClick={() => handleRemoveMember(currentUserId, true)}
+              disabled={isPending}
               variant="outline"
-              className="text-blue-600 border-blue-500 hover:bg-blue-50 mr-auto"
+              className="px-4 py-2 border border-gray-400 text-gray-700 hover:bg-gray-100"
             >
-              <MoveUp className="w-4 h-4" />
-              끌어올리기
+              {isPending && <Loader2Icon className="animate-spin" />}
+              참가 취소
             </Button>
           )}
-          {/* 우측하단: 참가/취소 + 닫기 버튼 */}
-          <div className="flex gap-2">
-            {/* disabled버튼(작성자) */}
-            {isOwner && (
-              <TooltipWrapper message="파티장은 취소할 수 없습니다.">
-                <div>
-                  <Button
-                    disabled
-                    variant="outline"
-                    className="px-4 py-2 border border-gray-400 text-gray-700 hover:bg-gray-100"
-                  >
-                    참가 취소
-                  </Button>
-                </div>
-              </TooltipWrapper>
-            )}
 
-            {/* 참가 취소 버튼 */}
-            {!isOwner && isJoined && (
-              <Button
-                onClick={() => handleRemoveMember(currentUserId, true)}
-                disabled={isPending}
-                variant="outline"
-                className="px-4 py-2 border border-gray-400 text-gray-700 hover:bg-gray-100"
-              >
-                {isPending && <Loader2Icon className="animate-spin" />}
-                참가 취소
-              </Button>
-            )}
+          {/* 참가 신청 버튼 */}
+          {!isOwner && !isJoined && (
+            <Button
+              onClick={handleRequestJoin}
+              disabled={isJoining}
+              className="px-4 py-2 bg-green-600 hover:bg-green-700"
+            >
+              {isJoining && <Loader2Icon className="animate-spin" />}
+              참가 신청
+            </Button>
+          )}
 
-            {/* 참가 신청 버튼 */}
-            {!isOwner && !isJoined && (
-              <Button
-                onClick={handleRequestJoin}
-                disabled={isJoining}
-                className="px-4 py-2 bg-green-600 hover:bg-green-700"
-              >
-                {isJoining && <Loader2Icon className="animate-spin" />}
-                참가 신청
-              </Button>
-            )}
-
+          {/* 닫기 or 목록 버튼 조건부 */}
+          {isModal ? (
             <DialogClose asChild>
               <Button className="px-4 py-2 bg-gray-300 text-gray-800 hover:bg-gray-400">
                 닫기
               </Button>
             </DialogClose>
-          </div>
+          ) : (
+            <Button
+              asChild
+              className="px-4 py-2 bg-gray-300 text-gray-800 hover:bg-gray-400"
+            >
+              <Link href="/recruit">목록으로</Link>
+            </Button>
+          )}
         </div>
-        {/* <div className="mt-6 flex justify-center gap-4">
+      </div>
+      {/* <div className="mt-6 flex justify-center gap-4">
           </div> */}
-      </DialogContent>
 
       {/* 수정하기 모달 */}
       {isEditOpen && (

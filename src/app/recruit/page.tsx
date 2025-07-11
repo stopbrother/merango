@@ -7,18 +7,26 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 
-const RecruitPage = async () => {
+interface RecruitPageProps {
+  searchParams: {
+    partyType?: string;
+  };
+}
+
+const RecruitPage = async ({ searchParams }: RecruitPageProps) => {
+  const partyType = searchParams.partyType ?? 'all';
+
   const serverClient = createClient();
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ['recruits'],
-    queryFn: () => getParties(serverClient),
+    queryKey: ['recruits', partyType],
+    queryFn: () => getParties(serverClient, partyType),
   });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <PartyRecruitList />
+      <PartyRecruitList partyType={partyType} />
     </HydrationBoundary>
   );
 };

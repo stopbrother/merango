@@ -3,6 +3,7 @@ import { Badge } from '../ui/badge';
 import { RecruitWithProfile } from '@/types/parties.types';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { PARTY_TYPE_OPTIONS } from '@/constants/partyType';
 
 interface PartyCardProps {
   recruit: RecruitWithProfile;
@@ -14,11 +15,17 @@ const PartyCard = ({ recruit }: PartyCardProps) => {
     addSuffix: true,
     locale: ko,
   });
+
+  // 파티타입 한글로 변환
+  const typeLabel = PARTY_TYPE_OPTIONS.find(
+    (v) => v.value === recruit.party_type
+  )?.label;
+
   return (
     <Card key={recruit.id} className="hover:shadow-lg cursor-pointer">
       <CardHeader className="w-full flex flex-row justify-between items-center">
-        <Badge>{recruit.party_type}</Badge>
-        <span className="text-sm text-gray-500 !mt-0">{formattedTime}</span>
+        <Badge>{typeLabel}</Badge>
+        <span className="text-sm text-gray-500 mt-0!">{formattedTime}</span>
       </CardHeader>
       <CardTitle className="text-center">{recruit.title}</CardTitle>
       <CardFooter className="justify-center">
