@@ -15,28 +15,24 @@ import PartyDetail from './PartyDetail';
 
 interface PartyDialogProps {
   party: RecruitWithProfile;
-  partyType?: string;
-  partyIdParam: string | null;
+  searchParams: URLSearchParams;
 }
 
-const PartyDialog = ({ party, partyType, partyIdParam }: PartyDialogProps) => {
+const PartyDialog = ({ party, searchParams }: PartyDialogProps) => {
   const router = useRouter();
-  const isOpen = party.id === partyIdParam; // open상태 결정
+
+  const isOpen = party.id === searchParams.get('id'); // open상태 결정
 
   // 모달 라우팅 핸들러
   const handleOpenChange = (open: boolean) => {
     // 쿼리스트링 추가/제거 로직(열릴때 id추가, 닫힐때 id제거)
-
-    const params = new URLSearchParams();
-
-    if (partyType && partyType !== 'all') params.set('partyType', partyType);
+    const params = new URLSearchParams(searchParams);
 
     if (open) params.set('id', party.id);
 
-    const paramsString = params.toString();
-    const url = paramsString ? `/recruit?${paramsString}` : '/recruit';
+    if (!open) params.delete('id');
 
-    router.replace(url, { scroll: false });
+    router.replace(`/recruit?${params.toString()}`, { scroll: false });
   };
 
   return (

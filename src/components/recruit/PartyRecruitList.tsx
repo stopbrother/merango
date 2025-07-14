@@ -42,7 +42,7 @@ const PartyRecruitList = ({ partyType, keyword }: PartyRecruitListProps) => {
 
       <QueryStateWrapper isLoading={isLoading} error={error}>
         {data?.length ? (
-          <PartyList parties={data ?? []} partyType={partyType} />
+          <PartyList parties={data ?? []} />
         ) : (
           <EmptyState icon={PartyPopper} message="등록된 파티가 없습니다." />
         )}
