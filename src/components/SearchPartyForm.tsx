@@ -74,7 +74,7 @@ const SearchPartyForm = () => {
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
-                  <SelectTrigger className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 w-full sm:w-32">
+                  <SelectTrigger className="px-4 py-2 m-0 border border-gray-300 rounded-md text-gray-700 w-full sm:w-32">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
