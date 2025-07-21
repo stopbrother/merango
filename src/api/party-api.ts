@@ -30,11 +30,12 @@ export const addParties = async (formData: RecruitForm) => {
   return recruitData;
 };
 
-// api - 구인글 리스트 조회
+// api - 구인글 리스트 조회 & 검색
 // 가상테이블 생성 => COALESCE(updated_date_time, created_date_time) AS sort_time
 export const getParties = async (
   client: SupabaseDataBase,
-  partyType: string
+  partyType: string,
+  keyword?: string
 ) => {
   let query = client
     .from('party_recruit_sort')
@@ -43,6 +44,9 @@ export const getParties = async (
 
   if (partyType && partyType !== 'all')
     query = query.eq('party_type', partyType);
+
+  // 키워드가 있을 경우, title 컬럼에서 대소문자 무시 부분 일치 검색
+  if (keyword) query = query.ilike('title', `%${keyword}%`);
 
   const { data, error } = await query.returns<RecruitWithProfile[]>();
 
@@ -107,29 +111,6 @@ export const getCreatedParties = async (
     .eq('created_by', userId)
     .order('sort_time', { ascending: false })
     .returns<RecruitWithProfile[]>();
-
-  if (error) throw new Error(error.message);
-
-  return data;
-};
-
-// api - 파티(구인글) 검색
-export const searchParties = async (
-  client: SupabaseDataBase,
-  keyword: string,
-  partyType: string
-) => {
-  let query = client
-    .from('party_recruit_sort')
-    .select(`*, created_by(*)`)
-    .order('sort_time', { ascending: false });
-
-  // 키워드가 있을 경우, title 컬럼에서 대소문자 무시 부분 일치 검색
-  if (keyword) query = query.ilike('title', `%${keyword}%`);
-
-  if (partyType !== 'all') query = query.eq('party_type', partyType);
-
-  const { data, error } = await query.returns<RecruitWithProfile[]>();
 
   if (error) throw new Error(error.message);
 

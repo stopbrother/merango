@@ -10,23 +10,25 @@ import {
 interface RecruitPageProps {
   searchParams: {
     partyType?: string;
+    keyword?: string;
   };
 }
 
 const RecruitPage = async ({ searchParams }: RecruitPageProps) => {
+  const { keyword } = searchParams;
   const partyType = searchParams.partyType ?? 'all';
 
   const serverClient = createClient();
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ['recruits', partyType],
-    queryFn: () => getParties(serverClient, partyType),
+    queryKey: ['recruits', partyType, keyword],
+    queryFn: () => getParties(serverClient, partyType, keyword),
   });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <PartyRecruitList partyType={partyType} />
+      <PartyRecruitList partyType={partyType} keyword={searchParams.keyword} />
     </HydrationBoundary>
   );
 };

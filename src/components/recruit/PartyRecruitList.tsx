@@ -11,13 +11,14 @@ import PartyList from './PartyList';
 
 interface PartyRecruitListProps {
   partyType: string;
+  keyword?: string;
 }
 
-const PartyRecruitList = ({ partyType }: PartyRecruitListProps) => {
+const PartyRecruitList = ({ partyType, keyword }: PartyRecruitListProps) => {
   const router = useRouter();
 
   // 목록조회
-  const { data, isLoading, error } = usePartiesQuery(partyType);
+  const { data, isLoading, error } = usePartiesQuery(partyType, keyword);
 
   // 탭 변경 핸들러
   const handleFilter = (value: string) => {
@@ -41,7 +42,7 @@ const PartyRecruitList = ({ partyType }: PartyRecruitListProps) => {
 
       <QueryStateWrapper isLoading={isLoading} error={error}>
         {data?.length ? (
-          <PartyList parties={data ?? []} partyType={partyType} />
+          <PartyList parties={data ?? []} />
         ) : (
           <EmptyState icon={PartyPopper} message="등록된 파티가 없습니다." />
         )}

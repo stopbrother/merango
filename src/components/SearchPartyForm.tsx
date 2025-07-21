@@ -38,7 +38,7 @@ const SearchPartyForm = () => {
 
     if (!formData.keyword.trim()) return toast.error('검색어를 입력해주세요.');
 
-    router.push(`/search/${keyword}/${party_type}`);
+    router.push(`/recruit?keyword=${keyword}&partyType=${party_type}`);
   };
 
   return (
