@@ -1,9 +1,11 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '../utils/supabase/client';
+import { SupabaseDataBase } from '@/types/utils.types';
 
+// 디스코드 소셜 로그인
 export async function signInWithDiscord() {
   const supabase = createClient();
-
+  console.log('next_base_url', process.env.NEXT_PUBLIC_BASE_URL);
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'discord',
     options: {
@@ -18,6 +20,7 @@ export async function signInWithDiscord() {
   if (error) console.log('error', error);
 }
 
+// 로그아웃
 export async function signOut() {
   const supabase = createClient();
 
@@ -28,3 +31,15 @@ export async function signOut() {
     console.log('error', error);
   }
 }
+
+// api - 로그인 한 사용자
+export const getCurrentUser = async (client: SupabaseDataBase) => {
+  const { data, error } = await client.auth.getUser();
+
+  if (error) {
+    if (!data.user) return null;
+    throw new Error(error.message);
+  }
+
+  return data.user;
+};

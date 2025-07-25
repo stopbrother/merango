@@ -1,16 +1,6 @@
+import { Profile, ProfileForm } from '@/types/profiles.types';
 import { SupabaseDataBase } from '@/types/utils.types';
-
-// api - 로그인 한 사용자
-export const getCurrentUser = async (client: SupabaseDataBase) => {
-  const { data, error } = await client.auth.getUser();
-
-  if (error) {
-    if (!data.user) return null;
-    throw new Error(error.message);
-  }
-
-  return data.user;
-};
+import { createClient } from '@/utils/supabase/client';
 
 // api - 유저 정보
 export const getUserProfile = async (
@@ -26,4 +16,33 @@ export const getUserProfile = async (
   if (error) throw new Error(error.message);
 
   return data;
+};
+
+// api - 소개글 등록/수정
+export const updateUserIntro = async (
+  data: Profile['intro'],
+  userId: Profile['id']
+) => {
+  const client = createClient();
+  const { error } = await client
+    .from('profiles')
+    .update({ intro: data })
+    .eq('id', userId);
+
+  if (error) throw new Error(error.message);
+};
+
+// api - 프로필 수정
+export const updateProfile = async (
+  userId: Profile['id'],
+  formData: ProfileForm
+) => {
+  const client = createClient();
+
+  const { error } = await client
+    .from('profiles')
+    .update(formData)
+    .eq('id', userId);
+
+  if (error) throw new Error(error.message);
 };

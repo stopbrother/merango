@@ -1,13 +1,25 @@
-import { PartyMemberWithProfile } from '@/types/parties.types';
+import {
+  PartyMemberWithProfile,
+  RecruitWithProfile,
+} from '@/types/parties.types';
 import { SupabaseDataBase } from '@/types/utils.types';
 import { createClient } from '@/utils/supabase/client';
 
-// 파티 멤버
+// 파티 참가
 
 // api - 참가 신청
-export const addMember = async (partyId: string) => {
+export const requestJoinParty = async (partyId: string) => {
   const client = createClient();
 
+  // 현재 참가자 수 조회(6명 제한)
+  const { count, error: countError } = await client
+    .from('party_member')
+    .select('*', { count: 'exact', head: true })
+    .eq('party_id', partyId);
+
+  if ((count ?? 0) >= 6) throw new Error(countError?.message);
+
+  // 참가자 테이블에 데이터 삽입
   const { error } = await client
     .from('party_member')
     .insert({ party_id: partyId });
@@ -15,8 +27,24 @@ export const addMember = async (partyId: string) => {
   if (error) throw new Error(error.message);
 };
 
-// api - 참가중인 멤버
-export const getMembers = async (client: SupabaseDataBase, PartyId: string) => {
+// api - 참가자 본인: 참가신청 취소, 파티장: 추방
+export const removePartyMember = async (partyId: string, userId: string) => {
+  const client = createClient();
+
+  const { error } = await client
+    .from('party_member')
+    .delete()
+    .eq('party_id', partyId)
+    .eq('profile_id', userId);
+
+  if (error) throw new Error(error.message);
+};
+
+// api - 참가자 조회
+export const getPartyMembers = async (
+  client: SupabaseDataBase,
+  PartyId: string
+) => {
   const { data, error } = await client
     .from('party_member')
     .select('*, profile_id(*)')
@@ -29,7 +57,7 @@ export const getMembers = async (client: SupabaseDataBase, PartyId: string) => {
 };
 
 // api - 참가 신청한 파티인지 확인
-export const isMember = async (
+export const hasJoinedParty = async (
   client: SupabaseDataBase,
   partyId: string,
   profileId: string
@@ -37,11 +65,28 @@ export const isMember = async (
   // console.log('실행됨', { partyId, profileId });
   const { data, error } = await client
     .from('party_member')
-    .select()
+    .select('id')
     .eq('party_id', partyId)
     .eq('profile_id', profileId);
 
   if (error) throw new Error(error.message);
 
   return data.length > 0;
+};
+
+// api - 참가중인 파티 목록 조회
+export const getJoinedParties = async (
+  client: SupabaseDataBase,
+  userId: string
+) => {
+  const { data, error } = await client
+    .from('party_member')
+    .select('party_id(*, created_by(*))')
+    .eq('profile_id', userId)
+    .order('joined_date_time', { ascending: false })
+    .returns<{ party_id: RecruitWithProfile }[]>();
+
+  if (error) throw new Error(error.message);
+
+  return data.map((item) => item.party_id);
 };

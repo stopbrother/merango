@@ -10,6 +10,7 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createClient();
+    // Authorization code를 통한 세션 교환
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
       const forwardedHost = request.headers.get('x-forwarded-host'); // original origin before load balancer

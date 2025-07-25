@@ -1,4 +1,4 @@
-import { getCurrentUser } from '@/api/profile-api';
+import { getCurrentUser } from '@/api/auth-api';
 import { createClient } from '@/utils/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 

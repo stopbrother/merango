@@ -9,7 +9,7 @@ import { createClient } from '@/utils/supabase/client';
 // 구인 API
 
 // api - 구인글 등록
-export const addRecruit = async (formData: RecruitForm) => {
+export const addParties = async (formData: RecruitForm) => {
   const client = createClient();
 
   const { data: recruitData, error } = await client
@@ -30,12 +30,86 @@ export const addRecruit = async (formData: RecruitForm) => {
   return recruitData;
 };
 
-// api - 구인글 리스트
-export const getRecruits = async (client: SupabaseDataBase) => {
+// api - 구인글 리스트 조회 & 검색
+// 가상테이블 생성 => COALESCE(updated_date_time, created_date_time) AS sort_time
+export const getParties = async (
+  client: SupabaseDataBase,
+  partyType: string,
+  keyword?: string
+) => {
+  let query = client
+    .from('party_recruit_sort')
+    .select(`*, created_by(*)`)
+    .order('sort_time', { ascending: false });
+
+  if (partyType && partyType !== 'all')
+    query = query.eq('party_type', partyType);
+
+  // 키워드가 있을 경우, title 컬럼에서 대소문자 무시 부분 일치 검색
+  if (keyword) query = query.ilike('title', `%${keyword}%`);
+
+  const { data, error } = await query.returns<RecruitWithProfile[]>();
+
+  if (error) throw new Error(error.message);
+
+  return data;
+};
+
+// api - 구인글 상세조회
+export const getPartyDetail = async (
+  client: SupabaseDataBase,
+  id: Recruit['id']
+) => {
   const { data, error } = await client
     .from('party_recruit')
     .select(`*, created_by(*)`)
-    .order('created_date_time', { ascending: false })
+    .eq('id', id)
+    .single<RecruitWithProfile>();
+  // single은 결과없으면 에러, .maybeSingle은 결과가 없으면 data === null
+
+  if (error) throw new Error(error.message);
+
+  return data;
+};
+
+// api - 구인글 수정
+export const updateParty = async (
+  recruitId: Recruit['id'],
+  formData: RecruitForm
+) => {
+  const client = createClient();
+  console.log('update실행:', { recruitId, formData });
+
+  const { error } = await client
+    .from('party_recruit')
+    .update(formData)
+    .eq('id', recruitId);
+
+  if (error) throw new Error(error.message);
+};
+
+// api - 구인글 삭제
+export const deleteParty = async (recruitId: Recruit['id']) => {
+  const client = createClient();
+
+  const { error } = await client
+    .from('party_recruit')
+    .delete()
+    .eq('id', recruitId);
+
+  if (error) throw new Error(error.message);
+};
+
+// api - 생성한 파티(구인글) 조회
+export const getCreatedParties = async (
+  client: SupabaseDataBase,
+  userId: Recruit['created_by']
+) => {
+  const { data, error } = await client
+    .from('party_recruit_sort')
+    .select(`*, created_by(*)`)
+    .eq('created_by', userId)
+    .order('sort_time', { ascending: false })
     .returns<RecruitWithProfile[]>();
 
   if (error) throw new Error(error.message);
@@ -43,13 +117,16 @@ export const getRecruits = async (client: SupabaseDataBase) => {
   return data;
 };
 
-// api - 구인글 업데이트
-
-// api - 구인글 삭제
-export const deleteRecruit = async (data: Recruit) => {
+// api - 구인글 끌어올리기
+export const raiseParty = async (recruitId: Recruit['id']) => {
   const client = createClient();
 
-  const { error } = await client.from('party_recruit').delete();
+  const now = new Date().toISOString(); // UTC(세계 표준시)로 변환
+
+  const { error } = await client
+    .from('party_recruit')
+    .update({ raised_date_time: now })
+    .eq('id', recruitId);
 
   if (error) throw new Error(error.message);
 };

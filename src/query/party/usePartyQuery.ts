@@ -1,12 +1,23 @@
-import { getRecruits } from '@/api/party-api';
+import { getCreatedParties, getParties } from '@/api/party-api';
 import { createClient } from '@/utils/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 
-export const useRecruitQuery = () => {
+// 구인글(파티) 리스트 조회
+export const usePartiesQuery = (partyType: string, keyword?: string) => {
   const browserClient = createClient();
 
   return useQuery({
-    queryKey: ['recruits'],
-    queryFn: () => getRecruits(browserClient),
+    queryKey: ['recruits', partyType, keyword],
+    queryFn: () => getParties(browserClient, partyType, keyword),
+  });
+};
+
+// 생성한 구인글(파티) 조회
+export const useCreatedPartiesQuery = (userId: string) => {
+  const browserClient = createClient();
+
+  return useQuery({
+    queryKey: ['createdParties', userId],
+    queryFn: () => getCreatedParties(browserClient, userId),
   });
 };

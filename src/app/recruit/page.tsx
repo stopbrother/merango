@@ -1,5 +1,5 @@
-import { getRecruits } from '@/api/party-api';
-import RecruitList from '@/components/recruit/RecruitList';
+import { getParties } from '@/api/party-api';
+import PartyRecruitList from '@/components/recruit/PartyRecruitList';
 import { createClient } from '@/utils/supabase/server';
 import {
   dehydrate,
@@ -7,18 +7,28 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 
-const RecruitPage = async () => {
+interface RecruitPageProps {
+  searchParams: {
+    partyType?: string;
+    keyword?: string;
+  };
+}
+
+const RecruitPage = async ({ searchParams }: RecruitPageProps) => {
+  const { keyword } = searchParams;
+  const partyType = searchParams.partyType ?? 'all';
+
   const serverClient = createClient();
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ['recruits'],
-    queryFn: () => getRecruits(serverClient),
+    queryKey: ['recruits', partyType, keyword],
+    queryFn: () => getParties(serverClient, partyType, keyword),
   });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <RecruitList />
+      <PartyRecruitList partyType={partyType} keyword={searchParams.keyword} />
     </HydrationBoundary>
   );
 };

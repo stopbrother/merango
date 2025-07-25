@@ -1,12 +1,14 @@
-import { getCurrentUser } from '@/api/profile-api';
+import { getUserProfile } from '@/api/profile-api';
+import { Profile } from '@/types/profiles.types';
 import { createClient } from '@/utils/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 
-export const useCurrentUserQuery = () => {
+export const useProfileQuery = (userId: Profile['id']) => {
   const browserClient = createClient();
 
   return useQuery({
-    queryKey: ['currentUser'],
-    queryFn: () => getCurrentUser(browserClient),
+    queryKey: ['userProfile', userId],
+    queryFn: () => getUserProfile(browserClient, userId),
+    enabled: !!userId, // userId가 있을 경우에만 실행
   });
 };

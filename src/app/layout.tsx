@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 import Header from '@/components/Header';
 import Providers from './providers';
+import { Toaster } from '@/components/ui/sonner';
 
 const pretendard = localFont({
   src: './fonts/PretendardVariable.woff2',
@@ -26,7 +27,10 @@ export default function RootLayout({
       <body className={`${pretendard.className}`}>
         <Providers>
           <Header />
-          <main className="max-w-[1200px] mx-auto">{children}</main>
+          <main className="max-w-[1200px] mx-auto w-full py-4 px-4">
+            {children}
+            <Toaster />
+          </main>
         </Providers>
       </body>
     </html>
