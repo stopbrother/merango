@@ -21,6 +21,8 @@ import { Form, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 import { Input } from './ui/input';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 import { Textarea } from './ui/textarea';
+import { useCreatedPartiesCountQuery } from '@/query/party/usePartyQuery';
+import { useAuthQuery } from '@/query/auth/useAuthQuery';
 
 interface PartyRecruitFormProps {
   open: boolean;
@@ -41,6 +43,11 @@ const PartyRecruitForm = ({
   onClose,
   editData,
 }: PartyRecruitFormProps) => {
+  // 로그인 정보
+  const { data: user } = useAuthQuery();
+  const userId = user?.id ?? '';
+  // 생성한 구인글 개수 조회
+  const { data: count } = useCreatedPartiesCountQuery(userId);
   // 구인글 등록
   const { mutate: addRecruit } = useAddRecruitMutation();
   // 구인글 수정
@@ -138,10 +145,14 @@ const PartyRecruitForm = ({
               )}
             />
             <div className="flex justify-between">
-              <Button type="submit">완료</Button>
               <DialogClose asChild>
-                <Button type="button">취소</Button>
+                <Button type="button" variant="secondary">
+                  취소
+                </Button>
               </DialogClose>
+              <Button type="submit" variant="default">
+                완료
+              </Button>
             </div>
           </form>
         </Form>
