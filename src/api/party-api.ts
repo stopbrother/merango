@@ -72,6 +72,37 @@ export const getPartyDetail = async (
   return data;
 };
 
+// api - 생성한 파티(구인글) 조회
+export const getCreatedParties = async (
+  client: SupabaseDataBase,
+  userId: Recruit['created_by']
+) => {
+  const { data, error } = await client
+    .from('party_recruit_sort')
+    .select(`*, created_by(*)`)
+    .eq('created_by', userId)
+    .order('sort_time', { ascending: false })
+    .returns<RecruitWithProfile[]>();
+
+  if (error) throw new Error(error.message);
+
+  return data;
+};
+
+// api - 생성한 파티글 개수 조회 (count)
+export const getCreatedPartiesCount = async (
+  client: SupabaseDataBase,
+  userId: Recruit['created_by']
+) => {
+  const { count, error } = await client
+    .from('party_recruit')
+    .select('*', { count: 'exact', head: true })
+    .eq('created_by', userId);
+
+  if (error) throw new Error(error.message);
+  return count ?? 0;
+};
+
 // api - 구인글 수정
 export const updateParty = async (
   recruitId: Recruit['id'],
@@ -98,23 +129,6 @@ export const deleteParty = async (recruitId: Recruit['id']) => {
     .eq('id', recruitId);
 
   if (error) throw new Error(error.message);
-};
-
-// api - 생성한 파티(구인글) 조회
-export const getCreatedParties = async (
-  client: SupabaseDataBase,
-  userId: Recruit['created_by']
-) => {
-  const { data, error } = await client
-    .from('party_recruit_sort')
-    .select(`*, created_by(*)`)
-    .eq('created_by', userId)
-    .order('sort_time', { ascending: false })
-    .returns<RecruitWithProfile[]>();
-
-  if (error) throw new Error(error.message);
-
-  return data;
 };
 
 // api - 구인글 끌어올리기
