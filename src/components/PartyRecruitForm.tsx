@@ -4,11 +4,15 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { PARTY_TYPE_OPTIONS } from '@/constants/partyType';
+import { useAuthQuery } from '@/query/auth/useAuthQuery';
 import {
   useAddRecruitMutation,
   useUpdateRecruitMutation,
 } from '@/query/party/usePartyMutation';
+import { useCreatedPartiesCountQuery } from '@/query/party/usePartyQuery';
 import { RecruitWithProfile } from '@/types/parties.types';
+import clsx from 'clsx';
+import { toast } from 'sonner';
 import { Button } from './ui/button';
 import {
   Dialog,
@@ -21,8 +25,6 @@ import { Form, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 import { Input } from './ui/input';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 import { Textarea } from './ui/textarea';
-import { useCreatedPartiesCountQuery } from '@/query/party/usePartyQuery';
-import { useAuthQuery } from '@/query/auth/useAuthQuery';
 
 interface PartyRecruitFormProps {
   open: boolean;
@@ -47,11 +49,14 @@ const PartyRecruitForm = ({
   const { data: user } = useAuthQuery();
   const userId = user?.id ?? '';
   // 생성한 구인글 개수 조회
-  const { data: count } = useCreatedPartiesCountQuery(userId);
+  const { data: createdCount } = useCreatedPartiesCountQuery(userId);
   // 구인글 등록
   const { mutate: addRecruit } = useAddRecruitMutation();
   // 구인글 수정
   const { mutate: updateRecruit } = useUpdateRecruitMutation();
+
+  // 글작성 5개 제한
+  const isLimitReached = (createdCount ?? 0) >= 5;
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -62,26 +67,28 @@ const PartyRecruitForm = ({
     },
   });
 
+  // TODO: 작성/수정 함수분리
   const onSubmit = (formData: z.infer<typeof FormSchema>) => {
-    // const { party_type, title, description } = data;
-    console.log('onSubmitFormdata:', formData);
+    // 작성일 경우 5개제한
+    if (!editData && isLimitReached)
+      return toast.error('최대 5개까지 작성할 수 있습니다.');
+
+    // 수정 모드
     if (editData) {
       updateRecruit(
         { recruitId: editData.id, formData },
-        {
-          onSuccess: () => {
-            onClose();
-          },
-        }
+        { onSuccess: onClose }
       );
-    } else {
-      addRecruit(formData, {
-        onSuccess: () => {
-          onClose();
-          form.reset();
-        },
-      });
+      return;
     }
+
+    // 작성 모드
+    addRecruit(formData, {
+      onSuccess: () => {
+        onClose();
+        form.reset();
+      },
+    });
   };
 
   return (
@@ -144,13 +151,34 @@ const PartyRecruitForm = ({
                 </FormItem>
               )}
             />
+
+            <div
+              className={clsx(
+                'flex gap-1 text-sm',
+                isLimitReached
+                  ? 'text-destructive font-semibold'
+                  : 'text-muted-foreground'
+              )}
+            >
+              <p>구인글은 5개까지 작성 가능합니다</p>
+              <span>({createdCount}/5)</span>
+            </div>
+
             <div className="flex justify-between">
               <DialogClose asChild>
-                <Button type="button" variant="secondary">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="bg-[#E5E7EB] hover:bg-[#D1D5DB]"
+                >
                   취소
                 </Button>
               </DialogClose>
-              <Button type="submit" variant="default">
+              <Button
+                type="submit"
+                disabled={isLimitReached}
+                className="bg-[#FFD700] text-black hover:bg-yellow-500"
+              >
                 완료
               </Button>
             </div>
