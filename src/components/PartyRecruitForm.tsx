@@ -55,8 +55,9 @@ const PartyRecruitForm = ({
   // 구인글 수정
   const { mutate: updateRecruit } = useUpdateRecruitMutation();
 
-  // 글작성 5개 제한
+  // 글작성 5개 제한 및 버튼disabled
   const isLimitReached = (createdCount ?? 0) >= 5;
+  const isDisabled = !editData && isLimitReached;
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -176,7 +177,7 @@ const PartyRecruitForm = ({
               </DialogClose>
               <Button
                 type="submit"
-                disabled={isLimitReached}
+                disabled={isDisabled}
                 className="bg-[#FFD700] text-black hover:bg-yellow-500"
               >
                 완료
