@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 
 const tabsTriggerVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-sm font-medium',
+  'cursor-pointer hover:text-foreground inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-sm font-medium',
   {
     variants: {
       variant: {
