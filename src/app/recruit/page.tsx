@@ -15,8 +15,8 @@ interface RecruitPageProps {
 }
 
 const RecruitPage = async ({ searchParams }: RecruitPageProps) => {
-  const { keyword } = searchParams;
   const partyType = searchParams.partyType ?? 'all';
+  const keyword = searchParams.keyword ?? '';
 
   const serverClient = createClient();
   const queryClient = new QueryClient();
