@@ -8,6 +8,14 @@ import { createClient } from '@/utils/supabase/client';
 
 // 구인 API
 
+export interface getPartiesParams {
+  client: SupabaseDataBase;
+  partyType: string;
+  keyword?: string;
+  cursor?: string;
+  limit?: number;
+}
+
 // api - 구인글 등록
 export const addParties = async (formData: RecruitForm) => {
   const client = createClient();
@@ -38,10 +46,12 @@ export const getParties = async (
   keyword?: string
 ) => {
   let query = client
-    .from('party_recruit_sort')
+    .from('party_recruit')
     .select(`*, created_by(*)`)
-    .order('sort_time', { ascending: false });
+    .order('sort_time', { ascending: false })
+    .order('id', { ascending: false });
 
+  // 파티타입 필터
   if (partyType && partyType !== 'all')
     query = query.eq('party_type', partyType);
 
@@ -53,6 +63,55 @@ export const getParties = async (
   if (error) throw new Error(error.message);
 
   return data;
+};
+
+// api - 구인글 조회 & 검색 (무한스크롤)
+export const getInfiniteParties = async ({
+  client,
+  partyType,
+  keyword,
+  cursor,
+  limit = 15,
+}: getPartiesParams) => {
+  console.log('query', { partyType, keyword, cursor, limit });
+  let query = client
+    .from('party_recruit')
+    .select(`*, created_by(*)`)
+    .order('sort_time', { ascending: false })
+    .order('id', { ascending: false })
+    .limit(limit);
+
+  // 파티타입 필터
+  if (partyType && partyType !== 'all')
+    query = query.eq('party_type', partyType);
+
+  // 키워드가 있을 경우, title 컬럼에서 대소문자 무시 부분 일치 검색
+  if (keyword) query = query.ilike('title', `%${keyword}%`);
+
+  // 커서보다 작은(오래된) 글만 - 중복방지(sort_time이 더 작거나 같은 레코드중 id가 더 작은것)
+  if (cursor) {
+    const [time, id] = cursor.split('__');
+    query = query.or(
+      `sort_time.lt.${time},` + `and(sort_time.eq.${time},id.lt.${id})`
+    );
+  }
+
+  const { data, error, status } = await query.returns<RecruitWithProfile[]>();
+
+  // if (error) throw new Error(error.message);
+  if (error) {
+    console.error('supabaseerror', { status, error });
+    throw error;
+  }
+
+  // 마지막 요소
+  // const items = data ?? [];
+  const last = data[data.length - 1];
+
+  return {
+    data,
+    nextCursor: data.length === limit ? `${last.sort_time}__${last.id}` : null,
+  };
 };
 
 // api - 구인글 상세조회
@@ -78,7 +137,7 @@ export const getCreatedParties = async (
   userId: Recruit['created_by']
 ) => {
   const { data, error } = await client
-    .from('party_recruit_sort')
+    .from('party_recruit')
     .select(`*, created_by(*)`)
     .eq('created_by', userId)
     .order('sort_time', { ascending: false })
