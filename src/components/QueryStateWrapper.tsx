@@ -1,17 +1,17 @@
 import { Loader2, TriangleAlert } from 'lucide-react';
 
 interface QueryStateWrapperProps {
-  isLoading: boolean;
+  isPending: boolean;
   error: Error | null;
   children: React.ReactNode;
 }
 
 const QueryStateWrapper = ({
-  isLoading,
+  isPending,
   error,
   children,
 }: QueryStateWrapperProps) => {
-  if (isLoading) {
+  if (isPending) {
     return (
       <div className="flex justify-center items-center py-10">
         <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />

@@ -11,7 +11,7 @@ const JoiningParty = ({ userId }: JoiningPartyProps) => {
   const { data, isLoading, error } = useJoinedPartiesQuery(userId);
 
   return (
-    <QueryStateWrapper isLoading={isLoading} error={error}>
+    <QueryStateWrapper isPending={isLoading} error={error}>
       <PartyList parties={data ?? []} />
     </QueryStateWrapper>
   );

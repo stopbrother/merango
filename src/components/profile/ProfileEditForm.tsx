@@ -69,7 +69,7 @@ const ProfileEditForm = () => {
   };
 
   return (
-    <QueryStateWrapper isLoading={isLoading} error={error}>
+    <QueryStateWrapper isPending={isLoading} error={error}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* 닉네임 */}

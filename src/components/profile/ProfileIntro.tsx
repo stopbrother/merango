@@ -52,7 +52,7 @@ const ProfileIntro = ({ userId }: ProfileIntroProps) => {
   };
 
   return (
-    <QueryStateWrapper isLoading={isLoading} error={error}>
+    <QueryStateWrapper isPending={isLoading} error={error}>
       <section>
         {isOwner && !isEdit && (
           <div className="flex justify-end">
