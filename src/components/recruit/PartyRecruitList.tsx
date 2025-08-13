@@ -1,13 +1,16 @@
 'use client';
+
+import { useInView } from 'react-intersection-observer';
 import { PARTY_TYPE_FILTER_OPTIONS } from '@/constants/partyType';
-import { usePartiesQuery } from '@/query/party/usePartyQuery';
-import { PartyPopper } from 'lucide-react';
+import { useInfinitePartiesQuery } from '@/query/party/usePartyQuery';
+import { Loader2, PartyPopper } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import EmptyState from '../EmptyState';
 import QueryStateWrapper from '../QueryStateWrapper';
 import SearchPartyForm from '../SearchPartyForm';
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import PartyList from './PartyList';
+import PartyCardSkeleton from './PartyCardSkeleton';
 
 interface PartyRecruitListProps {
   partyType: string;
@@ -18,7 +21,28 @@ const PartyRecruitList = ({ partyType, keyword }: PartyRecruitListProps) => {
   const router = useRouter();
 
   // 목록조회
-  const { data, isLoading, error } = usePartiesQuery(partyType, keyword);
+  // const { data, isPending, error } = usePartiesQuery(partyType, keyword);
+
+  // 무한스크롤
+  const {
+    data,
+    error,
+    isPending,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfinitePartiesQuery(partyType, keyword);
+
+  // 배열로 펼쳐서 data 배열만 추출 (cursor제외)
+  const items = data?.pages.flatMap((page) => page.data);
+
+  // 스크롤 감지
+  const { ref } = useInView({
+    rootMargin: '200px',
+    onChange: (inView) => {
+      if (inView && hasNextPage && !isFetchingNextPage) fetchNextPage();
+    },
+  });
 
   // 탭 변경 핸들러
   const handleFilter = (value: string) => {
@@ -40,11 +64,26 @@ const PartyRecruitList = ({ partyType, keyword }: PartyRecruitListProps) => {
 
       <SearchPartyForm />
 
-      <QueryStateWrapper isLoading={isLoading} error={error}>
-        {data?.length ? (
-          <PartyList parties={data ?? []} />
+      <QueryStateWrapper isPending={isPending} error={error}>
+        {items?.length ? (
+          <PartyList parties={items ?? []} />
         ) : (
           <EmptyState icon={PartyPopper} message="등록된 파티가 없습니다." />
+        )}
+
+        {/* <div>
+          <PartyCardSkeleton count={3} />
+          <div className="flex justify-center items-center py-10">
+            <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+          </div>
+        </div> */}
+        {hasNextPage && (
+          <div ref={ref}>
+            <PartyCardSkeleton count={3} />
+            <div className="flex justify-center items-center py-10">
+              <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+            </div>
+          </div>
         )}
       </QueryStateWrapper>
     </>
