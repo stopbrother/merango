@@ -86,7 +86,7 @@ export const getInfiniteParties = async ({
     query = query.eq('party_type', partyType);
 
   // 키워드가 있을 경우, title 컬럼에서 대소문자 무시 부분 일치 검색
-  if (keyword) query = query.ilike('title', `%${keyword}%`);
+  if (keyword && keyword !== '') query = query.ilike('title', `%${keyword}%`);
 
   // 커서보다 작은(오래된) 글만 - 중복방지(sort_time이 더 작거나 같은 레코드중 id가 더 작은것)
   if (cursor) {
@@ -105,12 +105,12 @@ export const getInfiniteParties = async ({
   }
 
   // 마지막 요소
-  // const items = data ?? [];
-  const last = data[data.length - 1];
+  const items = data ?? []; // null 방어
+  const last = items[items.length - 1];
 
   return {
-    data,
-    nextCursor: data.length === limit ? `${last.sort_time}__${last.id}` : null,
+    data: items,
+    nextCursor: items.length === limit ? `${last.sort_time}__${last.id}` : null,
   };
 };
 
