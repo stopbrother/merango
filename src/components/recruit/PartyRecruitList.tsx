@@ -20,10 +20,7 @@ interface PartyRecruitListProps {
 const PartyRecruitList = ({ partyType, keyword }: PartyRecruitListProps) => {
   const router = useRouter();
 
-  // 목록조회
-  // const { data, isPending, error } = usePartiesQuery(partyType, keyword);
-
-  // 무한스크롤
+  // 목록조회 (무한스크롤)
   const {
     data,
     error,
@@ -71,12 +68,7 @@ const PartyRecruitList = ({ partyType, keyword }: PartyRecruitListProps) => {
           <EmptyState icon={PartyPopper} message="등록된 파티가 없습니다." />
         )}
 
-        {/* <div>
-          <PartyCardSkeleton count={3} />
-          <div className="flex justify-center items-center py-10">
-            <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
-          </div>
-        </div> */}
+        {/* 로드할 목록이 있으면 스크롤 감지 및 로딩상태표시 */}
         {hasNextPage && (
           <div ref={ref}>
             <PartyCardSkeleton count={3} />
