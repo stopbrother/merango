@@ -31,7 +31,7 @@ const ProfileInfo = ({ userId }: ProfileInfoProps) => {
   };
 
   return (
-    <QueryStateWrapper isLoading={isLoading} error={error}>
+    <QueryStateWrapper isPending={isLoading} error={error}>
       <section className="flex flex-row gap-10 pb-8">
         {/* 프로필 이미지 */}
         <Image

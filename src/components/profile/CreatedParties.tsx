@@ -13,7 +13,7 @@ const CreatedParties = ({ userId }: CreatedPartiesProps) => {
   const { data, isLoading, error } = useCreatedPartiesQuery(userId);
 
   return (
-    <QueryStateWrapper isLoading={isLoading} error={error}>
+    <QueryStateWrapper isPending={isLoading} error={error}>
       {data?.length === 0 ? (
         <EmptyState icon={PartyPopper} message="등록한 파티가 없습니다." />
       ) : (
