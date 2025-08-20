@@ -15,7 +15,9 @@ const TooltipWrapper = ({ children, message }: TooltipWrapperProps) => {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
-        <TooltipContent>{message}</TooltipContent>
+        <TooltipContent className="max-w-xs text-center">
+          {message}
+        </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
