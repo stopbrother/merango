@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className="overflow-y-scroll">
+    <html lang="ko">
       <body className={`${pretendard.className}`}>
         <Providers>
           <Header />
