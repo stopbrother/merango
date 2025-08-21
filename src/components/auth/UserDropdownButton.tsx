@@ -32,7 +32,7 @@ const UserDropdownButton = ({ profile }: UserDropdownButtonProps) => {
   };
 
   return (
-    <DropdownMenu modal={false}>
+    <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className="bg-[#588157] hover:bg-[#476947]">
           <ProfileAvatar profileImg={profile.avatar_url} />
