@@ -5,10 +5,7 @@ import { Button } from './ui/button';
 import { ArrowUp } from 'lucide-react';
 
 const ScrollToTopButton = () => {
-  const { ref: sentinalRef, inView } = useInView({
-    rootMargin: '0px 0px -60% 0px',
-    threshold: 0,
-  });
+  const { ref: sentinalRef, inView } = useInView();
 
   const handleClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
