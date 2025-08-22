@@ -37,7 +37,7 @@ const PartyDialog = ({ party, searchParams }: PartyDialogProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogTrigger>
+      <DialogTrigger className="w-full">
         <PartyCard recruit={party} />
       </DialogTrigger>
 
