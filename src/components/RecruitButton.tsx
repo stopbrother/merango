@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuthQuery } from '@/query/auth/useAuthQuery';
+import { useAuthQuery } from '@/app/hooks/query/auth/useAuthQuery';
 import { requireLogin } from '@/utils/auth';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

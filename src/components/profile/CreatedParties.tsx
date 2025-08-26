@@ -1,5 +1,5 @@
 'use client';
-import { useCreatedPartiesQuery } from '@/query/party/usePartyQuery';
+import { useCreatedPartiesQuery } from '@/app/hooks/query/party/usePartyQuery';
 import QueryStateWrapper from '../QueryStateWrapper';
 import PartyList from '../recruit/PartyList';
 import EmptyState from '../EmptyState';

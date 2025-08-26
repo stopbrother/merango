@@ -2,7 +2,7 @@
 
 import { useInView } from 'react-intersection-observer';
 import { PARTY_TYPE_FILTER_OPTIONS } from '@/constants/partyType';
-import { useInfinitePartiesQuery } from '@/query/party/usePartyQuery';
+import { useInfinitePartiesQuery } from '@/app/hooks/query/party/usePartyQuery';
 import { Loader2, PartyPopper } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import EmptyState from '../EmptyState';

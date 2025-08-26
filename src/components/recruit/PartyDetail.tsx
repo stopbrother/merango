@@ -1,17 +1,17 @@
 'use client';
-import { useAuthQuery } from '@/query/auth/useAuthQuery';
+import { useAuthQuery } from '@/app/hooks/query/auth/useAuthQuery';
 import {
   useRemovePartyMemberMutation,
   useRequestJoinPartyMutation,
-} from '@/query/member/usePartyMemberMutation';
+} from '@/app/hooks/query/member/usePartyMemberMutation';
 import {
   useHasJoinedPartyQuery,
   usePartyMembersQuery,
-} from '@/query/member/usePartyMemberQuery';
+} from '@/app/hooks/query/member/usePartyMemberQuery';
 import {
   useDeleteRecruitMutation,
   useRaisePartyMutation,
-} from '@/query/party/usePartyMutation';
+} from '@/app/hooks/query/party/usePartyMutation';
 import { RecruitWithProfile } from '@/types/parties.types';
 import { requireLogin } from '@/utils/auth';
 import { canRaiseParty } from '@/utils/time';

@@ -1,7 +1,7 @@
 'use client';
-import { useAuthQuery } from '@/query/auth/useAuthQuery';
+import { useAuthQuery } from '@/app/hooks/query/auth/useAuthQuery';
 import UserDropdownButton from './UserDropdownButton';
-import { useProfileQuery } from '@/query/profile/useProfileQuery';
+import { useProfileQuery } from '@/app/hooks/query/profile/useProfileQuery';
 import LoadingButton from '../LoadingButton';
 import LoginButton from './LoginButton';
 

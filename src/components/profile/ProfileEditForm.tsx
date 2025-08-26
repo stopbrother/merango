@@ -13,9 +13,9 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { useProfileUpdateMutation } from '@/query/profile/useProfileMutation';
-import { useAuthQuery } from '@/query/auth/useAuthQuery';
-import { useProfileQuery } from '@/query/profile/useProfileQuery';
+import { useProfileUpdateMutation } from '@/app/hooks/query/profile/useProfileMutation';
+import { useAuthQuery } from '@/app/hooks/query/auth/useAuthQuery';
+import { useProfileQuery } from '@/app/hooks/query/profile/useProfileQuery';
 import QueryStateWrapper from '../QueryStateWrapper';
 import { MSG } from '@/constants/messages';
 import { toast } from 'sonner';
