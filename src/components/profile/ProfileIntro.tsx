@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { Button } from '../ui/button';
 import { Edit } from 'lucide-react';
-import { useAuthQuery } from '@/query/auth/useAuthQuery';
+import { useAuthQuery } from '@/hooks/query/auth/useAuthQuery';
 import { Textarea } from '../ui/textarea';
-import { useProfileQuery } from '@/query/profile/useProfileQuery';
-import { useProfileIntroMutation } from '@/query/profile/useProfileMutation';
+import { useProfileQuery } from '@/hooks/query/profile/useProfileQuery';
+import { useProfileIntroMutation } from '@/hooks/query/profile/useProfileMutation';
 import { Profile } from '@/types/profiles.types';
 import QueryStateWrapper from '../QueryStateWrapper';
 
