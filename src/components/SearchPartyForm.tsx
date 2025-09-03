@@ -33,7 +33,6 @@ const SearchPartyForm = () => {
   });
 
   const onSubmit = (formData: z.infer<typeof formSchema>) => {
-    console.log('formData', formData);
     const { keyword, partyType: party_type } = formData;
 
     if (!formData.keyword.trim()) return toast.error('검색어를 입력해주세요.');
