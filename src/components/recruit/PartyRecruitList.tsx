@@ -2,7 +2,7 @@
 
 import { useInView } from 'react-intersection-observer';
 import { PARTY_TYPE_FILTER_OPTIONS } from '@/constants/partyType';
-import { useInfinitePartiesQuery } from '@/query/party/usePartyQuery';
+import { useInfinitePartiesQuery } from '@/hooks/query/party/usePartyQuery';
 import { Loader2, PartyPopper } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import EmptyState from '../EmptyState';
@@ -11,14 +11,19 @@ import SearchPartyForm from '../SearchPartyForm';
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import PartyList from './PartyList';
 import PartyCardSkeleton from './PartyCardSkeleton';
+import { usePartyRecruitRealtime } from '@/hooks/realtime/usePartyRecruitRealtime';
+import RefreshButton from '../RefreshButton';
 
 interface PartyRecruitListProps {
   partyType: string;
-  keyword?: string;
+  keyword: string;
 }
 
 const PartyRecruitList = ({ partyType, keyword }: PartyRecruitListProps) => {
   const router = useRouter();
+
+  // 실시간: 새로운글 카운트, 수동 갱신
+  const { newPostCnt, refresh } = usePartyRecruitRealtime(partyType, keyword);
 
   // 목록조회 (무한스크롤)
   const {
@@ -32,6 +37,8 @@ const PartyRecruitList = ({ partyType, keyword }: PartyRecruitListProps) => {
 
   // 배열로 펼쳐서 data 배열만 추출 (cursor제외)
   const items = data?.pages.flatMap((page) => page.data);
+
+  const isSearch = Boolean(keyword);
 
   // 스크롤 감지
   const { ref } = useInView({
@@ -49,6 +56,10 @@ const PartyRecruitList = ({ partyType, keyword }: PartyRecruitListProps) => {
 
   return (
     <>
+      {newPostCnt > 0 && (
+        <RefreshButton onRefresh={refresh} newPostCnt={newPostCnt} />
+      )}
+
       <Tabs value={partyType} onValueChange={handleFilter}>
         <TabsList>
           {PARTY_TYPE_FILTER_OPTIONS.map((option) => (
@@ -60,6 +71,12 @@ const PartyRecruitList = ({ partyType, keyword }: PartyRecruitListProps) => {
       </Tabs>
 
       <SearchPartyForm />
+      {isSearch && (
+        <div className="mb-2 mt-2">
+          <span className="text-[#3B82F6]">“{keyword}”</span>
+          검색 결과
+        </div>
+      )}
 
       <QueryStateWrapper isPending={isPending} error={error}>
         {items?.length ? (

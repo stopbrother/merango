@@ -1,12 +1,11 @@
-import { redirect } from 'next/navigation';
-import { createClient } from '../utils/supabase/client';
 import { SupabaseDataBase } from '@/types/utils.types';
+import { redirect } from 'next/navigation';
+import { browserClient } from '../utils/supabase/client';
 
 // 디스코드 소셜 로그인
 export async function signInWithDiscord() {
-  const supabase = createClient();
   console.log('next_base_url', process.env.NEXT_PUBLIC_BASE_URL);
-  const { data, error } = await supabase.auth.signInWithOAuth({
+  const { data, error } = await browserClient.auth.signInWithOAuth({
     provider: 'discord',
     options: {
       redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/callback`,
@@ -22,9 +21,7 @@ export async function signInWithDiscord() {
 
 // 로그아웃
 export async function signOut() {
-  const supabase = createClient();
-
-  const { error } = await supabase.auth.signOut();
+  const { error } = await browserClient.auth.signOut();
 
   if (error) {
     // redirect error page

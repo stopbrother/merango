@@ -1,11 +1,11 @@
 'use client';
 
-import { useProfileQuery } from '@/query/profile/useProfileQuery';
+import { useProfileQuery } from '@/hooks/query/profile/useProfileQuery';
 import { Copy } from 'lucide-react';
 import Image from 'next/image';
 import { toast } from 'sonner';
 import QueryStateWrapper from '../QueryStateWrapper';
-import { useAuthQuery } from '@/query/auth/useAuthQuery';
+import { useAuthQuery } from '@/hooks/query/auth/useAuthQuery';
 import { Button } from '../ui/button';
 import Link from 'next/link';
 

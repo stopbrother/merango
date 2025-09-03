@@ -4,7 +4,7 @@ import {
   RecruitWithProfile,
 } from '@/types/parties.types';
 import { SupabaseDataBase } from '@/types/utils.types';
-import { createClient } from '@/utils/supabase/client';
+import { browserClient } from '@/utils/supabase/client';
 
 // 구인 API
 
@@ -18,9 +18,7 @@ export interface getPartiesParams {
 
 // api - 구인글 등록
 export const addParties = async (formData: RecruitForm) => {
-  const client = createClient();
-
-  const { data: recruitData, error } = await client
+  const { data: recruitData, error } = await browserClient
     .from('party_recruit')
     .insert(formData)
     .select();
@@ -28,10 +26,12 @@ export const addParties = async (formData: RecruitForm) => {
   if (error) throw new Error(error.message);
 
   // 작성자 자동참가
-  const { error: partyMemberError } = await client.from('party_member').insert({
-    party_id: recruitData[0].id,
-    profile_id: recruitData[0].created_by,
-  });
+  const { error: partyMemberError } = await browserClient
+    .from('party_member')
+    .insert({
+      party_id: recruitData[0].id,
+      profile_id: recruitData[0].created_by,
+    });
 
   if (partyMemberError) throw new Error(partyMemberError.message);
 
@@ -86,7 +86,7 @@ export const getInfiniteParties = async ({
     query = query.eq('party_type', partyType);
 
   // 키워드가 있을 경우, title 컬럼에서 대소문자 무시 부분 일치 검색
-  if (keyword && keyword !== '') query = query.ilike('title', `%${keyword}%`);
+  if (keyword !== '') query = query.ilike('title', `%${keyword}%`);
 
   // 커서보다 작은(오래된) 글만 - 중복방지(sort_time이 더 작거나 같은 레코드중 id가 더 작은것)
   if (cursor) {
@@ -167,10 +167,7 @@ export const updateParty = async (
   recruitId: Recruit['id'],
   formData: RecruitForm
 ) => {
-  const client = createClient();
-  console.log('update실행:', { recruitId, formData });
-
-  const { error } = await client
+  const { error } = await browserClient
     .from('party_recruit')
     .update(formData)
     .eq('id', recruitId);
@@ -180,9 +177,7 @@ export const updateParty = async (
 
 // api - 구인글 삭제
 export const deleteParty = async (recruitId: Recruit['id']) => {
-  const client = createClient();
-
-  const { error } = await client
+  const { error } = await browserClient
     .from('party_recruit')
     .delete()
     .eq('id', recruitId);
@@ -192,11 +187,9 @@ export const deleteParty = async (recruitId: Recruit['id']) => {
 
 // api - 구인글 끌어올리기
 export const raiseParty = async (recruitId: Recruit['id']) => {
-  const client = createClient();
-
   const now = new Date().toISOString(); // UTC(세계 표준시)로 변환
 
-  const { error } = await client
+  const { error } = await browserClient
     .from('party_recruit')
     .update({ raised_date_time: now })
     .eq('id', recruitId);

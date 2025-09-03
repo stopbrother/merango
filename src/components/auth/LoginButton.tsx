@@ -1,5 +1,5 @@
 'use client';
-import { useSigninMutation } from '@/query/auth/useAuthMutation';
+import { useSigninMutation } from '@/hooks/query/auth/useAuthMutation';
 import { Button } from '../ui/button';
 import { FaDiscord } from 'react-icons/fa';
 

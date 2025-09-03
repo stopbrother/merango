@@ -1,5 +1,5 @@
 'use client';
-import { useSignOutMutation } from '@/query/auth/useAuthMutation';
+import { useSignOutMutation } from '@/hooks/query/auth/useAuthMutation';
 import { Profile } from '@/types/profiles.types';
 import { useRouter } from 'next/navigation';
 import ProfileAvatar from '../ProfileAvatar';
