@@ -20,6 +20,9 @@ export const useAddRecruitMutation = () => {
       queryClient.invalidateQueries({
         queryKey: ['recruits'],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['createdParties'],
+      });
     },
   });
 };
@@ -40,6 +43,9 @@ export const useUpdateRecruitMutation = () => {
       queryClient.invalidateQueries({
         queryKey: ['recruits'],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['createdParties'],
+      });
     },
     onError: (error) => {
       toast.error('업데이트 실패');
@@ -58,6 +64,9 @@ export const useDeleteRecruitMutation = () => {
       queryClient.invalidateQueries({
         queryKey: ['recruits'],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['createdParties'],
+      });
     },
   });
 };
@@ -73,6 +82,9 @@ export const useRaisePartyMutation = () => {
 
       queryClient.invalidateQueries({
         queryKey: ['recruits'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['createdParties'],
       });
     },
   });

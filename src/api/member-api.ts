@@ -3,16 +3,14 @@ import {
   RecruitWithProfile,
 } from '@/types/parties.types';
 import { SupabaseDataBase } from '@/types/utils.types';
-import { createClient } from '@/utils/supabase/client';
+import { browserClient } from '@/utils/supabase/client';
 
 // 파티 참가
 
 // api - 참가 신청
 export const requestJoinParty = async (partyId: string) => {
-  const client = createClient();
-
   // 현재 참가자 수 조회(6명 제한)
-  const { count, error: countError } = await client
+  const { count, error: countError } = await browserClient
     .from('party_member')
     .select('*', { count: 'exact', head: true })
     .eq('party_id', partyId);
@@ -20,7 +18,7 @@ export const requestJoinParty = async (partyId: string) => {
   if ((count ?? 0) >= 6) throw new Error(countError?.message);
 
   // 참가자 테이블에 데이터 삽입
-  const { error } = await client
+  const { error } = await browserClient
     .from('party_member')
     .insert({ party_id: partyId });
 
@@ -29,9 +27,7 @@ export const requestJoinParty = async (partyId: string) => {
 
 // api - 참가자 본인: 참가신청 취소, 파티장: 추방
 export const removePartyMember = async (partyId: string, userId: string) => {
-  const client = createClient();
-
-  const { error } = await client
+  const { error } = await browserClient
     .from('party_member')
     .delete()
     .eq('party_id', partyId)

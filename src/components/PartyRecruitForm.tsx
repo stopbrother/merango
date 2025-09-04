@@ -4,12 +4,12 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { PARTY_TYPE_OPTIONS } from '@/constants/partyType';
-import { useAuthQuery } from '@/query/auth/useAuthQuery';
+import { useAuthQuery } from '@/hooks/query/auth/useAuthQuery';
 import {
   useAddRecruitMutation,
   useUpdateRecruitMutation,
-} from '@/query/party/usePartyMutation';
-import { useCreatedPartiesCountQuery } from '@/query/party/usePartyQuery';
+} from '@/hooks/query/party/usePartyMutation';
+import { useCreatedPartiesCountQuery } from '@/hooks/query/party/usePartyQuery';
 import { RecruitWithProfile } from '@/types/parties.types';
 import clsx from 'clsx';
 import { toast } from 'sonner';

@@ -4,6 +4,7 @@ import { RecruitWithProfile } from '@/types/parties.types';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { PARTY_TYPE_OPTIONS } from '@/constants/partyType';
+import TooltipWrapper from '../TooltipWrapper';
 
 interface PartyCardProps {
   recruit: RecruitWithProfile;
@@ -27,7 +28,9 @@ const PartyCard = ({ recruit }: PartyCardProps) => {
         <Badge>{typeLabel}</Badge>
         <span className="text-sm text-gray-500 mt-0!">{formattedTime}</span>
       </CardHeader>
-      <CardTitle className="text-center">{recruit.title}</CardTitle>
+      <TooltipWrapper message={recruit.title}>
+        <CardTitle className="text-center truncate">{recruit.title}</CardTitle>
+      </TooltipWrapper>
       <CardFooter className="justify-center">
         파티장: {recruit.created_by.username}
       </CardFooter>

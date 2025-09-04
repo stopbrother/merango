@@ -1,6 +1,6 @@
 import { Profile, ProfileForm } from '@/types/profiles.types';
 import { SupabaseDataBase } from '@/types/utils.types';
-import { createClient } from '@/utils/supabase/client';
+import { browserClient } from '@/utils/supabase/client';
 
 // api - 유저 정보
 export const getUserProfile = async (
@@ -23,8 +23,7 @@ export const updateUserIntro = async (
   data: Profile['intro'],
   userId: Profile['id']
 ) => {
-  const client = createClient();
-  const { error } = await client
+  const { error } = await browserClient
     .from('profiles')
     .update({ intro: data })
     .eq('id', userId);
@@ -37,9 +36,7 @@ export const updateProfile = async (
   userId: Profile['id'],
   formData: ProfileForm
 ) => {
-  const client = createClient();
-
-  const { error } = await client
+  const { error } = await browserClient
     .from('profiles')
     .update(formData)
     .eq('id', userId);

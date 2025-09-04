@@ -1,5 +1,5 @@
 'use client';
-import { useSignOutMutation } from '@/query/auth/useAuthMutation';
+import { useSignOutMutation } from '@/hooks/query/auth/useAuthMutation';
 import { Profile } from '@/types/profiles.types';
 import { useRouter } from 'next/navigation';
 import ProfileAvatar from '../ProfileAvatar';
@@ -32,7 +32,7 @@ const UserDropdownButton = ({ profile }: UserDropdownButtonProps) => {
   };
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button className="bg-[#588157] hover:bg-[#476947]">
           <ProfileAvatar profileImg={profile.avatar_url} />

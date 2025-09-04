@@ -5,7 +5,7 @@ import RecruitButton from './RecruitButton';
 
 const Header = () => {
   return (
-    <header className="w-full sticky top-0 bg-[#588157]">
+    <header className="w-full sticky top-0 z-50 bg-[#588157]">
       <div className="max-w-[1200px] h-[60px] flex justify-between items-center mx-auto px-4">
         <nav className="space-x-6 text-[#333333] font-bold">
           <Link href={'/'} className="hover:text-[#E63946]">

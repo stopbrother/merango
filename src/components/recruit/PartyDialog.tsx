@@ -16,9 +16,10 @@ import PartyDetail from './PartyDetail';
 interface PartyDialogProps {
   party: RecruitWithProfile;
   searchParams: URLSearchParams;
+  pathName: string;
 }
 
-const PartyDialog = ({ party, searchParams }: PartyDialogProps) => {
+const PartyDialog = ({ party, searchParams, pathName }: PartyDialogProps) => {
   const router = useRouter();
 
   const isOpen = party.id === searchParams.get('id'); // open상태 결정
@@ -32,12 +33,12 @@ const PartyDialog = ({ party, searchParams }: PartyDialogProps) => {
 
     if (!open) params.delete('id');
 
-    router.replace(`/recruit?${params.toString()}`, { scroll: false });
+    router.replace(`${pathName}?${params.toString()}`, { scroll: false });
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogTrigger>
+      <DialogTrigger className="w-full">
         <PartyCard recruit={party} />
       </DialogTrigger>
 
