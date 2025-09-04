@@ -79,6 +79,7 @@ export const getJoinedParties = async (
     .from('party_member')
     .select('party_id(*, created_by(*))')
     .eq('profile_id', userId)
+    .neq('party_id.created_by', userId)
     .order('joined_date_time', { ascending: false })
     .returns<{ party_id: RecruitWithProfile }[]>();
 
