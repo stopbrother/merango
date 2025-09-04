@@ -25,15 +25,16 @@ export const addParties = async (formData: RecruitForm) => {
 
   if (error) throw new Error(error.message);
 
+  // supabase trigger로 자동참가
   // 작성자 자동참가
-  const { error: partyMemberError } = await browserClient
-    .from('party_member')
-    .insert({
-      party_id: recruitData[0].id,
-      profile_id: recruitData[0].created_by,
-    });
+  // const { error: partyMemberError } = await browserClient
+  //   .from('party_member')
+  //   .insert({
+  //     party_id: recruitData[0].id,
+  //     profile_id: recruitData[0].created_by,
+  //   });
 
-  if (partyMemberError) throw new Error(partyMemberError.message);
+  // if (partyMemberError) throw new Error(partyMemberError.message);
 
   return recruitData;
 };
