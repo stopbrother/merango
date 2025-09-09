@@ -71,14 +71,20 @@ export const hasJoinedParty = async (
 };
 
 // api - 참가중인 파티 목록 조회
+/* 본인이 만든 파티는 제외하기 위하여 inner join추가
+   → inner: 양쪽이 일치하는 행만 반환
+   왼쪽=party_member, 오른쪽=party_recruit
+*/
+
 export const getJoinedParties = async (
   client: SupabaseDataBase,
   userId: string
 ) => {
   const { data, error } = await client
     .from('party_member')
-    .select('party_id(*, created_by(*))')
+    .select('party_id!inner(*, created_by(*))')
     .eq('profile_id', userId)
+    .neq('party_id.created_by', userId)
     .order('joined_date_time', { ascending: false })
     .returns<{ party_id: RecruitWithProfile }[]>();
 
