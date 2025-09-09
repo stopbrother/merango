@@ -96,6 +96,6 @@
   }
 }
 
-body[data-scroll-locked] {
+body[data-scroll-locked][style] {
   margin-right: 0 !important;
 }
