@@ -26,6 +26,7 @@ import TooltipWrapper from '../TooltipWrapper';
 import { Button } from '../ui/button';
 import { DialogClose } from '../ui/dialog';
 import OwnerActionButtons from './OwnerActionButtons';
+import { usePartyMembersRealtime } from '@/hooks/realtime/usePartyMembersRealtime';
 
 interface PartyDetailProps {
   recruit: RecruitWithProfile;
@@ -58,6 +59,9 @@ const PartyDetail = ({ recruit, isModal }: PartyDetailProps) => {
 
   // 구인글 끌어올리기
   const { mutate: raiseParty } = useRaisePartyMutation();
+
+  // 실시간 참가자 목록
+  usePartyMembersRealtime(recruit.id, isModal);
 
   // 로그인한 사용자가 작성자인지 확인
   const isOwner = recruit.created_by.id === currentUserId;
