@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/Header';
 import Providers from './providers';
 import { Toaster } from '@/components/ui/sonner';
+import Footer from '@/components/Footer';
 
 const pretendard = localFont({
   src: './fonts/PretendardVariable.woff2',
@@ -24,13 +25,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className="overflow-y-scroll">
-      <body className={`${pretendard.className}`}>
+      <body className={`${pretendard.className} flex flex-col min-h-screen`}>
         <Providers>
           <Header />
-          <main className="max-w-[1200px] mx-auto w-full py-4 px-4">
+
+          <main className="flex-1 max-w-[1200px] mx-auto w-full py-4 px-4">
             {children}
             <Toaster />
           </main>
+
+          <Footer />
         </Providers>
       </body>
     </html>
