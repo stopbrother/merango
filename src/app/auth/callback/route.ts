@@ -10,22 +10,38 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createClient();
+
     // Authorization code를 통한 세션 교환
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
-      const forwardedHost = request.headers.get('x-forwarded-host'); // original origin before load balancer
-      const isLocalEnv = process.env.NODE_ENV === 'development';
-      if (isLocalEnv) {
-        // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
-        return NextResponse.redirect(`${origin}${next}`);
-      } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`);
-      } else {
-        return NextResponse.redirect(`${origin}${next}`);
-      }
-    }
+    if (error) return NextResponse.redirect(`${origin}/auth/error`);
+
+    // 사용자 정보 확인
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return NextResponse.redirect(`${origin}${next}`);
+
+    // 프로필에서 동의 여부 조회
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select(
+        'terms_accepted_at, terms_version, privacy_accepted_at, privacy_version'
+      )
+      .eq('id', user.id)
+      .single();
+
+    const needsConsent =
+      !profile ||
+      !profile.terms_accepted_at ||
+      !profile.privacy_accepted_at ||
+      profile.terms_version !== '0' ||
+      profile.privacy_version !== '0';
+
+    // 동의 필요하면 동의 페이지로
+    if (needsConsent)
+      return NextResponse.redirect(new URL('/consent', request.url));
   }
 
   // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/auth/auth-code-error`);
+  return NextResponse.redirect(`${origin}/auth/error`);
 }
