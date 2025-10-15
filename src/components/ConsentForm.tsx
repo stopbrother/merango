@@ -2,6 +2,8 @@
 
 import { useForm } from 'react-hook-form';
 
+import { Button } from './ui/button';
+import { Checkbox } from './ui/checkbox';
 import {
   Form,
   FormControl,
@@ -10,9 +12,8 @@ import {
   FormLabel,
   FormMessage,
 } from './ui/form';
-import { Button } from './ui/button';
-import { Checkbox } from './ui/checkbox';
 
+import { submitConsent } from '@/app/consent/action';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 
@@ -32,8 +33,8 @@ const ConsentForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log('consentFormvalues:', values);
+  const onSubmit = async () => {
+    await submitConsent();
   };
   return (
     <Form {...form}>
