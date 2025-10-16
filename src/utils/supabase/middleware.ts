@@ -1,3 +1,4 @@
+import { CONSENT_VERSION } from '@/constants/consent';
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
@@ -37,13 +38,49 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // 미인증자 처리
+  const pathname = request.nextUrl.pathname;
+
+  // 비로그인시 보호 경로
+  const protectedRoutes = ['/settings', '/consent'];
+  const isProtectedRoutes = protectedRoutes.includes(pathname);
+
+  // 미동의시 접근 가능 경로
+  const consentPublicRoutes = ['/consent', '/terms', '/privacy'];
+  const isConsentPublicRoutes = consentPublicRoutes.includes(pathname);
+
+  // 미인증자 처리 (비로그인)
   if (!user) {
-    // 로그인된 사용자가 없으므로, 로그인 페이지로 리다이렉트하도록 응답할 수 있습니다.
-    const url = request.nextUrl.clone();
-    url.pathname = '/login-required';
-    return NextResponse.redirect(url);
+    if (isProtectedRoutes)
+      return NextResponse.redirect(new URL('/login-required', request.url));
+    return supabaseResponse;
   }
+
+  // 인증자 처리 (로그인): 경로 이동시마다 동의 버전 조회(동의해야만 이용가능)
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('terms_version')
+    .eq('id', user.id)
+    .single();
+
+  const needsConsent = profile?.terms_version !== CONSENT_VERSION;
+
+  // 미동의면 허용된페이지 외 접속 불가능
+  if (needsConsent && !isConsentPublicRoutes)
+    return NextResponse.redirect(new URL('/consent', request.url));
+
+  // 동의한 사용자는 동의페이지 접근 불가
+  if (!needsConsent && pathname === '/consent')
+    return NextResponse.redirect(new URL('/', request.url));
+
+  // 로그인 + 임시 쿠키 보유중(동의가 필요한)유저: consent경로만
+  // if (
+  //   request.cookies.get(CONSENT_COOKIE)?.value === CONSENT_VERSION &&
+  //   pathname !== '/consent'
+  // ) {
+  //   const url = request.nextUrl.clone();
+  //   url.pathname = '/consent';
+  //   return NextResponse.redirect(url);
+  // }
 
   // IMPORTANT: 반드시 supabaseResponse 객체를 그대로 반환해야 합니다.
   // 만약 새 NextResponse.next() 객체를 만들었다면,
