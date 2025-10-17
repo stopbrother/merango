@@ -16,6 +16,7 @@ import {
 import { submitConsent } from '@/app/consent/action';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
+import PolicyDialog from './docs/PolicyDialog';
 
 const formSchema = z.object({
   terms: z.boolean().refine((v) => v, { message: '이용약관에 동의해 주세요.' }),
@@ -58,25 +59,20 @@ const ConsentForm = () => {
           control={form.control}
           name="terms"
           render={({ field }) => (
-            <FormItem className="flex items-start space-x-3">
+            <FormItem className="flex items-center gap-3 space-y-0">
               <FormControl>
                 <Checkbox
                   checked={field.value}
                   onCheckedChange={(checked) => field.onChange(!!checked)}
+                  className="cursor-pointer"
                 />
               </FormControl>
-              <div>
-                <FormLabel className="font-medium">이용약관(필수)</FormLabel>
-                <p className="text-sm text-muted-foreground">
-                  <a
-                    className="underline"
-                    href="/terms"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    약관 전문 보기
-                  </a>
-                </p>
+              <div className="space-x-2">
+                <FormLabel className="font-medium cursor-pointer">
+                  이용약관(필수)
+                </FormLabel>
+
+                <PolicyDialog policy="terms" />
               </div>
               <FormMessage />
             </FormItem>
@@ -88,34 +84,26 @@ const ConsentForm = () => {
           control={form.control}
           name="privacy"
           render={({ field }) => (
-            <FormItem className="flex items-start space-x-3">
+            <FormItem className="flex items-center gap-3 space-y-0">
               <FormControl>
                 <Checkbox
                   checked={field.value}
                   onCheckedChange={(checked) => field.onChange(!!checked)}
+                  className="cursor-pointer"
                 />
               </FormControl>
-              <div>
-                <FormLabel className="font-medium">
+              <div className="space-x-2">
+                <FormLabel className="font-medium cursor-pointer">
                   개인정보처리방침(필수)
                 </FormLabel>
-                <p className="text-sm text-muted-foreground">
-                  <a
-                    className="underline"
-                    href="/privacy"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    전문 보기
-                  </a>
-                </p>
+                <PolicyDialog policy="privacy" />
               </div>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className="pt-2">
+        <div className="flex pt-2 justify-center">
           <Button
             type="submit"
             className="w-full"
