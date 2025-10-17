@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 // The client you created from the Server-Side Auth instructions
+import { CONSENT_VERSION } from '@/constants/consent';
 import { createClient } from '@/utils/supabase/server';
 
 export async function GET(request: Request) {
@@ -8,24 +9,45 @@ export async function GET(request: Request) {
   // if "next" is in param, use it as the redirect URL
   const next = searchParams.get('next') ?? '/';
 
-  if (code) {
-    const supabase = await createClient();
-    // Authorization code를 통한 세션 교환
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
-      const forwardedHost = request.headers.get('x-forwarded-host'); // original origin before load balancer
-      const isLocalEnv = process.env.NODE_ENV === 'development';
-      if (isLocalEnv) {
-        // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
-        return NextResponse.redirect(`${origin}${next}`);
-      } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`);
-      } else {
-        return NextResponse.redirect(`${origin}${next}`);
-      }
-    }
-  }
+  if (!code) return NextResponse.redirect(`${origin}/auth/error`);
 
-  // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/auth/auth-code-error`);
+  const supabase = await createClient();
+
+  // Authorization code를 통한 세션 교환
+  const { error } = await supabase.auth.exchangeCodeForSession(code);
+  if (error) return NextResponse.redirect(`${origin}/auth/error`);
+
+  // 사용자 정보 확인 (Auth세션확인)
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.redirect(`${origin}${next}`);
+
+  // 프로필에서 동의 여부 조회
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('terms_version')
+    .eq('id', user.id)
+    .single();
+
+  const needsConsent = profile?.terms_version !== CONSENT_VERSION;
+
+  // 동의 필요하면 동의 페이지로 이동
+  if (needsConsent)
+    return NextResponse.redirect(new URL('/consent', request.url));
+
+  // // 동의 필요하면 임시 쿠키 심고 동의 페이지로
+  // if (needsConsent) {
+  //   const response = NextResponse.redirect(new URL('/consent', request.url));
+
+  //   response.cookies.set(CONSENT_COOKIE, CONSENT_VERSION, {
+  //     httpOnly: true, // 클라이언트 JS로 조작 불가
+  //     secure: true, // https에서만 전송
+  //     sameSite: 'lax', // 크로스사이트 요청 최소화
+  //     path: '/', // 전역에서 접근 가능
+  //   });
+  //   return response;
+  // }
+
+  return NextResponse.redirect(`${origin}${next}`);
 }
