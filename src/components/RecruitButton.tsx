@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import PartyRecruitForm from './PartyRecruitForm';
 import { Button } from './ui/button';
+import { useProfileGuard } from '@/hooks/query/profile/useProfileGuard';
 
 const RecruitButton = () => {
   const router = useRouter();
@@ -14,9 +15,13 @@ const RecruitButton = () => {
 
   const { data: user } = useAuthQuery();
 
-  // 로그인 유무 검증 핸들러
+  const { requireProfile } = useProfileGuard();
+
+  // 로그인 & 프로필 유무 검증 핸들러
   const handleOpenRecruitForm = () => {
     if (!requireLogin({ user, router })) return;
+
+    if (!requireProfile()) return;
 
     setIsRecruitFormOpen(true);
   };
