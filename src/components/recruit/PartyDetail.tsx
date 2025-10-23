@@ -12,6 +12,8 @@ import {
   useDeleteRecruitMutation,
   useRaisePartyMutation,
 } from '@/hooks/query/party/usePartyMutation';
+import { useProfileGuard } from '@/hooks/query/profile/useProfileGuard';
+import { usePartyMembersRealtime } from '@/hooks/realtime/usePartyMembersRealtime';
 import { RecruitWithProfile } from '@/types/parties.types';
 import { requireLogin } from '@/utils/auth';
 import { canRaiseParty } from '@/utils/time';
@@ -20,13 +22,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import AlertProfileGuard from '../AlertProfileGuard';
 import PartyRecruitForm from '../PartyRecruitForm';
 import ProfileAvatar from '../ProfileAvatar';
 import TooltipWrapper from '../TooltipWrapper';
 import { Button } from '../ui/button';
 import { DialogClose } from '../ui/dialog';
 import OwnerActionButtons from './OwnerActionButtons';
-import { usePartyMembersRealtime } from '@/hooks/realtime/usePartyMembersRealtime';
 
 interface PartyDetailProps {
   recruit: RecruitWithProfile;
@@ -59,6 +61,9 @@ const PartyDetail = ({ recruit, isModal }: PartyDetailProps) => {
 
   // 구인글 끌어올리기
   const { mutate: raiseParty } = useRaisePartyMutation();
+
+  // 프로필 설정 유무(닉네임,레벨,직업)
+  const { hasProfile, requireProfile } = useProfileGuard();
 
   // 실시간 참가자 목록
   usePartyMembersRealtime(recruit.id, isModal);
@@ -93,6 +98,8 @@ const PartyDetail = ({ recruit, isModal }: PartyDetailProps) => {
   // 참가하기 핸들러
   const handleRequestJoin = () => {
     if (!requireLogin({ user: currentUser, router })) return;
+
+    if (!requireProfile()) return;
 
     if ((partyMembers?.length ?? 0) >= 6)
       return toast.error('최대 인원(6명)이 찼습니다.');
@@ -159,6 +166,12 @@ const PartyDetail = ({ recruit, isModal }: PartyDetailProps) => {
           ))}
         </ul>
       </div>
+
+      {/* 프로필 설정 alert */}
+      {!hasProfile && (
+        <AlertProfileGuard handleClick={() => router.push('/settings')} />
+      )}
+
       {/* Dialog footer 영역 */}
       <div className="mt-6 flex justify-end">
         {/* 좌측하단 : 끌어올리기 버튼 */}
@@ -205,7 +218,7 @@ const PartyDetail = ({ recruit, isModal }: PartyDetailProps) => {
           {!isOwner && !isJoined && (
             <Button
               onClick={handleRequestJoin}
-              disabled={isJoining}
+              disabled={isJoining || !hasProfile}
               className="px-4 py-2 bg-green-600 hover:bg-green-700"
             >
               {isJoining && <Loader2Icon className="animate-spin" />}
