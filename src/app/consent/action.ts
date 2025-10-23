@@ -17,6 +17,7 @@ export async function submitConsent() {
   const { error: updateError } = await supabase
     .from('profiles')
     .update({
+      age_confirmed_at: now,
       terms_accepted_at: now,
       terms_version: CONSENT_VERSION,
       privacy_accepted_at: now,
@@ -26,5 +27,5 @@ export async function submitConsent() {
 
   if (updateError) throw new Error(updateError.message);
 
-  redirect('/');
+  redirect('/settings');
 }
