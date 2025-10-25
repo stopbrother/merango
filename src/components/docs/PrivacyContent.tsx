@@ -4,13 +4,13 @@ const PrivacyContent = () => {
   return (
     <>
       <DocsSection>
-        <strong>[서비스 명]</strong>(이하 “서비스”)는 「개인정보 보호법」 등
-        관련 법령을 준수하며, 이용자의 개인정보를 안전하게 보호하기 위해 다음과
-        같이 개인정보처리방침을 수립·공개합니다.
+        <strong>MeranGo</strong>(이하 “메랜고”)는 「개인정보 보호법」 등 관련
+        법령을 준수하며, 이용자의 개인정보를 안전하게 보호하기 위해 다음과 같이
+        개인정보처리방침을 수립·공개합니다.
       </DocsSection>
 
       <DocsSection title="1. 수집하는 개인정보 항목">
-        서비스는 회원 가입 및 이용 과정에서 다음과 같은 개인정보를 수집합니다.
+        메랜고는 회원 가입 및 이용 과정에서 다음과 같은 개인정보를 수집합니다.
         <ul className="list-disc ml-5 space-y-1">
           <li>
             수집 항목: 계정 식별자(UUID), 소셜 프로필 기본 정보(디스코드 별명,
@@ -59,7 +59,7 @@ const PrivacyContent = () => {
       </DocsSection>
 
       <DocsSection title="4. 제3자 제공">
-        서비스는 이용자의 개인정보를 외부에 제공하지 않습니다. 다만, 법령에 의한
+        메랜고는 이용자의 개인정보를 외부에 제공하지 않습니다. 다만, 법령에 의한
         요구가 있거나 이용자의 사전 동의가 있는 경우에 한하여 필요한 범위 내에서
         제공할 수 있습니다.
         <p className="text-sm text-muted-foreground">
@@ -170,7 +170,7 @@ const PrivacyContent = () => {
         </div>
       </DocsSection>
 
-      <p className="text-sm text-muted-foreground mt-8">시행일: 2025-09-11</p>
+      <p className="text-sm text-muted-foreground mt-8">시행일: 2025-10-23</p>
     </>
   );
 };
