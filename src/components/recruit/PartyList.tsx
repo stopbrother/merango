@@ -1,0 +1,35 @@
+'use client';
+
+import { RecruitWithProfile } from '@/types/parties.types';
+import PartyDialog from './PartyDialog';
+import { usePathname, useSearchParams } from 'next/navigation';
+import ScrollToTopButton from '../ScrollToTopButton';
+
+interface PartyListProps {
+  parties: RecruitWithProfile[];
+}
+
+const PartyList = ({ parties }: PartyListProps) => {
+  // 여기서 한번만 실행하고 props로 전달
+  const searchParams = useSearchParams();
+  const pathName = usePathname();
+
+  return (
+    <section className="relative">
+      <ScrollToTopButton />
+      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-3">
+        {parties?.map((party) => (
+          <li key={party.id}>
+            <PartyDialog
+              party={party}
+              searchParams={searchParams}
+              pathName={pathName}
+            />
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+};
+
+export default PartyList;

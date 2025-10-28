@@ -1,0 +1,175 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dineug/erd-editor/main/json-schema/schema.json",
+  "version": "3.0.0",
+  "settings": {
+    "width": 2000,
+    "height": 2000,
+    "scrollTop": 0,
+    "scrollLeft": 0,
+    "zoomLevel": 1,
+    "show": 431,
+    "database": 4,
+    "databaseName": "",
+    "canvasType": "ERD",
+    "language": 1,
+    "tableNameCase": 4,
+    "columnNameCase": 2,
+    "bracketType": 1,
+    "relationshipDataTypeSync": true,
+    "relationshipOptimization": false,
+    "columnOrder": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "maxWidthComment": -1,
+    "ignoreSaveSettings": 0
+  },
+  "doc": {
+    "tableIds": [
+      "WSUkPEsDcuCOZJviG2r-H"
+    ],
+    "relationshipIds": [],
+    "indexIds": [],
+    "memoIds": []
+  },
+  "collections": {
+    "tableEntities": {
+      "WSUkPEsDcuCOZJviG2r-H": {
+        "id": "WSUkPEsDcuCOZJviG2r-H",
+        "name": "account",
+        "comment": "",
+        "columnIds": [
+          "EyAjncbIEjubpOIDdETRy",
+          "WY8dfG1cF-wvIYuNNpFAs",
+          "cQKsBtyp7zmj5T7F4VW_w"
+        ],
+        "seqColumnIds": [
+          "EyAjncbIEjubpOIDdETRy",
+          "WY8dfG1cF-wvIYuNNpFAs",
+          "cQKsBtyp7zmj5T7F4VW_w"
+        ],
+        "ui": {
+          "x": 28,
+          "y": 55,
+          "zIndex": 2,
+          "widthName": 60,
+          "widthComment": 60,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1733126148410,
+          "createAt": 1733126073751
+        }
+      }
+    },
+    "tableColumnEntities": {
+      "EyAjncbIEjubpOIDdETRy": {
+        "id": "EyAjncbIEjubpOIDdETRy",
+        "tableId": "WSUkPEsDcuCOZJviG2r-H",
+        "name": "id",
+        "comment": "",
+        "dataType": "uuid",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1733126119719,
+          "createAt": 1733126084504
+        }
+      },
+      "WY8dfG1cF-wvIYuNNpFAs": {
+        "id": "WY8dfG1cF-wvIYuNNpFAs",
+        "tableId": "WSUkPEsDcuCOZJviG2r-H",
+        "name": "username",
+        "comment": "",
+        "dataType": "TEXT",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1733126140489,
+          "createAt": 1733126094033
+        }
+      },
+      "cQKsBtyp7zmj5T7F4VW_w": {
+        "id": "cQKsBtyp7zmj5T7F4VW_w",
+        "tableId": "WSUkPEsDcuCOZJviG2r-H",
+        "name": "created_date_time",
+        "comment": "",
+        "dataType": "TIMESTAMP",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 99,
+          "widthComment": 60,
+          "widthDataType": 65,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1733126161543,
+          "createAt": 1733126148410
+        }
+      }
+    },
+    "relationshipEntities": {},
+    "indexEntities": {},
+    "indexColumnEntities": {},
+    "memoEntities": {}
+  },
+  "lww": {
+    "WSUkPEsDcuCOZJviG2r-H": [
+      "tableEntities",
+      1733126073714,
+      -1,
+      {
+        "name": 1733126079576
+      }
+    ],
+    "EyAjncbIEjubpOIDdETRy": [
+      "tableColumnEntities",
+      1733126084503,
+      -1,
+      {
+        "name": 1733126096807,
+        "dataType": 1733126111680,
+        "options(notNull)": 1733126119719
+      }
+    ],
+    "WY8dfG1cF-wvIYuNNpFAs": [
+      "tableColumnEntities",
+      1733126094030,
+      -1,
+      {
+        "name": 1733126137616,
+        "dataType": 1733126140488
+      }
+    ],
+    "cQKsBtyp7zmj5T7F4VW_w": [
+      "tableColumnEntities",
+      1733126148407,
+      -1,
+      {
+        "name": 1733126157343,
+        "dataType": 1733126161542
+      }
+    ]
+  }
+}
