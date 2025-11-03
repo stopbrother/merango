@@ -6,6 +6,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 const ConsentPage = async () => {
   return (

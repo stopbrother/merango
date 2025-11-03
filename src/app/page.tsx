@@ -1,6 +1,12 @@
 import SearchPartyForm from '@/components/SearchPartyForm';
 import { Button } from '@/components/ui/button';
+import { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: '메이플랜드 파티 매칭',
+  description: '메랜 파티 구인/구직',
+};
 
 export default function Home() {
   return (

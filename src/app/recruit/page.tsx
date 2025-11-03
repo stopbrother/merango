@@ -7,6 +7,12 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '메이플랜드 파티 목록',
+  description: '메이플랜드 파티 찾기. 메랜파티찾기 목록',
+};
 
 interface RecruitPageProps {
   searchParams: {
