@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from './ui/form';
 
-import { submitConsent } from '@/app/consent/action';
+import { submitConsent } from '@/app/(auth)/consent/action';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 import PolicyDialog from './docs/PolicyDialog';

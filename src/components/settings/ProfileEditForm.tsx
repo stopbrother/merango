@@ -72,7 +72,6 @@ const ProfileEditForm = () => {
     <>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold">프로필 설정</h1>
           <p className="text-sm text-muted-foreground">
             파티 매칭을 위해 닉네임·레벨·직업은 필수입니다.
           </p>
