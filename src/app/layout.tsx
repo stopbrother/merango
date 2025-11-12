@@ -1,4 +1,3 @@
-import SiteLayout from '@/components/SiteLayout';
 import { Toaster } from '@/components/ui/sonner';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
@@ -46,10 +45,8 @@ export default function RootLayout({
     <html lang="ko" className="overflow-y-scroll">
       <body className={`${pretendard.className} flex flex-col min-h-screen`}>
         <Providers>
-          <SiteLayout>
-            {children}
-            <Toaster position="top-center" />
-          </SiteLayout>
+          {children}
+          <Toaster position="top-center" />
         </Providers>
       </body>
     </html>
