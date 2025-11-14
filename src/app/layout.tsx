@@ -49,6 +49,11 @@ export default function RootLayout({
           name="google-site-verification"
           content="HYyoPQ59FAmROHPHf8pa9exypRJHFgOgWu9J3-1LtgY"
         />
+        {/* Naver Search Advisor 사이트 검증 */}
+        <meta
+          name="naver-site-verification"
+          content="bce879f6651a6ee99833ebb897fea1f1facfc618"
+        />
       </head>
       <body className={`${pretendard.className} flex flex-col min-h-screen`}>
         <Providers>
