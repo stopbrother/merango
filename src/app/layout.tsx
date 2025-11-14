@@ -43,6 +43,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className="overflow-y-scroll">
+      <head>
+        {/* Google Search console 사이트 검증 */}
+        <meta
+          name="google-site-verification"
+          content="HYyoPQ59FAmROHPHf8pa9exypRJHFgOgWu9J3-1LtgY"
+        />
+      </head>
       <body className={`${pretendard.className} flex flex-col min-h-screen`}>
         <Providers>
           {children}
