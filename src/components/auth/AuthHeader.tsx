@@ -1,24 +1,21 @@
-'use client';
-import { useAuthQuery } from '@/hooks/query/auth/useAuthQuery';
-import UserDropdownButton from './UserDropdownButton';
-import { useProfileQuery } from '@/hooks/query/profile/useProfileQuery';
-import LoadingButton from '../LoadingButton';
+import { getUserProfile } from '@/api/profile-api';
+import { createClient } from '@/utils/supabase/server';
 import LoginButton from './LoginButton';
+import UserDropdownButton from './UserDropdownButton';
 
-const AuthHeader = () => {
-  // auth 테이블 조회
-  const { data: user, isLoading } = useAuthQuery();
+const AuthHeader = async () => {
+  const client = createClient();
 
-  // 타입 에러 방지 (enabled로 실행 제어됨)
+  const {
+    data: { user },
+  } = await client.auth.getUser();
+
+  if (!user) return <LoginButton />;
+
   const userId = user?.id ?? '';
+  const profile = await getUserProfile(client, userId);
 
-  // profiles 테이블 조회
-  const { data: profile } = useProfileQuery(userId);
-
-  if (isLoading) return <LoadingButton />;
-  if (profile) return <UserDropdownButton profile={profile} />;
-
-  return <LoginButton />;
+  return <UserDropdownButton profile={profile} />;
 };
 
 export default AuthHeader;

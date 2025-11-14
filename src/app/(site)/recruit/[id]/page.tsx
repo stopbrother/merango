@@ -1,12 +1,25 @@
 import { getPartyDetail } from '@/api/party-api';
 import PartyDetail from '@/components/recruit/PartyDetail';
 import { createClient } from '@/utils/supabase/server';
+import { Metadata } from 'next';
 
 interface RecruitDetailPageProps {
   params: {
     id: string;
   };
 }
+
+export const generateMetadata = async ({
+  params,
+}: RecruitDetailPageProps): Promise<Metadata> => {
+  const serverClient = createClient();
+  const data = await getPartyDetail(serverClient, params.id);
+
+  return {
+    title: data.title,
+    description: data.description,
+  };
+};
 
 const RecruitDetailPage = async ({ params }: RecruitDetailPageProps) => {
   const serverClient = createClient();

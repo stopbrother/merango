@@ -96,6 +96,13 @@
   }
 }
 
+@layer base {
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
 body[data-scroll-locked][style] {
   margin-right: 0 !important;
 }
