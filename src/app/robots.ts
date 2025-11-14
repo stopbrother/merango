@@ -21,7 +21,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: ['/'],
-        disallow: '/settings/*',
+        disallow: ['/settings/*', '/consent'],
       },
     ],
     sitemap: 'https://merango.party/sitemap.xml',
