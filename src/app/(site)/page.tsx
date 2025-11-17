@@ -16,6 +16,14 @@ export default function Home() {
         <h1 className="text-4xl font-bold text-gray-800">
           MapleLand 파티 매칭
         </h1>
+
+        {/* 소개글 */}
+        <p className="text-sm text-muted-foreground text-center max-w-xl">
+          메랜고(MeranGo)는 MapleLand 유저를 위한 메이플랜드 파티 매칭
+          서비스입니다. 메랜파티를 구인·구직하고 싶다면, 디스코드 로그인만으로
+          간편하게 원하는 파티를 찾고 모집해 보세요.
+        </p>
+
         <Button
           asChild
           className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-md"

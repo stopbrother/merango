@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     default: 'MeranGo - 메이플랜드 파티 매칭',
   },
   description:
-    '메이플랜드 파티 매칭 - 디스코드 로그인으로 간편하게 구인/구직 하세요',
+    '메이플랜드 파티 매칭 - 디스코드 로그인으로 간편하게 구인/구직 하세요, 메랜고',
   // metadata내 상대경로를 절대 경로로 바꾸는 기준 주소
   metadataBase: new URL(BASE_URL),
   icons: { icon: '/favicon.svg', apple: '/apple-icon' },
