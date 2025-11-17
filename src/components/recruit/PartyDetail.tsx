@@ -238,7 +238,7 @@ const PartyDetail = ({ recruit, isModal }: PartyDetailProps) => {
               asChild
               className="px-4 py-2 bg-gray-300 text-gray-800 hover:bg-gray-400"
             >
-              <Link href="/recruit">목록으로</Link>
+              <Link href="/recruits">목록으로</Link>
             </Button>
           )}
         </div>
