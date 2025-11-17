@@ -51,7 +51,9 @@ const PartyRecruitList = ({ partyType, keyword }: PartyRecruitListProps) => {
   // 탭 변경 핸들러
   const handleFilter = (value: string) => {
     if (partyType !== value)
-      router.replace(`/recruit${value === 'all' ? '' : `?partyType=${value}`}`);
+      router.replace(
+        `/recruits${value === 'all' ? '' : `?partyType=${value}`}`
+      );
   };
 
   return (

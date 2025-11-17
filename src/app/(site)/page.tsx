@@ -28,7 +28,7 @@ export default function Home() {
           asChild
           className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-md"
         >
-          <Link href="/recruit">파티 찾기</Link>
+          <Link href="/recruits">파티 찾기</Link>
         </Button>
       </div>
 

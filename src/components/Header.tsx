@@ -18,7 +18,7 @@ const Header = () => {
           <Link href={'/'} className="hover:text-[#E63946]">
             홈
           </Link>
-          <Link href={'/recruit'} className="hover:text-[#E63946]">
+          <Link href={'/recruits'} className="hover:text-[#E63946]">
             파티찾기
           </Link>
         </nav>
