@@ -4,8 +4,8 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'MeranGo - 메이플랜드 파티 매칭',
-  description: 'MeranGo - 메랜 파티 구인/구직',
+  title: '메이플랜드 파티 매칭',
+  description: '메랜고(Merango) - 메랜 파티 구인/구직',
 };
 
 export default function Home() {
