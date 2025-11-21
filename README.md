@@ -78,34 +78,85 @@ Discord 소셜 로그인을 통해 간편하게 접속하고, 프로필을 설�
 
 ### Framework & Language
 
-- **Next.js 14 (App Router)**
+- **Next.js 14**(App Router)
 - **React 18**
-- **TypeScript**
+- **TypeScript 5**
 
-### Backend & Auth
+### Backend & Infra
 
--
+- **Supabase**(PostgreSQL, OAuth)
+- **Vercel** (배포 및 호스팅)
 
-### Frontend
+### **데이터 & 폼 상태 관리**
 
-- **Next.js 14 (App Router)**
-- **TypeScript**
+- **TanStack query v5** - 서버 상태 관리
+- **React Hook Form + Zod** - 폼 상태 관리 및 검증
+
+### UI
+
+- **Tailwind CSS v4**
 - **shadcn/ui**
-- **Tailwind CSS**
-- **TanStack Query (React Query)**
+- 아이콘: **lucide-react, react-icons**
 
-### Backend / Infra
+### 기타
 
-- **Supabase**
-  - Postgres Database
-  - Auth (Discord 소셜 로그인)
-  - Row Level Security(RLS)
-- **Vercel**
-  - Production / Preview / Dev 환경 분리 배포
+- 날짜: **date-fns**
+- 스크롤 감지: **react-intersection-observer**
 
 ---
 
 ## 🏗️ 아키텍처 & 설계 포인트
+
+### 1. Next.js App Router 기반 SSR
+
+- **Next.js App Router**를 사용해 페이지를 구성하고 `app` 폴더 아래의 `page.tsx`는 기본적으로 **서버 컴포넌트**로 구현
+- `app` 폴더 아래의 `page.tsx`는 서버 컴포넌트
+- 상호작용이 필요한 부분은 `클라이언트 컴포넌트`로 분리
+- 헤더를 `서버 컴포넌트`로 구현
+  - 내부에서 supabase 서버 클라이언트 생성 후 세션을 조회
+  - 로그인하지 않은 경우 → `로그인버튼` 렌더
+  - 로그인한 경우 → `유저 메뉴` 렌더
+- 요청이 들어오면 서버에서 먼저 페이지를 렌더링하기 때문에
+  - 초기 로딩시점부터 `사용자 상태가 반영된 UI`를 보여줄 수 있음
+  - 파티목록 같은 주요 페이지에서 `SEO`에도 유리해짐
+
+### 2. Supabase 기반 BaaS
+
+- 별도의 백엔드 서버 없이 **Supabase를 사용해 인증, DB를 통합 관리**
+- Supabase Auth의 `OAuth`를 사용하여 디스코드 소셜로그인 구현
+  - `/auth/callback` 서버 라우트에서 Supabase 서버 클라이언트를 생성해 인증코드를 Supabase로 전달하고 세션을 생성
+- Supabase 클라이언트는 `utils/supabase/server.ts, client.ts`경로에 분리하여 서버/클라이언트 환경에 따라 재사용
+- `RLS 정책`을 통해 작성자 본인만 수정/삭제
+- 테이블의 CRUD 작업은 **Supabase 쿼리**로 처리
+- `profiles`테이블 구조는 **Supabase Quickstarts의 User Management Starter**를 기반(`auth.users`에 유저가 추가되면 `profiles` 테이블에도 자동으로 동기화)
+- 테이블 구성
+  - `profiles`
+    - 사용자 프로필 정보 및 동의 관련
+  - `party_recruit`
+    - 파티 구인글 정보
+  - `party_member`
+    - 파티 참가자
+
+### 3. 데이터 & 폼 상태 관리
+
+- **서버 상태 관리 - TanStack query**
+
+  - 파티목록, 참가/취소, 프로필 정보 등 서버에서 가져오는 데이터는 **TanStack Query**로 관리
+  - 서버와 연동되는 액션은 **Query/Mutation + 캐시**를 통해 처리,
+    mutation 성공 시 캐시 무효화해서 최신 데이터 갱신
+  - 페이지 컴포넌트에서 `prefetchQuery`로 데이터를 미리 조회하여 클라이언트에서 `HydrationBoundary`를 통해 해당 캐시를 사용
+
+- **폼 상태 & 검증 - React Hook Form + Zod**
+  - **React Hook Form**으로 폼 상태 관리
+  - `@hookform/resolvers` 패키지의 `zodResolver`로 **Zod 스키마**와 **React Hook Form**을 연결하여
+    타입 기반의 유효성 검사와 에러 메시지를 관리
+  - 에러 메시지는 `shadcn/ui`의 Form 컴포넌트를 통해 UI 구성
+
+### 4. 유저 플로우 설계
+
+### 5. 파티 데이터 비즈니스 규칙
+
+### 6. UI구조
 
 ### 1. SSR + Supabase Auth
 
