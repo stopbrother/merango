@@ -7,11 +7,9 @@ Discord 소셜 로그인을 통해 간편하게 접속하고, 프로필을 설�
 
 ## 🔗 링크
 
-- **서비스 주소**: https://[배포 도메인].party
-- **Dev / Preview**: https://[dev 도메인].vercel.app
-- **GitHub Repository**: https://github.com/[username]/[repo-name]
-
-> ※ 실제 사용하는 도메인/레포 주소로 교체해주세요.
+- **서비스 주소**: https://merango.party
+- **Dev / Preview**: https://merango.vercel.app
+- **GitHub Repository**: https://github.com/stopbrother/merango
 
 ---
 
@@ -54,7 +52,7 @@ Discord 소셜 로그인을 통해 간편하게 접속하고, 프로필을 설�
 
 ### 5. 프로필 관리
 
-- **프로필 페이지**에서 정보를 확인할 수 있습니다.
+- **프로필 페이지**에서 다음 정보를 확인 및 관리
   - 닉네임/레벨/직업
   - 소개글
   - 참가중인 파티 목록
@@ -70,7 +68,7 @@ Discord 소셜 로그인을 통해 간편하게 접속하고, 프로필을 설�
 - **SSR 기반 페이지 렌더링** (Next.js App Router)
 - 메타데이터, OG 이미지, `robots`, `sitemap` 등을 활용한 **SEO 대응**
 - Supabase dev/prod 프로젝트 분리 및 Vercel 환경 분리
-- 동의/약관/개인정보처리방침 페이지 및 법적 문서 기본 템플릿 구현
+- 동의/약관/개인정보처리방침 페이지 및 기본 법적 문서 템플릿 구현
 
 ---
 
@@ -111,18 +109,18 @@ Discord 소셜 로그인을 통해 간편하게 접속하고, 프로필을 설�
 
 - **Next.js App Router**를 사용해 페이지를 구성하고 `app` 폴더 아래의 `page.tsx`는 기본적으로 **서버 컴포넌트**로 구현
 - `app` 폴더 아래의 `page.tsx`는 서버 컴포넌트
-- 상호작용이 필요한 부분은 `클라이언트 컴포넌트`로 분리
-- 헤더를 `서버 컴포넌트`로 구현
-  - 내부에서 supabase 서버 클라이언트 생성 후 세션을 조회
+- 상호작용이 필요한 부분은 **클라이언트 컴포넌트**로 분리
+- 헤더를 **서버 컴포넌트**로 구현
+  - 내부에서 supabase 서버 클라이언트 생성해 세션을 조회
   - 로그인하지 않은 경우 → `로그인버튼` 렌더
   - 로그인한 경우 → `유저 메뉴` 렌더
 - 요청이 들어오면 서버에서 먼저 페이지를 렌더링하기 때문에
-  - 초기 로딩시점부터 `사용자 상태가 반영된 UI`를 보여줄 수 있음
-  - 파티목록 같은 주요 페이지에서 `SEO`에도 유리해짐
+  - 초기 로딩시점부터 **사용자 상태가 반영된 UI**를 보여줄 수 있음
+  - 파티목록 같은 주요 페이지에서 **SEO에도 유리**
 
 ### 2. Supabase 기반 BaaS
 
-- 별도의 백엔드 서버 없이 **Supabase를 사용해 인증, DB를 통합 관리**
+- 별도의 백엔드 서버 없이 **Supabase를 사용해 인증과 DB를 통합 관리**
 - Supabase Auth의 `OAuth`를 사용하여 디스코드 소셜로그인 구현
   - `/auth/callback` 서버 라우트에서 Supabase 서버 클라이언트를 생성해 인증코드를 Supabase로 전달하고 세션을 생성
 - Supabase 클라이언트는 `utils/supabase/server.ts, client.ts`경로에 분리하여 서버/클라이언트 환경에 따라 재사용
@@ -147,79 +145,150 @@ Discord 소셜 로그인을 통해 간편하게 접속하고, 프로필을 설�
   - 페이지 컴포넌트에서 `prefetchQuery`로 데이터를 미리 조회하여 클라이언트에서 `HydrationBoundary`를 통해 해당 캐시를 사용
 
 - **폼 상태 & 검증 - React Hook Form + Zod**
+
   - **React Hook Form**으로 폼 상태 관리
   - `@hookform/resolvers` 패키지의 `zodResolver`로 **Zod 스키마**와 **React Hook Form**을 연결하여
     타입 기반의 유효성 검사와 에러 메시지를 관리
   - 에러 메시지는 `shadcn/ui`의 Form 컴포넌트를 통해 UI 구성
 
+- **실시간(Supabase Realtime)**
+
+  Supabase Realtime을 구독하여 데이터 변경시 다른 사용자 화면에서도 반영
+
+  - 파티 테이블(`party_recruit`)의 **INSERT 이벤트**를 구독
+    - 새로운 파티글이 등록되면 상단에 "새 글 알림" 버튼과 카운트 노출
+    - 버튼 클릭시 관련 목록 쿼리 캐시를 무효화하고 다시 조회
+  - 파티 참가자 테이블(`party_member`)은 **모든 이벤트(INSERT/UPDATE/DELETE)**를 구독
+    - 참가 / 취소 등으로 데이터가 변경되면 관련 캐시를 무효화하고 다시 조회
+
 ### 4. 유저 플로우 설계
+
+1. Discord 소셜 로그인(Supabase OAuth)
+2. 최초 로그인시 동의 페이지(`/consent`) 이동
+3. 만 14세 이상 / 이용약관 / 개인정보처리방침 모두 동의
+4. 프로필 편집 페이지로 이동하여 닉네임/레벨/직업 입력 유도
+5. 파티 구인/참가 기능 사용
+
+- **로그인 / 동의 가드**
+
+  - `middleware`에서 Supabase 세션과 동의 여부 확인
+  - 세션이 없는 경우 보호된 페이지 접근시 로그인 안내페이지로 이동
+  - 동의를 완료하지 않은 경우 동의페이지로 이동
+
+- **프로필 미완성 가드**
+  - 프로필 정보 (닉네임, 레벨, 직업)가 미완성인 상태에서 **파티 구인/구직 기능 사용불가**
+  - 구인/참가하기 버튼 클릭시 토스트 및 다이얼로그로 프로필 작성 안내 및 유도
+- 페이지 전체 접근을 막지 않고 **액션 시점에서 프로필 작성 유도**
 
 ### 5. 파티 데이터 비즈니스 규칙
 
+- **파티 구인글 작성 제한**
+
+  - 한 계정당 **최대 5개의 파티 구인글 작성** 가능
+
+- **파티 참가 인원 제한**
+
+  - 각 파티는 작성자 포함 **최대 6명까지 참가** 가능
+  - 같은 파티에 **중복 참가** 불가
+
+- **정렬 기준 & 끌어올리기**
+
+  - `sort_time = COALESCE(raised_date_time, created_date_time)` 컬럼으로 정렬
+
+    - 끌어올린 시점 (`raised_date_time`)
+    - 최초 작성 시점(`created_date_time`)
+    - 하나의 정렬 기준으로 통합하여 `sort_time`기준 내림차순으로 정렬
+
+  - 끌어올리기 기능은 파티 구인글당 **30분에 한 번** 사용, `raised_date_time` 갱신하여 목록 상단으로 노출
+
+- **버튼 상태**
+  - 참가상태, 참가 인원수, 본인 작성 여부에 따른 버튼 분기
+    - 참가 버튼 활성화 / 참가 취소 활성화
+    - 본인이 작성한 글인 경우 **수정/삭제/끌어올리기** 버튼 노출
+
 ### 6. UI구조
 
-### 1. SSR + Supabase Auth
+- **레이아웃 & 라우트 그룹**
 
-- Next.js App Router의 **Server Component**에서 Supabase 클라이언트를 생성하여  
-  로그인 유저 정보를 가져와 SSR 단계에서 헤더/페이지 상태를 결정
-- AuthHeader를 서버 컴포넌트로 변경하여, **초기 렌더링 시점부터 로그인 상태 반영**
+  - **전역 레이아웃**(app/layout.tsx)
+    - 메타데이터, TanStack Query Provider, 토스트 등을 설정
+  - Route Group으로 **헤더·푸터 유무에 따라 페이지 분리**
+    - `(plain)/consent`: 동의페이지 - 헤더·푸터가 없는 레이아웃
+    - `(site)`: 나머지 페이지 - 헤더·푸터가 포함된 레이아웃
+  - 헤더를 **서버 컴포넌트**로 구현
+    - `Supabase 세션`을 읽어와 로그인 상태에 따라 `로그인 버튼` 또는 `유저 메뉴` 렌더
 
-### 2. TanStack Query로 서버 상태 관리
+- **파티 목록 & 상세보기**
 
-- 로그인 상태, 프로필, 파티 목록 등 **서버 상태를 TanStack Query로 관리**
-- 페이지는 기본적으로 SSR로 렌더링하고, **클라이언트에서는 캐시 기반으로 부드럽게 갱신**
-- React Query Devtools를 개발 환경에서만 노출하도록 설정
+  - 파티 목록은 **카드 리스트**로 구성
+    - shadcn/ui의 `Card` 컴포넌트 사용
+  - 카드 클릭시 **모달 형태의 상세보기**
 
-### 3. dev/prod 환경 분리
+    - shadcn/ui의 `Dialog` 컴포넌트 사용
 
-- Supabase 프로젝트를 **dev / prod로 분리**
-- Vercel 환경별로 **서로 다른 Supabase URL / 키** 사용
-- `.env.local`, Vercel 환경 변수 등을 통해 환경별 설정 분리
+  - **무한스크롤 목록**
 
-### 4. 동의(Consent) 설계
+    - 파티 목록은 **무한 스크롤 방식**으로 구현
+    - TanStack Query의 `useInfiniteQuery`로 커서 기반으로 15개씩 데이터를 가져와 렌더
+    - `react-intersection-observer`로 리스트 하단에 둔 sentinel 요소가 뷰포트에 들어오면 다음 데이터 패칭
 
-- `CONSENT_VERSION` 상수를 두고, 버전이 올라가면 재동의 유도 가능하도록 설계
-- profiles 테이블 예시:
+- **폼**
 
-  - `terms_accepted_at`, `terms_version`
-  - `privacy_accepted_at`, `privacy_version`
-  - `is_over_14` (또는 유사 컬럼)
+  - 파티 작성, 프로필 편집, 검색 폼 등은 shadcn/ui의 `Form` 컴포넌트 및 `Input`, `Textarea`, `RadioGroup`, `Select` 등을 조합
+  - `React Hook Form + Zod` 검증하여 라벨, 입력 필드, 에러 메시지를 일관된 레이아웃으로 구성
 
 ---
 
 ## 📁 폴더 구조
 
-> 실제 구조에 맞게 수정해서 사용하세요.
-
 ```bash
-app/
-  layout.tsx
-  page.tsx                # 홈
-  auth/
-    callback/route.ts     # Discord OAuth 콜백
-  consent/
-    page.tsx              # 약관/동의 페이지
-  recruit/
-    page.tsx              # 파티 리스트/검색 페이지
-    [id]/
-      page.tsx            # 파티 상세 페이지
-  settings/
-    page.tsx              # 프로필/계정 설정
-
-components/
-  common/
-  recruit/
-  profile/
-  auth/
-
-lib/
-  supabase/
-    server.ts             # createClient 등
-  constants/
-    consent.ts            # CONSENT_VERSION 등
-
-types/
-  supabase.ts             # supabase gen types
+📦src
+ ┣ 📂api                  # Supabase 기반 API 함수들
+ ┃ ┣ 📜auth-api.ts
+ ┃ ┣ 📜member-api.ts
+ ┃ ┣ 📜party-api.ts
+ ┃ ┗ 📜profile-api.ts
+ ┣ 📂app
+ ┃ ┣ 📂(plain)            # 헤더·푸터 없는 동의 페이지
+ ┃ ┣ 📂(site)             # 그외 페이지들
+ ┃ ┣ 📂fonts              # 폰트
+ ┃ ┣ 📜error.tsx          # 전역 에러 페이지
+ ┃ ┣ 📜globals.css        # 전역 스타일 및 Tailwind CSS 설정
+ ┃ ┣ 📜layout.tsx         # 전역 레이아웃
+ ┃ ┣ 📜not-found.tsx      # 404 페이지
+ ┃ ┣ 📜providers.tsx      # TanStack Query provider
+ ┃ ┣ 📜robots.ts
+ ┃ ┗ 📜sitemap.ts
+ ┣ 📂components
+ ┃ ┣ 📂auth
+ ┃ ┣ 📂common
+ ┃ ┣ 📂consent
+ ┃ ┣ 📂docs
+ ┃ ┣ 📂layout
+ ┃ ┣ 📂profile
+ ┃ ┣ 📂recruit
+ ┃ ┣ 📂settings
+ ┃ ┗ 📂ui                 # shadcn/ui UI
+ ┣ 📂constants            # 상수들
+ ┃ ┣ 📜consent.ts
+ ┃ ┣ 📜error-message.ts
+ ┃ ┣ 📜messages.ts
+ ┃ ┗ 📜partyType.ts
+ ┣ 📂hooks
+ ┃ ┣ 📂query              # TanStack Query 관련 훅
+ ┃ ┗ 📂realtime           # Supabase Realtime 훅
+ ┣ 📂lib
+ ┃ ┗ 📜utils.ts
+ ┣ 📂types
+ ┣ 📂utils
+ ┃ ┣ 📂supabase           # Supabase Client 및 미들웨어
+ ┃ ┃ ┣ 📜admin.ts
+ ┃ ┃ ┣ 📜client.ts
+ ┃ ┃ ┣ 📜middleware.ts    # Supabase 세션 동기화 + 로그인/동의 가드
+ ┃ ┃ ┗ 📜server.ts
+ ┃ ┣ 📜auth.ts
+ ┃ ┗ 📜time.ts
+ ┗ 📜middleware.ts        # Next.js 미들웨어
 ```
 
 ---
@@ -229,8 +298,8 @@ types/
 1. 저장소 클론
 
 ```bash
-git clone https://github.com/[username]/[repo-name].git
-cd [repo-name]
+git clone https://github.com/stopbrother/merango.git
+cd merango
 ```
 
 2. 패키지 설치
@@ -240,12 +309,14 @@ pnpm install
 ```
 
 3. 환경 변수 설정
-   프로젝트 루트에 .env.local 파일을 생성하고, 아래와 같이 설정합니다.
+   프로젝트 루트에 `.env.local` 파일을 생성하고, Supabase 정보 설정.
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 SUPABASE_SERVICE_ROLE_KEY=...
+
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
 ```
 
 4. 개발 서버 실행
@@ -264,17 +335,16 @@ Discord 소셜 로그인 후 닉네임(global_name)이 갱신되지 않는 문�
 
 CONSENT_VERSION 기반 동의 플로우 설계
 
-Supabase RLS 적용 및 dev/prod 환경 분리 경험
+Supabase RLS 적용 및 dev/prod 환경 분리 경험 등등
 
-[TODO] 블로그 또는 노션 링크를 추가해주세요.
+[TODO] 링크 추가.
 
 ## 📌 향후 개선 계획 (TODO)
 
-## 🙋‍♂️ 개발자
-
-이름: [본인 이름 or 닉네임]
-
-GitHub: https://github.com/[username
-]
-
-이메일: [선택 사항]
+- 파티참가 선착순 → 파티장이 승인하는 시스템
+- 알림: 파티참가 신청시 파티장에게 알림 & 참가 승인/거절
+- 파티 모집글 공개/비공개
+- 프로필 이미지 편집
+- 관심 구인글
+- 다크모드
+- 채팅
