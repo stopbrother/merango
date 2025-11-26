@@ -3,7 +3,7 @@
 import { RecruitWithProfile } from '@/types/parties.types';
 import PartyDialog from './PartyDialog';
 import { usePathname, useSearchParams } from 'next/navigation';
-import ScrollToTopButton from '../ScrollToTopButton';
+import ScrollToTopButton from '../common/ScrollToTopButton';
 
 interface PartyListProps {
   parties: RecruitWithProfile[];

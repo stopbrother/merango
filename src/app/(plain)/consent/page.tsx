@@ -1,4 +1,4 @@
-import ConsentForm from '@/components/ConsentForm';
+import ConsentForm from '@/components/consent/ConsentForm';
 import {
   Card,
   CardContent,

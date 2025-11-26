@@ -2,8 +2,8 @@
 
 import { useForm } from 'react-hook-form';
 
-import { Button } from './ui/button';
-import { Checkbox } from './ui/checkbox';
+import { Button } from '../ui/button';
+import { Checkbox } from '../ui/checkbox';
 import {
   Form,
   FormControl,
@@ -11,11 +11,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from './ui/form';
+} from '../ui/form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
-import PolicyDialog from './docs/PolicyDialog';
+import PolicyDialog from '../docs/PolicyDialog';
 import { submitConsent } from '@/app/(plain)/consent/action';
 
 const formSchema = z.object({

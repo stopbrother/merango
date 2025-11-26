@@ -1,5 +1,5 @@
 import { RotateCw } from 'lucide-react';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 
 interface RefreshButtonProps {
   onRefresh: () => void;

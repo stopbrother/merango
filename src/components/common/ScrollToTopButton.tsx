@@ -1,7 +1,7 @@
 'use client';
 
 import { useInView } from 'react-intersection-observer';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import { ArrowUp } from 'lucide-react';
 
 const ScrollToTopButton = () => {

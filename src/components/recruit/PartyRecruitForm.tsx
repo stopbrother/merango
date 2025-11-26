@@ -13,18 +13,18 @@ import { useCreatedPartiesCountQuery } from '@/hooks/query/party/usePartyQuery';
 import { RecruitWithProfile } from '@/types/parties.types';
 import clsx from 'clsx';
 import { toast } from 'sonner';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from './ui/dialog';
-import { Form, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
-import { Input } from './ui/input';
-import { RadioGroup, RadioGroupItem } from './ui/radio-group';
-import { Textarea } from './ui/textarea';
+} from '../ui/dialog';
+import { Form, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Input } from '../ui/input';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { Textarea } from '../ui/textarea';
 
 interface PartyRecruitFormProps {
   open: boolean;

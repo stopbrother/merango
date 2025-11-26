@@ -1,6 +1,6 @@
 'use client';
 import { useJoinedPartiesQuery } from '@/hooks/query/member/usePartyMemberQuery';
-import QueryStateWrapper from '../QueryStateWrapper';
+import QueryStateWrapper from '../common/QueryStateWrapper';
 import PartyList from '../recruit/PartyList';
 
 interface JoiningPartyProps {

@@ -16,7 +16,7 @@ import { Button } from '../ui/button';
 import { useProfileUpdateMutation } from '@/hooks/query/profile/useProfileMutation';
 import { useAuthQuery } from '@/hooks/query/auth/useAuthQuery';
 import { useProfileQuery } from '@/hooks/query/profile/useProfileQuery';
-import QueryStateWrapper from '../QueryStateWrapper';
+import QueryStateWrapper from '../common/QueryStateWrapper';
 import { MSG } from '@/constants/messages';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';

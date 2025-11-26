@@ -2,7 +2,7 @@
 import { useSignOutMutation } from '@/hooks/query/auth/useAuthMutation';
 import { Profile } from '@/types/profiles.types';
 import { useRouter } from 'next/navigation';
-import ProfileAvatar from '../ProfileAvatar';
+
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import DropdownLinkItem from './DropdownLinkItem';
+import ProfileAvatar from '../profile/ProfileAvatar';
 
 interface UserDropdownButtonProps {
   profile: Profile;

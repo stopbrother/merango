@@ -5,16 +5,16 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { Button } from './ui/button';
-import { Form, FormControl, FormField, FormItem } from './ui/form';
-import { Input } from './ui/input';
+import { Button } from '../ui/button';
+import { Form, FormControl, FormField, FormItem } from '../ui/form';
+import { Input } from '../ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from './ui/select';
+} from '../ui/select';
 
 const formSchema = z.object({
   keyword: z.string(),

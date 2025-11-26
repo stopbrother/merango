@@ -8,7 +8,7 @@ import { Textarea } from '../ui/textarea';
 import { useProfileQuery } from '@/hooks/query/profile/useProfileQuery';
 import { useProfileIntroMutation } from '@/hooks/query/profile/useProfileMutation';
 import { Profile } from '@/types/profiles.types';
-import QueryStateWrapper from '../QueryStateWrapper';
+import QueryStateWrapper from '../common/QueryStateWrapper';
 
 interface ProfileIntroProps {
   userId: Profile['id'];

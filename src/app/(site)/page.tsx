@@ -1,4 +1,4 @@
-import SearchPartyForm from '@/components/SearchPartyForm';
+import SearchPartyForm from '@/components/recruit/SearchPartyForm';
 import { Button } from '@/components/ui/button';
 import { Metadata } from 'next';
 import Link from 'next/link';
