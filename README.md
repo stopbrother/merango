@@ -63,7 +63,7 @@ Discord 소셜 로그인을 통해 간편하게 접속하고, 프로필을 설�
 - 프로필 미완성 시:
   - 구인하기/참가하기 버튼 클릭 시 **토스트/다이얼로그로 안내**
 
-### 4. 서비스 운영 측면 기능
+### 6. 서비스 운영 측면 기능
 
 - **SSR 기반 페이지 렌더링** (Next.js App Router)
 - 메타데이터, OG 이미지, `robots`, `sitemap` 등을 활용한 **SEO 대응**
@@ -123,17 +123,14 @@ Discord 소셜 로그인을 통해 간편하게 접속하고, 프로필을 설�
 - 별도의 백엔드 서버 없이 **Supabase를 사용해 인증과 DB를 통합 관리**
 - Supabase Auth의 `OAuth`를 사용하여 디스코드 소셜로그인 구현
   - `/auth/callback` 서버 라우트에서 Supabase 서버 클라이언트를 생성해 인증코드를 Supabase로 전달하고 세션을 생성
-- Supabase 클라이언트는 `utils/supabase/server.ts, client.ts`경로에 분리하여 서버/클라이언트 환경에 따라 재사용
-- `RLS 정책`을 통해 작성자 본인만 수정/삭제
+- Supabase 클라이언트는 `utils/supabase/server.ts, client.ts`로 분리하여 서버/클라이언트 환경에 맞게 재사용
+- `RLS 정책`을 통해 작성자 본인만 수정/삭제할 수 있도록 제한
 - 테이블의 CRUD 작업은 **Supabase 쿼리**로 처리
-- `profiles`테이블 구조는 **Supabase Quickstarts의 User Management Starter**를 기반(`auth.users`에 유저가 추가되면 `profiles` 테이블에도 자동으로 동기화)
+- `profiles`테이블 구조는 **Supabase Quickstarts의 User Management Starter**를 기반으로 사용(`auth.users`에 유저가 추가되면 `profiles` 테이블에도 자동으로 동기화)
 - 테이블 구성
-  - `profiles`
-    - 사용자 프로필 정보 및 동의 관련
-  - `party_recruit`
-    - 파티 구인글 정보
-  - `party_member`
-    - 파티 참가자
+  - `profiles` - 사용자 프로필 정보 및 동의 관련
+  - `party_recruit` - 파티 구인글 정보
+  - `party_member` - 파티 참가자
 
 ### 3. 데이터 & 폼 상태 관리
 
@@ -141,22 +138,21 @@ Discord 소셜 로그인을 통해 간편하게 접속하고, 프로필을 설�
 
   - 파티목록, 참가/취소, 프로필 정보 등 서버에서 가져오는 데이터는 **TanStack Query**로 관리
   - 서버와 연동되는 액션은 **Query/Mutation + 캐시**를 통해 처리,
-    mutation 성공 시 캐시 무효화해서 최신 데이터 갱신
+    mutation 성공 시 캐시 무효화해서 최신 데이터로 갱신
   - 페이지 컴포넌트에서 `prefetchQuery`로 데이터를 미리 조회하여 클라이언트에서 `HydrationBoundary`를 통해 해당 캐시를 사용
 
 - **폼 상태 & 검증 - React Hook Form + Zod**
 
   - **React Hook Form**으로 폼 상태 관리
-  - `@hookform/resolvers` 패키지의 `zodResolver`로 **Zod 스키마**와 **React Hook Form**을 연결하여
-    타입 기반의 유효성 검사와 에러 메시지를 관리
-  - 에러 메시지는 `shadcn/ui`의 Form 컴포넌트를 통해 UI 구성
+  - `@hookform/resolvers` 패키지의 `zodResolver`로 **Zod 스키마**와 **React Hook Form**을 연결하여 타입 기반의 유효성 검사와 에러 메시지를 관리
+  - 에러 메시지는 `shadcn/ui`의 `Form` 컴포넌트를 통해 일괄된 UI 구성
 
-- **실시간(Supabase Realtime)**
+- **실시간 - Supabase Realtime**
 
-  Supabase Realtime을 구독하여 데이터 변경시 다른 사용자 화면에서도 반영
+  Supabase Realtime을 사용하여 데이터 변경시 다른 사용자 화면에서도 반영되도록 구현
 
   - 파티 테이블(`party_recruit`)의 **INSERT 이벤트**를 구독
-    - 새로운 파티글이 등록되면 상단에 "새 글 알림" 버튼과 카운트 노출
+    - 새로운 파티글이 등록되면 상단에 **"새 글 알림" 버튼과 카운트** 노출
     - 버튼 클릭시 관련 목록 쿼리 캐시를 무효화하고 다시 조회
   - 파티 참가자 테이블(`party_member`)은 **모든 이벤트(INSERT/UPDATE/DELETE)**를 구독
     - 참가 / 취소 등으로 데이터가 변경되면 관련 캐시를 무효화하고 다시 조회
@@ -166,8 +162,8 @@ Discord 소셜 로그인을 통해 간편하게 접속하고, 프로필을 설�
 1. Discord 소셜 로그인(Supabase OAuth)
 2. 최초 로그인시 동의 페이지(`/consent`) 이동
 3. 만 14세 이상 / 이용약관 / 개인정보처리방침 모두 동의
-4. 프로필 편집 페이지로 이동하여 닉네임/레벨/직업 입력 유도
-5. 파티 구인/참가 기능 사용
+4. 프로필 편집 페이지로 이동하여 `닉네임/레벨/직업` 입력 유도
+5. 프로필 저장 후 `파티 구인/참가 기능` 사용
 
 - **로그인 / 동의 가드**
 
@@ -194,16 +190,16 @@ Discord 소셜 로그인을 통해 간편하게 접속하고, 프로필을 설�
 - **정렬 기준 & 끌어올리기**
 
   - `sort_time = COALESCE(raised_date_time, created_date_time)` 컬럼으로 정렬
-
     - 끌어올린 시점 (`raised_date_time`)
     - 최초 작성 시점(`created_date_time`)
-    - 하나의 정렬 기준으로 통합하여 `sort_time`기준 내림차순으로 정렬
+    - ↑ 하나의 정렬 기준으로 통합하여 `sort_time`기준 내림차순으로 정렬
+  - 끌어올리기 기능은 파티 구인글당 **30분에 한 번** 사용 가능,
+    호출 시 `raised_date_time` 갱신하여 목록 상단으로 노출
 
-  - 끌어올리기 기능은 파티 구인글당 **30분에 한 번** 사용, `raised_date_time` 갱신하여 목록 상단으로 노출
-
-- **버튼 상태**
+- **버튼 상태 분기**
   - 참가상태, 참가 인원수, 본인 작성 여부에 따른 버튼 분기
-    - 참가 버튼 활성화 / 참가 취소 활성화
+    - 참가하지 않은 경우 **참가 버튼** 노출
+    - 이미 참가한 경우 **참가 취소 버튼** 노출
     - 본인이 작성한 글인 경우 **수정/삭제/끌어올리기** 버튼 노출
 
 ### 6. UI구조
@@ -230,12 +226,12 @@ Discord 소셜 로그인을 통해 간편하게 접속하고, 프로필을 설�
 
     - 파티 목록은 **무한 스크롤 방식**으로 구현
     - TanStack Query의 `useInfiniteQuery`로 커서 기반으로 15개씩 데이터를 가져와 렌더
-    - `react-intersection-observer`로 리스트 하단에 둔 sentinel 요소가 뷰포트에 들어오면 다음 데이터 패칭
+    - `react-intersection-observer`로 리스트 하단에 둔 sentinel 요소가 뷰포트에 들어오면 다음 데이터를 패칭
 
 - **폼**
 
   - 파티 작성, 프로필 편집, 검색 폼 등은 shadcn/ui의 `Form` 컴포넌트 및 `Input`, `Textarea`, `RadioGroup`, `Select` 등을 조합
-  - `React Hook Form + Zod` 검증하여 라벨, 입력 필드, 에러 메시지를 일관된 레이아웃으로 구성
+  - `React Hook Form + Zod`로 검증하여 라벨, 입력 필드, 에러 메시지를 일관된 레이아웃으로 구성
 
 ---
 
@@ -325,6 +321,8 @@ NEXT_PUBLIC_BASE_URL=http://localhost:3000
 pnpm dev
 ```
 
+브라우저에서 `http://localhost:3000`으로 접속
+
 ## 🧪 트러블슈팅 & 기술 노트
 
 아래와 같은 주제들에 대해 별도의 블로그/문서로 정리하고, 링크를 추가할 예정입니다.
@@ -337,14 +335,14 @@ CONSENT_VERSION 기반 동의 플로우 설계
 
 Supabase RLS 적용 및 dev/prod 환경 분리 경험 등등
 
-[TODO] 링크 추가.
+[TODO] 링크 추가 예정.
 
 ## 📌 향후 개선 계획 (TODO)
 
 - 파티참가 선착순 → 파티장이 승인하는 시스템
-- 알림: 파티참가 신청시 파티장에게 알림 & 참가 승인/거절
-- 파티 모집글 공개/비공개
-- 프로필 이미지 편집
-- 관심 구인글
+- 알림: 파티참가 신청시 파티장에게 알림, 참가 승인/거절 알림
+- 파티 모집글 공개/비공개 설정
+- 프로필 이미지 등록
+- 관심 구인글 (즐겨찾기)
 - 다크모드
 - 채팅
