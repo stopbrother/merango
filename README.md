@@ -323,19 +323,21 @@ pnpm dev
 
 브라우저에서 `http://localhost:3000`으로 접속
 
-## 🧪 트러블슈팅 & 기술 노트
+## 🧪 트러블슈팅
 
-아래와 같은 주제들에 대해 별도의 블로그/문서로 정리하고, 링크를 추가할 예정입니다.
+### 디스코드 OAuth 로그인 시 유저 생성 실패 문제
 
-Discord 소셜 로그인 후 닉네임(global_name)이 갱신되지 않는 문제 해결
+- **문제**: 디스코드 소셜 로그인 시 `Database error saving new user` 에러로 로그인 실패
+- **원인**: OAuth로부터 전달된 `global_name`이 빈 문자열로 들어와 `profiles`테이블의 체크 제약조건 위반
+- **해결**: Supabase 트리거에서 `coalesce / nullif` 처리로 값 정규화 후 저장 로직 수정
+- 블로그: https://stopbrother.tistory.com/133
 
-/auth/callback에서 provider_token으로 Discord API 호출 후 profiles 업데이트 흐름
+### TanStack Query mutation에서 폼 값이 초기값만 전송되던 문제
 
-CONSENT_VERSION 기반 동의 플로우 설계
-
-Supabase RLS 적용 및 dev/prod 환경 분리 경험 등등
-
-[TODO] 링크 추가 예정.
+- **문제**: 폼에 값을 입력해도 DB에는 빈 문자열(초기값)만 저장됨
+- **원인**: `mutationFn`이 렌더 시점의 `formData`를 참조해 제출 시점에도 초기값이 사용됨
+- **해결**: `mutationFn`에 함수정의만 해두고 제출 시점에 `mutate(formData)`로 전달하도록 수정
+- 블로그: https://stopbrother.tistory.com/134
 
 ## 📌 향후 개선 계획 (TODO)
 
