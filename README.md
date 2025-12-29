@@ -332,12 +332,12 @@ pnpm dev
 - **해결**: Supabase 트리거에서 `coalesce / nullif` 처리로 값 정규화 후 저장 로직 수정
 - 블로그: https://stopbrother.tistory.com/133
 
-### TanStack Query mutation에서 폼 값이 초기값만 전송되던 문제
+### shadcn/ui 모달 사용 시 스크롤 여백으로 인한 레이아웃 깨짐 문제
 
-- **문제**: 폼에 값을 입력해도 DB에는 빈 문자열(초기값)만 저장됨
-- **원인**: `mutationFn`이 렌더 시점의 `formData`를 참조해 제출 시점에도 초기값이 사용됨
-- **해결**: `mutationFn`에 함수정의만 해두고 제출 시점에 `mutate(formData)`로 전달하도록 수정
-- 블로그: https://stopbrother.tistory.com/134
+- **문제**: Dialog / Select 오픈 시 오른쪽에 불필요한 여백이 생기며 레이아웃 밀림
+- **원인**: Radix UI 내부의 `react-remove-scroll`이 스크롤 잠금 시 스크롤바 너비만큼 `margin-right` 보정을 추가
+- **해결**: CSS 우선순위 더 높은 `body[data-scroll-locked][style]` 선택자로 보정 스타일을 덮어써 여백 제거
+- 블로그: https://stopbrother.tistory.com/136
 
 ## 📌 향후 개선 계획 (TODO)
 
