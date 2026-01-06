@@ -1,8 +1,8 @@
 'use client';
 import { useSignOutMutation } from '@/hooks/query/auth/useAuthMutation';
-import { Profile } from '@/types/profiles.types';
 import { useRouter } from 'next/navigation';
 
+import ProfileAvatar from '../profile/ProfileAvatar';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -12,16 +12,20 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import DropdownLinkItem from './DropdownLinkItem';
-import ProfileAvatar from '../profile/ProfileAvatar';
+import { useProfileQuery } from '@/hooks/query/profile/useProfileQuery';
+import UserDropdownSkeleton from './UserDropdownSkeleton';
 
 interface UserDropdownButtonProps {
-  profile: Profile;
+  userId: string;
 }
 
-const UserDropdownButton = ({ profile }: UserDropdownButtonProps) => {
+const UserDropdownButton = ({ userId }: UserDropdownButtonProps) => {
   const router = useRouter();
 
+  const { data: profile } = useProfileQuery(userId);
   const { mutate: signOut } = useSignOutMutation();
+
+  if (!profile) return <UserDropdownSkeleton />;
 
   // TODO 로그아웃 후 새로고침 x supabase 구조개선 참고
   const handleLogOut = () => {
