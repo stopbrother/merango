@@ -1,7 +1,6 @@
 import Link from 'next/link';
-
-import AuthHeader from './auth/AuthHeader';
-import RecruitButton from './RecruitButton';
+import RecruitButton from '../recruit/RecruitButton';
+import AuthHeader from '../auth/AuthHeader';
 
 const Header = () => {
   return (

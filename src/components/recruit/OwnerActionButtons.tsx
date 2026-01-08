@@ -1,5 +1,5 @@
 import { Pencil, Trash2 } from 'lucide-react';
-import TooltipWrapper from '../TooltipWrapper';
+import TooltipWrapper from '../common/TooltipWrapper';
 
 interface OwnerActionButtonsProps {
   onEdit: () => void;

@@ -5,14 +5,15 @@ import { PARTY_TYPE_FILTER_OPTIONS } from '@/constants/partyType';
 import { useInfinitePartiesQuery } from '@/hooks/query/party/usePartyQuery';
 import { Loader2, PartyPopper } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import EmptyState from '../EmptyState';
-import QueryStateWrapper from '../QueryStateWrapper';
-import SearchPartyForm from '../SearchPartyForm';
+import EmptyState from '../common/EmptyState';
+import QueryStateWrapper from '../common/QueryStateWrapper';
+
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import PartyList from './PartyList';
 import PartyCardSkeleton from './PartyCardSkeleton';
 import { usePartyRecruitRealtime } from '@/hooks/realtime/usePartyRecruitRealtime';
-import RefreshButton from '../RefreshButton';
+import RefreshButton from '../common/RefreshButton';
+import SearchPartyForm from './SearchPartyForm';
 
 interface PartyRecruitListProps {
   partyType: string;

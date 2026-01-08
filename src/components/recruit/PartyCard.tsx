@@ -4,7 +4,7 @@ import { RecruitWithProfile } from '@/types/parties.types';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { PARTY_TYPE_OPTIONS } from '@/constants/partyType';
-import TooltipWrapper from '../TooltipWrapper';
+import TooltipWrapper from '../common/TooltipWrapper';
 
 interface PartyCardProps {
   recruit: RecruitWithProfile;

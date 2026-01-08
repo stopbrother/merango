@@ -1,5 +1,5 @@
 import { Profile } from '@/types/profiles.types';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { UserIcon } from 'lucide-react';
 
 interface ProfileAvatarProps {

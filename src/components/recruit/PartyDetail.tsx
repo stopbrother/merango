@@ -22,13 +22,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import AlertProfileGuard from '../AlertProfileGuard';
-import PartyRecruitForm from '../PartyRecruitForm';
-import ProfileAvatar from '../ProfileAvatar';
-import TooltipWrapper from '../TooltipWrapper';
+
+import TooltipWrapper from '../common/TooltipWrapper';
 import { Button } from '../ui/button';
 import { DialogClose } from '../ui/dialog';
 import OwnerActionButtons from './OwnerActionButtons';
+import ProfileAvatar from '../profile/ProfileAvatar';
+import AlertProfileGuard from '../profile/AlertProfileGuard';
+import PartyRecruitForm from './PartyRecruitForm';
 
 interface PartyDetailProps {
   recruit: RecruitWithProfile;

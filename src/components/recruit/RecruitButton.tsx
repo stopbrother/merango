@@ -5,7 +5,7 @@ import { requireLogin } from '@/utils/auth';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import PartyRecruitForm from './PartyRecruitForm';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import { useProfileGuard } from '@/hooks/query/profile/useProfileGuard';
 
 const RecruitButton = () => {

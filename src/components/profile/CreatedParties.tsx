@@ -1,8 +1,8 @@
 'use client';
 import { useCreatedPartiesQuery } from '@/hooks/query/party/usePartyQuery';
-import QueryStateWrapper from '../QueryStateWrapper';
+import QueryStateWrapper from '../common/QueryStateWrapper';
 import PartyList from '../recruit/PartyList';
-import EmptyState from '../EmptyState';
+import EmptyState from '../common/EmptyState';
 import { PartyPopper } from 'lucide-react';
 
 interface CreatedPartiesProps {
