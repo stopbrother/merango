@@ -74,7 +74,6 @@ export const getInfiniteParties = async ({
   cursor,
   limit = 15,
 }: getPartiesParams) => {
-  console.log('query', { partyType, keyword, cursor, limit });
   let query = client
     .from('party_recruit')
     .select(`*, created_by(*)`)

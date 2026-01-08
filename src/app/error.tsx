@@ -10,7 +10,7 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  console.log(error.message);
+  console.error(error.message);
 
   return (
     <main className="mx-auto max-w-md text-center py-20">
