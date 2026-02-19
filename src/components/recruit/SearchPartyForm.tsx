@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
+import { Search } from 'lucide-react';
 
 const formSchema = z.object({
   keyword: z.string(),
@@ -44,7 +45,7 @@ const SearchPartyForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col items-center justify-center gap-3 mx-auto bg-gray-100 p-3 border border-gray-300 rounded-lg shadow-md max-w-lg w-full sm:flex-row"
+        className="flex flex-col gap-3 max-w-lg w-full mx-auto bg-gray-100 p-3 border border-gray-300 rounded-lg shadow-md sm:flex-row sm:items-center sm:justify-center"
       >
         {/* input */}
         <FormField
@@ -56,7 +57,7 @@ const SearchPartyForm = () => {
                 <Input
                   {...field}
                   placeholder="파티명 검색"
-                  className="px-4 py-2 border border-gray-300 rounded-md w-full sm:w-64"
+                  className="px-4 py-2 border border-gray-300 bg-white rounded-md w-full sm:w-64"
                 />
               </FormControl>
             </FormItem>
@@ -73,7 +74,7 @@ const SearchPartyForm = () => {
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
-                  <SelectTrigger className="px-4 py-2 m-0 border border-gray-300 rounded-md text-gray-700 w-full sm:w-32">
+                  <SelectTrigger className="px-4 py-2 m-0 border border-gray-300 bg-white rounded-md text-gray-700 w-full sm:w-32">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -90,6 +91,7 @@ const SearchPartyForm = () => {
           )}
         />
         <Button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md w-full sm:w-auto ">
+          <Search className="size-4" aria-hidden />
           검색
         </Button>
       </form>
