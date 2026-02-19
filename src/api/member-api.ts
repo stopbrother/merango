@@ -58,7 +58,6 @@ export const hasJoinedParty = async (
   partyId: string,
   profileId: string
 ) => {
-  // console.log('실행됨', { partyId, profileId });
   const { data, error } = await client
     .from('party_member')
     .select('id')

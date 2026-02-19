@@ -54,7 +54,6 @@ const ProfileEditForm = () => {
   });
 
   const onSubmit = (formData: z.infer<typeof formSchema>) => {
-    console.log('formData', formData);
     if (!profile) return;
 
     updateProfile(

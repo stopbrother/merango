@@ -3,7 +3,6 @@ import { browserClient } from '../utils/supabase/client';
 
 // 디스코드 소셜 로그인
 export async function signInWithDiscord() {
-  console.log('next_base_url', process.env.NEXT_PUBLIC_BASE_URL);
   const { error } = await browserClient.auth.signInWithOAuth({
     provider: 'discord',
     options: {
